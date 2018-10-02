@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
+		<title>AirPortal丨空投</title>
+		<style type="text/css">
+			@import "styles/airportal.css";
+		</style>
+		<script type="text/javascript">
+			window.onload=function(){
+				var version="18w40a6";
+				console.info("AirPortal 由 毛若昕 和 杨尚臻 联合开发。")
+				console.info("版本："+version)
+				var txtVer=document.getElementById("version");
+				txtVer.innerHTML=version;
+			};
+		</script>
+	</head>
+	<body>
+		<div class="logoBox"></div>
+		<div class="mainBox" id="mainBox">
+			<button id="send" class="btnMain">发送</button><br/>
+			<button id="receive" class="btnMain">接收</button>
+		</div>
+		<span id="menuIcon" onclick="showMenu()"></span>
+		<div id="mask" onclick="hideMenu()"></div>
+		<div id="menu">
+			<a class="menuItem" id="menuItemCnServer" onclick="menuItemCnServer()"><span class="tick" id="tickCnServer"></span>东亚服务器</a>
+			<a class="menuItem" id="menuItemUsServer" onclick="menuItemUsServer()"><span class="tick" id="tickUsServer"></span>北美服务器</a>
+		</div>
+		<div class="popUp" id="popSend">
+			<div id="sendBox0">
+				<p class="p1">上传中...</p>
+			</div>
+			<div id="sendBox1">
+				<p class="p1">文件已成功传送。</p>
+				<p>您的取件码为：</p>
+				<p id="recvCode">XXXX</p>
+				<p>接收文件时，请输入该四位数密码，<br/></p>
+				<p style="display: inline;">或</p><a class="link1" onclick="viewQRC()">直接扫描二维码下载</a><p style="display: inline;">。<br/></p>
+			</div>
+			<div id="sendBox2">
+				<div id="QRBox"></div>
+				<span class="btnBack" id="btnBack0" onclick="btnBack0()"></span>
+			</div>
+			<button class="btn1" id="btnDone" onclick="btnDone()">完成</button>
+		</div>
+		<div class="popUp" id="popRecv">
+			<p class="p1" style="padding-top: 40px;">请输入取件码</p>
+			<input type="tel" id="inputCode" maxlength="4" autocomplete="off" onkeydown="inputSub(event)"><br/>
+			<input type="submit" class="btn1" id="btnSub" onclick="btnSub()" value="确定">
+			<span class="btnBack" id="btnBack1" onclick="btnBack1()"></span>
+		</div>
+
+		<div class="footer" id="footerL"><span id="version">Version</span>丨<a href="https://rths.tk/privacy" target="_blank" class="link1">隐私政策</a></div>
+		<div class="footer" id="footerR">前端 by <a href="https://www.maorx.cn/" target="_blank" class="link1">毛若昕</a>，后端 by <a href="https://www.rthsoftware.cn/" target="_blank" class="link1">杨尚臻</a>。保留所有权利。</div>
+		<input id="file" type="file">
+		<script>
+			var backend="https://www.rthsoftware.cn/backend/userdata/file/"
+			var isLocalhost=false;
+			var menuIcon=document.getElementById("menuIcon");
+			var menu=document.getElementById("menu");
+			var mask=document.getElementById("mask");
+			var tickCnServer=document.getElementById("tickCnServer");
+			var tickUsServer=document.getElementById("tickUsServer");
+			var mainBox=document.getElementById("mainBox");
+			var sendBox0=document.getElementById("sendBox0");
+			var sendBox1=document.getElementById("sendBox1");
+			var sendBox2=document.getElementById("sendBox2");
+			var popSend=document.getElementById("popSend");
+			var popRecv=document.getElementById("popRecv");
+			function downloadFile(code){
+				if(code){
+					var xhr=new XMLHttpRequest();
+					xhr.open("GET",backend+"getinfo.php?code="+code);
+					xhr.onreadystatechange=function(){
+						if(xhr.readyState==4){
+							if(xhr.status==200){
+								if(xhr.responseText){
+									var info=JSON.parse(xhr.responseText);
+									location.href=info.download;
+								}else{
+									alert("文件不存在");
+								}
+							}else{
+								alert("无法连接至服务器");
+							}
+						}
+					}
+					xhr.timeout=10000;
+					xhr.send();
+				}
+			}
+			document.getElementById("send").onclick=function(){
+				document.getElementById("file").value="";
+				document.getElementById("file").click();
+			}
+			document.getElementById("receive").onclick=function(){
+				var inputCode=document.getElementById("inputCode");
+				mainBox.style.opacity="0";
+				popRecv.style.display="block";
+				setTimeout(function(){
+					popRecv.style.opacity="1";
+				},250); 
+				inputCode.focus();
+			}
+			function btnSub(){
+				downloadFile(document.getElementById("inputCode").value);
+				popRecv.style.opacity="0";
+				mainBox.style.opacity="1";
+				setTimeout(function(){
+					document.getElementById("inputCode").value="";
+					popRecv.style.display="none";
+				},250);
+			}
+			function inputSub(event){
+				event = event || window.event;
+				source = event.srcElement;
+				if(event.keyCode==13){
+					btnSub();
+				}
+			}
+			function showMenu(){
+				menu.style.display="block";
+				setTimeout(function(){
+					menu.style.opacity="1";
+				},10);
+				mask.style.display="block";
+			}
+			function hideMenu(){
+				mask.style.display="none";
+				menu.style.opacity="0";
+				setTimeout(function(){
+					menu.style.display="none";
+				},250);
+			}
+			function menuItemCnServer(){
+				backend="https://www.rthsoftware.cn/backend/userdata/file/"
+				tickCnServer.style.opacity="1";
+				tickUsServer.style.opacity="0";
+				hideMenu()
+			}
+			function menuItemUsServer(){
+				backend="https://us.rths.tk/backend/userdata/file/"
+				tickCnServer.style.opacity="0";
+				tickUsServer.style.opacity="1";
+				hideMenu()
+			}
+			function viewQRC(){
+				sendBox1.style.left="-500px";
+				sendBox2.style.left="0px";
+			}
+			function btnDone(){
+				popSend.style.opacity="0";
+				mainBox.style.opacity="1";
+				setTimeout(function(){
+					popSend.style.display="none";
+				},250);
+			}
+			function btnBack0(){
+				sendBox1.style.left="0px";
+				sendBox2.style.left="500px";
+			}
+			function btnBack1(){
+				popRecv.style.opacity="0";
+				mainBox.style.opacity="1";
+				setTimeout(function(){
+					popRecv.style.display="none";
+				},250); 
+			}
+			document.getElementById("file").onchange=function(e){
+				var file=e.target.files[0];
+				if(file.type=="text/php"){
+					alert("不允许传输的文件类型");
+				}else if(file.size>104857600&&!isLocalhost){
+					alert("暂不支持传输大于100MB的文件");
+				}else if(isLocalhost&&file.size>1073741824){
+					alert("暂不支持传输大于1GB的文件");
+				}else{
+					sendBox0.style.left="0px";
+					sendBox1.style.left="500px";
+					sendBox2.style.left="1000px";
+					mainBox.style.opacity="0";
+					popSend.style.display="block";
+					setTimeout(function(){
+						popSend.style.opacity="1";
+					},250);
+					var formData=new FormData();
+					formData.append("file",file);
+					var xhr=new XMLHttpRequest();
+					xhr.open("POST",backend+"upload.php");
+					xhr.onreadystatechange=function(){
+						if(xhr.readyState==4){
+							if(xhr.status==200&&xhr.responseText){
+								var info=JSON.parse(xhr.responseText);
+								if(info.error){
+									alert(info.error);
+								}else{
+									document.getElementById("QRBox").innerHTML="";
+									var qrcode=new Image(200,200);
+									if(isLocalhost){
+										qrcode.src="http://qr.topscan.com/api.php?text="+encodeURIComponent("http://"+location.hostname+"/?code="+info.code);
+									}else{
+										qrcode.src="https://www.rthsoftware.cn/backend/get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text=https://airportal.maorx.cn/?code="+info.code)+"&username=admin";
+									}
+									document.getElementById("QRBox").appendChild(qrcode);
+									var recvCode=document.getElementById("recvCode");
+									recvCode.innerHTML=info.code;
+									sendBox0.style.left="-500px";
+									sendBox1.style.left="0px";
+									sendBox2.style.left="500px";
+								}
+							}else{
+								alert("无法连接至服务器");
+							}
+						}
+					}
+					xhr.send(formData);
+				}
+			}
+			var match=location.search.substr(1).match(/(^|&)code=([^&]*)(&|$)/);
+			if(match){
+				downloadFile(unescape(decodeURI(match[2])));
+			}
+			if(!location.hostname||location.hostname=="airportal.maorx.cn"){
+				var xhr=new XMLHttpRequest();
+				xhr.open("GET","https://us.rths.tk/backend/geo");
+				xhr.onreadystatechange=function(){
+					if(xhr.readyState==4&&xhr.status==200&&xhr.responseText&&xhr.responseText!="CN"){
+						backend="https://us.rths.tk/backend/userdata/file/"
+						tickCnServer.style.opacity="0";
+						tickUsServer.style.opacity="1";
+					}
+				}
+				xhr.timeout=10000;
+				xhr.send();
+			}else{
+				var xhr=new XMLHttpRequest();
+				xhr.open("GET","http://"+location.hostname+"/airportal/getinfo.php");
+				xhr.onreadystatechange=function(){
+					if(xhr.readyState==4){
+						if(xhr.status==200&&xhr.responseText){
+							if(JSON.parse(xhr.responseText).version>=2018092301){
+								backend="http://"+location.hostname+"/airportal/";
+								isLocalhost=true;
+							}else{
+								alert("请更新 AirPortal 的后端脚本");
+							}
+						}
+					}
+				}
+				xhr.timeout=10000;
+				xhr.send();
+			}
+		</script>
+	</body>
+</html>
