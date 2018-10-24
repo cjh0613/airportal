@@ -1,4 +1,4 @@
-var version="18w43a";
+var version="18w43b";
 console.info("AirPortal 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -7,7 +7,6 @@ txtVer.innerHTML=version;
 var backend="https://www.rthsoftware.cn/backend/userdata/file/";
 var isElectron=/Electron/i.test(navigator.userAgent);
 var isIE=/MSIE|Trident/i.test(navigator.userAgent);
-var isLocalhost=false;
 var login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -27,13 +26,22 @@ var popRecv=document.getElementById("popRecv");
 function downloadFile(code){
 	if(code){
 		ajax({
-			"url":backend+"getinfo.php",
+			"url":backend+"getinfo",
 			"data":{
 				"code":code
 			},
 			"dataType":"json",
 			"success":function(e){
-				location.href=e.download
+				if(e.multifile.length==1){
+					if(e.multifile[0].type=="text/plain"){
+						prompt(e.multifile[0].content);
+					}else{
+						location.href=e.multifile[0].download;
+					}
+				}else{
+					console.log(e.multifile);
+					//显示文件列表
+				}
 			},
 			"error":function(e){
 				if(e.status==200){
@@ -122,56 +130,94 @@ function btnBack1(){
 		popRecv.style.display="none";
 	},250); 
 }
-document.getElementById("file").onchange=function(e){
-	var file=e.target.files[0];
-	if(file.type=="text/php"){
-		alert("不允许传输的文件类型");
-	}else if(file.size>104857600&&!isLocalhost){
-		alert("暂不支持传输大于100MB的文件");
-	}else if(isLocalhost&&file.size>1073741824){
-		alert("暂不支持传输大于1GB的文件");
-	}else{
-		sendBox0.style.left="0px";
-		sendBox1.style.left="500px";
-		sendBox2.style.left="1000px";
-		mainBox.style.opacity="0";
-		popSend.style.display="block";
-		setTimeout(function(){
-			popSend.style.opacity="1";
-		},250);
-		ajax({
-			"url":backend+"upload.php",
-			"data":{
-				"file":file,
-				"username":login.username
-			},
-			"dataType":"json",
-			"method":"POST",
-			"processData":false,
-			"success":function(e){
-				if(e.error){
-					alert(e.error);
-				}else{
-					document.getElementById("QRBox").innerHTML="";
-					var qrcode=new Image(200,200);
-					if(isLocalhost){
-						qrcode.src="http://qr.topscan.com/api.php?text="+encodeURIComponent("http://"+location.hostname+"/?code="+e.code);
-					}else{
-						qrcode.src="https://www.rthsoftware.cn/backend/get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text=https://airportal.maorx.cn/?code="+e.code)+"&username=admin";
-					}
-					document.getElementById("QRBox").appendChild(qrcode);
-					var recvCode=document.getElementById("recvCode");
-					recvCode.innerHTML=e.code;
-					sendBox0.style.left="-500px";
-					sendBox1.style.left="0px";
-					sendBox2.style.left="500px";
-				}
-			},
-			"error":function(){
-				alert("无法连接至服务器");
-			}
-		});
+document.getElementById("file").onchange=function(input){
+	var files=[];
+	for(var i=0;i<input.target.files.length;i++){
+		if(input.target.files[i].type=="text/php"){
+			alert("不允许传输 PHP 文件");
+		}else{
+			files.push({
+				"name":input.target.files[i].name,
+				"progress":0,
+				"type":input.target.files[i].type
+			})
+		}
 	}
+	sendBox0.style.left="0px";
+	sendBox1.style.left="500px";
+	sendBox2.style.left="1000px";
+	mainBox.style.opacity="0";
+	popSend.style.display="block";
+	setTimeout(function(){
+		popSend.style.opacity="1";
+	},250);
+	//显示文件队列
+	ajax({
+		"url":backend+"getcode",
+		"data":{
+			"info":JSON.stringify(files),
+			"username":login.username
+		},
+		"dataType":"json",
+		"method":"POST",
+		"success":function(code){
+			var upload=function(fileIndex){
+				var file=input.target.files[fileIndex];
+				var fileSlice=[];
+				var uploadProgress=0;
+				for(var i=0;i<file.size/1000;i++){
+					fileSlice.push(file.slice(i*1000,(i+1)*1000));
+				}
+				var uploadSlice=function(){
+					ajax({
+						"url":backend+"uploadslice",
+						"data":{
+							"code":code,
+							"file":fileSlice[uploadProgress],
+							"index":fileIndex+1,
+							"progress":uploadProgress+1
+						},
+						"dataType":"json",
+						"method":"POST",
+						"processData":false,
+						"success":function(e){
+							if(e.error){
+								alert(e.error);
+							}else if(e.success==uploadProgress+1){
+								if(uploadProgress==fileSlice.length-1){
+									if(fileIndex==input.target.files.length-1){
+										document.getElementById("QRBox").innerHTML="";
+										var qrcode=new Image(200,200);
+										qrcode.src="https://www.rthsoftware.cn/backend/get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text=https://airportal.maorx.cn/?code="+e.code)+"&username=admin";
+										document.getElementById("QRBox").appendChild(qrcode);
+										var recvCode=document.getElementById("recvCode");
+										recvCode.innerHTML=e.code;
+										sendBox0.style.left="-500px";
+										sendBox1.style.left="0px";
+										sendBox2.style.left="500px";
+									}else{
+										//一个文件上传完成，开始上传下一个文件
+										upload(fileIndex+1);
+									}
+								}else{
+									uploadProgress++;
+									var uploadPercentage=uploadProgress/(fileSlice.length-1)*100;
+									console.log("上传进度："+uploadPercentage+"%");
+									//更新进度条
+									uploadSlice();
+								}
+							}
+						},
+						"error":function(){
+							alert("无法连接至服务器");
+						}
+					});
+				}
+				uploadSlice();
+			}
+			upload(0);
+		}
+	});
 }
 if(!isIE){
 	window.onerror=function(msg,url,lineNo){
@@ -198,28 +244,13 @@ var match=location.search.substr(1).match(/(^|&)code=([^&]*)(&|$)/);
 if(match){
 	downloadFile(unescape(decodeURI(match[2])));
 }
-if(!location.hostname||location.hostname=="airportal.maorx.cn"){
-	ajax({
-		"url":"https://us.rths.tk/backend/geo",
-		"success":function(e){
-			if(e!="CN"){
-				backend="https://us.rths.tk/backend/userdata/file/";
-				tickCnServer.style.opacity="0";
-				tickUsServer.style.opacity="1";
-			}
+ajax({
+	"url":"https://us.rths.tk/backend/geo",
+	"success":function(e){
+		if(e!="CN"){
+			backend="https://us.rths.tk/backend/userdata/file/";
+			tickCnServer.style.opacity="0";
+			tickUsServer.style.opacity="1";
 		}
-	});
-}else{
-	ajax({
-		"url":"http://"+location.hostname+"/airportal/getinfo.php",
-		"dataType":"json",
-		"success":function(e){
-			if(e.version>=2018092301){
-				backend="http://"+location.hostname+"/airportal/";
-				isLocalhost=true;
-			}else{
-				alert("请更新 AirPortal 的后端脚本");
-			}
-		}
-	});
-}
+	}
+});

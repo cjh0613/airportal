@@ -10,12 +10,17 @@ body {
 	cursor: default;
 	-webkit-tap-highlight-color: transparent;
 	-moz-user-select: none; 
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    -khtml-user-select: none;
-    user-select: none; 
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	-khtml-user-select: none;
+	user-select: none; 
 }
 @-webkit-keyframes fadeIn {
+	0% {opacity: 0;}
+	50% {opacity: 0;}
+	100% {opacity: 1;}
+}
+@keyframes fadeIn {
 	0% {opacity: 0;}
 	50% {opacity: 0;}
 	100% {opacity: 1;}
@@ -104,13 +109,13 @@ a,button {outline: none;}
 	left: 100%;
 	margin-left: -50px;
 	width: 25px;
-    height: 2px;
-    padding: 6px 0;
-    border-top: 2px solid rgb(65,145,245);
-    border-bottom: 2px solid rgb(65,145,245);
-    background-color: rgb(65,145,245);
-    background-clip: content-box;
-    -webkit-transition: all 0.25s;
+	height: 2px;
+	padding: 6px 0;
+	border-top: 2px solid rgb(65,145,245);
+	border-bottom: 2px solid rgb(65,145,245);
+	background-color: rgb(65,145,245);
+	background-clip: content-box;
+	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
@@ -137,10 +142,10 @@ a,button {outline: none;}
 	left: 100%;
 	margin-left: -160px;
 	width: 150px;
-    height: 90px;
-    padding-top: 15px;
-    background: white;
-    -webkit-border-radius: 10px;
+	height: 90px;
+	padding-top: 15px;
+	background: white;
+	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 	overflow: hidden;
@@ -337,13 +342,13 @@ a,button {outline: none;}
 	position: absolute;
 	left: 60px;
 	border-right: 3px solid rgba(0,0,0,0.35);
-    border-top: 3px solid rgba(0,0,0,0.35);
-    height: 15px;
-    width: 15px;
-    -webkit-transform: rotate(225deg);
-    transform: rotate(225deg);
-    cursor: pointer;
-    -webkit-transition: all 0.25s;
+	border-top: 3px solid rgba(0,0,0,0.35);
+	height: 15px;
+	width: 15px;
+	-webkit-transform: rotate(225deg);
+	transform: rotate(225deg);
+	cursor: pointer;
+	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
@@ -351,11 +356,11 @@ a,button {outline: none;}
 }
 .btnBack:hover {
 	border-right: 3px solid rgb(65,145,245);
-    border-top: 3px solid rgb(65,145,245);
+	border-top: 3px solid rgb(65,145,245);
 }
 .btnBack:active {
 	border-right: 3px solid rgba(65,145,245,0.5);
-    border-top: 3px solid rgba(65,145,245,0.5);
+	border-top: 3px solid rgba(65,145,245,0.5);
 }
 #btnBack0 {
 	top: 16px;
