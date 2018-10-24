@@ -1,4 +1,4 @@
-var version="18w43b";
+var version="18w43b1";
 console.info("AirPortal 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -164,9 +164,10 @@ document.getElementById("file").onchange=function(input){
 			var upload=function(fileIndex){
 				var file=input.target.files[fileIndex];
 				var fileSlice=[];
+				var sliceSize=1000000;
 				var uploadProgress=0;
-				for(var i=0;i<file.size/1000;i++){
-					fileSlice.push(file.slice(i*1000,(i+1)*1000));
+				for(var i=0;i<file.size/sliceSize;i++){
+					fileSlice.push(file.slice(i*sliceSize,(i+1)*sliceSize));
 				}
 				var uploadSlice=function(){
 					ajax({
