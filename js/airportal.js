@@ -1,4 +1,4 @@
-var version="18w43b2";
+var version="18w43b3";
 console.info("AirPortal 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -139,7 +139,8 @@ document.getElementById("file").onchange=function(input){
 			files.push({
 				"name":input.target.files[i].name,
 				"progress":0,
-				"type":input.target.files[i].type
+				"type":input.target.files[i].type,
+				"size":input.target.files[i].size
 			})
 		}
 	}
@@ -164,7 +165,11 @@ document.getElementById("file").onchange=function(input){
 			var upload=function(fileIndex){
 				var file=input.target.files[fileIndex];
 				var fileSlice=[];
-				var sliceSize=1024000;
+				var passedTime=0;
+				var progressCalc;
+				var sliceSize=10240000;
+				var time=0;
+				var timer;
 				var uploadProgress=0;
 				if(file.size>10240000){
 					for(var i=0;i<file.size/sliceSize;i++){
@@ -174,6 +179,7 @@ document.getElementById("file").onchange=function(input){
 					fileSlice.push(file)
 				}
 				var uploadSlice=function(){
+					clearInterval(timer);
 					ajax({
 						"url":backend+"uploadslice",
 						"data":{
@@ -186,6 +192,7 @@ document.getElementById("file").onchange=function(input){
 						"method":"POST",
 						"processData":false,
 						"success":function(e){
+							clearInterval(progressCalc);
 							if(e.error){
 								alert(e.error);
 							}else if(e.success==uploadProgress+1){
@@ -202,14 +209,32 @@ document.getElementById("file").onchange=function(input){
 										sendBox2.style.left="500px";
 									}else{
 										//一个文件上传完成，开始上传下一个文件
-										upload(fileIndex+1);
+										setTimeout(function(){
+											upload(fileIndex+1);
+										},1000);
 									}
 								}else{
 									uploadProgress++;
 									var uploadPercentage=uploadProgress/(fileSlice.length-1)*100;
 									console.log("上传进度："+uploadPercentage+"%");
 									//更新进度条
-									uploadSlice();
+									setTimeout(function(){
+										uploadSlice();
+										passedTime=0;
+										progressCalc=setInterval(function(){
+											passedTime+=100;
+											var maxPercentage=(uploadProgress+1)/(fileSlice.length-1)*100;
+											var percentagePrediction=uploadPercentage*(1+passedTime/time);
+											if(maxPercentage>100){
+												maxPercentage=100
+											}
+											if(percentagePrediction>maxPercentage){
+												percentagePrediction=maxPercentage;
+											}
+											console.log("上传进度："+percentagePrediction+"%");
+											//更新进度条
+										},100);
+									},1000);
 								}
 							}
 						},
@@ -219,6 +244,16 @@ document.getElementById("file").onchange=function(input){
 					});
 				}
 				uploadSlice();
+				timer=setInterval(function(){
+					time+=100;
+					var maxPercentage=1/(fileSlice.length-1)*100;
+					var percentagePrediction=maxPercentage*(time/10000);
+					if(percentagePrediction>maxPercentage){
+						percentagePrediction=maxPercentage;
+					}
+					console.log("上传进度："+percentagePrediction+"%");
+					//更新进度条
+				},100);
 			}
 			upload(0);
 		}
