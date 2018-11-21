@@ -395,6 +395,7 @@ a,button {outline: none;}
 }
 .footer {
 	position: absolute;
+	z-index: -1;
 	top: 100%;
 	margin-top: -35px;
 	font-size: 12px;
