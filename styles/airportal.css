@@ -50,7 +50,7 @@ a,button {outline: none;}
 	-ms-transition: all 0.25s;
 }
 .btnMain {
-	padding: 15px 100px;
+	padding: 15px 10px;
 	margin-bottom: 20px;
 	-webkit-border-radius: 30px;
 	-moz-border-radius: 30px;
@@ -62,25 +62,26 @@ a,button {outline: none;}
 	-moz-transition: all 0.25s;
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
+	width: 224px;
 }
 #send {
 	border: none;
 	color: white;
 	background: rgb(65,145,245);
 	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
- 	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
+	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
 }
 #send:hover {
 	-webkit-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
- 	-moz-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
+	-moz-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 }
 #send:active {
 	color: rgb(65,145,245);
 	background: white;
 	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
- 	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
+	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 }
 #receive {
@@ -88,19 +89,19 @@ a,button {outline: none;}
 	color: rgb(65,145,245);
 	background: white;
 	-webkit-box-shadow: rgba(65,145,245,0.2) 0px 5px 20px;
- 	-moz-box-shadow: rgba(65,145,245,0.2) 0px 5px 20px;
+	-moz-box-shadow: rgba(65,145,245,0.2) 0px 5px 20px;
 	box-shadow: rgba(65,145,245,0.2) 0px 5px 20px;
 }
 #receive:hover {
 	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
- 	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
+	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 }
 #receive:active {
 	color: white;
 	background: rgb(65,145,245);
 	-webkit-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
- 	-moz-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
+	-moz-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 }
 #menuIcon {
@@ -150,7 +151,7 @@ a,button {outline: none;}
 	border-radius: 10px;
 	overflow: hidden;
 	-webkit-box-shadow: rgba(0,0,0,0.1) 0px 5px 35px;
- 	-moz-box-shadow: rgba(0,0,0,0.1) 0px 5px 35px;
+	-moz-box-shadow: rgba(0,0,0,0.1) 0px 5px 35px;
 	box-shadow: rgba(0,0,0,0.1) 0px 5px 35px;
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
@@ -227,7 +228,7 @@ a,button {outline: none;}
 	border-radius: 20px;
 	overflow: hidden;
 	-webkit-box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
- 	-moz-box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
+	-moz-box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
 	box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
@@ -272,7 +273,7 @@ a,button {outline: none;}
 }
 .btn1:hover {
 	-webkit-box-shadow: rgba(65,145,245,0.35) 0px 5px 30px;
- 	-moz-box-shadow: rgba(65,145,245,0.35) 0px 5px 30px;
+	-moz-box-shadow: rgba(65,145,245,0.35) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.35) 0px 5px 30px;
 }
 .btn1:active {
@@ -422,6 +423,6 @@ input[type=file]{
 	.popUp {width: 80%;margin-left: -40%;}
 	#btnBack0 {left: 35px;}
 	#btnBack1 {top: 35px;left: 35px;}
-   	.footer {font-size: 11px;}
-   	#footerL {top: 0;margin-top: 20px;}
+	.footer {font-size: 11px;}
+	#footerL {top: 0;margin-top: 20px;}
 }

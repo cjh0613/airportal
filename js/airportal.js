@@ -1,9 +1,21 @@
-var version="18w47b";
-console.info("AirPortal 由 毛若昕 和 杨尚臻 联合开发。");
+var appName="AirPortal";
+var version="18w47c";
+console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
 txtVer.innerHTML=version;
 
+var $_GET=(function(){
+	var json={}
+	if(location.search){
+		var parameters=location.search.replace("?","").split("&")
+		for(var i=0;i<parameters.length;i++){
+			var split=parameters[i].split("=")
+			json[split[0]]=split[1]
+		}
+	}
+	return json
+})();
 var backend="https://www.rthsoftware.cn/backend/userdata/file/";
 var isElectron=/Electron/i.test(navigator.userAgent);
 var isIE=/MSIE|Trident/i.test(navigator.userAgent);
@@ -23,7 +35,7 @@ var sendBox1=document.getElementById("sendBox1");
 var sendBox2=document.getElementById("sendBox2");
 var popSend=document.getElementById("popSend");
 var popRecv=document.getElementById("popRecv");
-var lblUploadP=document.getElementById("lblUploadP");
+var lblUploadP=document.getElementById("uploadPercentage");
 function downloadFile(code){
 	if(code){
 		ajax({
@@ -201,14 +213,14 @@ document.getElementById("file").onchange=function(input){
 									if(fileIndex==input.target.files.length-1){
 										document.getElementById("QRBox").innerHTML="";
 										var qrcode=new Image(200,200);
-										qrcode.src="https://www.rthsoftware.cn/backend/get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text=https://airportal.maorx.cn/?code="+e.code)+"&username=admin";
+										qrcode.src="https://www.rthsoftware.cn/backend/get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text=https://www.rthsoftware.net/airportal/?code="+e.code)+"&username=admin";
 										document.getElementById("QRBox").appendChild(qrcode);
 										var recvCode=document.getElementById("recvCode");
 										recvCode.innerHTML=e.code;
 										sendBox0.style.left="-500px";
 										sendBox1.style.left="0px";
 										sendBox2.style.left="500px";
-										lblUploadP.innerHtml = "上传中...";
+										lblUploadP.innerHTML = "上传中...";
 									}else{
 										//一个文件上传完成，开始上传下一个文件
 										setTimeout(function(){
@@ -218,8 +230,7 @@ document.getElementById("file").onchange=function(input){
 								}else{
 									uploadProgress++;
 									var uploadPercentage=uploadProgress/(fileSlice.length-1)*100;
-									console.log("上传进度："+uploadPercentage+"%");
-									lblUploadP.innerHtml = "上传中 "+uploadPercentage+"%"; //更新进度条
+									lblUploadP.innerHTML = "上传中 "+Math.round(uploadPercentage)+"%"; //更新进度条
 									setTimeout(function(){
 										uploadSlice();
 										passedTime=0;
@@ -233,8 +244,7 @@ document.getElementById("file").onchange=function(input){
 											if(percentagePrediction>maxPercentage){
 												percentagePrediction=maxPercentage;
 											}
-											console.log("上传进度："+percentagePrediction+"%");
-											lblUploadP.innerHtml = "上传中 "+percentagePrediction+"%"; //更新进度条
+											lblUploadP.innerHTML = "上传中 "+Math.round(percentagePrediction)+"%"; //更新进度条
 										},100);
 									},1000);
 								}
@@ -254,8 +264,7 @@ document.getElementById("file").onchange=function(input){
 						if(percentagePrediction>maxPercentage){
 							percentagePrediction=maxPercentage;
 						}
-						console.log("上传进度："+percentagePrediction+"%");
-						lblUploadP.innerHtml = "上传中 "+percentagePrediction+"%"; //更新进度条
+						lblUploadP.innerHTML = "上传中 "+Math.round(percentagePrediction)+"%"; //更新进度条
 					},100);
 				}
 			}
@@ -279,6 +288,7 @@ if(!isIE){
 				ajax({
 					"url":"https://www.rthsoftware.cn/backend/feedback",
 					"data":{
+						"appname":appName,
 						"email":login.email,
 						"lang":navigator.language,
 						"name":login.username,
@@ -291,9 +301,12 @@ if(!isIE){
 		}
 	}
 }
-var match=location.search.substr(1).match(/(^|&)code=([^&]*)(&|$)/);
-if(match){
-	downloadFile(unescape(decodeURI(match[2])));
+if(navigator.language.indexOf("zh")==-1){
+	document.getElementById("send").innerText="Send"
+	document.getElementById("receive").innerText="Receive"
+}
+if($_GET["code"]){
+	downloadFile($_GET["code"]);
 }
 ajax({
 	"url":"https://us.rths.tk/backend/geo",
