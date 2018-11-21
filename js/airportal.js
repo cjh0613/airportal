@@ -1,4 +1,4 @@
-var version="18w47a1";
+var version="18w47b";
 console.info("AirPortal 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -23,6 +23,7 @@ var sendBox1=document.getElementById("sendBox1");
 var sendBox2=document.getElementById("sendBox2");
 var popSend=document.getElementById("popSend");
 var popRecv=document.getElementById("popRecv");
+var lblUploadP=document.getElementById("lblUploadP");
 function downloadFile(code){
 	if(code){
 		ajax({
@@ -207,6 +208,7 @@ document.getElementById("file").onchange=function(input){
 										sendBox0.style.left="-500px";
 										sendBox1.style.left="0px";
 										sendBox2.style.left="500px";
+										lblUploadP.innerHtml = "上传中...";
 									}else{
 										//一个文件上传完成，开始上传下一个文件
 										setTimeout(function(){
@@ -217,7 +219,7 @@ document.getElementById("file").onchange=function(input){
 									uploadProgress++;
 									var uploadPercentage=uploadProgress/(fileSlice.length-1)*100;
 									console.log("上传进度："+uploadPercentage+"%");
-									//更新进度条
+									lblUploadP.innerHtml = "上传中 "+uploadPercentage+"%"; //更新进度条
 									setTimeout(function(){
 										uploadSlice();
 										passedTime=0;
@@ -232,7 +234,7 @@ document.getElementById("file").onchange=function(input){
 												percentagePrediction=maxPercentage;
 											}
 											console.log("上传进度："+percentagePrediction+"%");
-											//更新进度条
+											lblUploadP.innerHtml = "上传中 "+percentagePrediction+"%"; //更新进度条
 										},100);
 									},1000);
 								}
@@ -253,11 +255,18 @@ document.getElementById("file").onchange=function(input){
 							percentagePrediction=maxPercentage;
 						}
 						console.log("上传进度："+percentagePrediction+"%");
-						//更新进度条
+						lblUploadP.innerHtml = "上传中 "+percentagePrediction+"%"; //更新进度条
 					},100);
 				}
 			}
 			upload(0);
+		},
+		"error":function(e){
+			if(e.status==402){
+				alert("批量上传功能需要付费");
+			}else{
+				alert("无法连接至服务器");
+			}
 		}
 	});
 }
