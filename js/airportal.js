@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w47d";
+var version="18w47e";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -37,6 +37,7 @@ var popSend=document.getElementById("popSend");
 var popRecv=document.getElementById("popRecv");
 var popLogin=document.getElementById("popLogin");
 var lblUploadP=document.getElementById("uploadPercentage");
+var fileList=document.getElementById("fileList");
 function downloadFile(code){
 	if(code){
 		ajax({
@@ -52,10 +53,36 @@ function downloadFile(code){
 					}else{
 						location.href=e.multifile[0].download;
 					}
+					popRecv.style.opacity="0";
+					mainBox.style.opacity="1";
+					setTimeout(function(){
+						document.getElementById("inputCode").value="";
+						popRecv.style.display="none";
+					},250);
 				}else{
 					console.log(e.multifile);
 					//显示文件列表
+
+					for(var file=0;file<e.multifile.length;file++){
+						var newLi=document.createElement("li")
+						newLi.classList.add("menu")
+						newLi.innerText=e.multifile[file].name
+						newLi.setAttribute("code",e.code)
+						if(e.multifile.length>1){
+							newLi.setAttribute("index",file+1)
+						}
+						newLi.onclick=function(mouse){
+							//var code=this.getAttribute("code")
+							index=this.getAttribute("index")-1,
+							location.href=e.multifile[index].download;
+							//downloadFile(code,index)
+						}
+						fileList.appendChild(newLi);
+						//return false
+					}
 				}
+					recvBox0.style.left="-500px";
+					recvBox1.style.left="0px";
 			},
 			"error":function(e){
 				if(e.status==200){
@@ -82,12 +109,6 @@ document.getElementById("receive").onclick=function(){
 }
 function btnSub(){
 	downloadFile(document.getElementById("inputCode").value);
-	popRecv.style.opacity="0";
-	mainBox.style.opacity="1";
-	setTimeout(function(){
-		document.getElementById("inputCode").value="";
-		popRecv.style.display="none";
-	},250);
 }
 function inputSub(event){
 	event = event || window.event;

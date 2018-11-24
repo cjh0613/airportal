@@ -213,6 +213,7 @@ a,button {outline: none;}
 }
 .popUp {
 	position: absolute;
+	z-index: 100;
 	width: 500px;
 	height: 350px;
 	top: 50%;
@@ -245,7 +246,6 @@ a,button {outline: none;}
 	opacity: 0;
 }
 #popLogin {
-	z-index: 100;
 	display: none;
 	opacity: 0;
 }
@@ -413,15 +413,46 @@ a,button {outline: none;}
 	position: absolute;
 	width: 100%;
 	left: 500px;
+	background: white;
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
 }
+#fileList {
+	width: 85%;
+	height: 300px;
+	left: 0%;
+	overflow-y: scroll;
+	list-style: none;
+	text-align: left;
+}
+#fileList li {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-left: 30px;
+	background-color: white;
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+	cursor: pointer;
+}
+#fileList li:nth-child(2n+1){
+	background-color: rgba(0,0,0,0.03);
+}
+#fileList li:hover {
+	/*background-color: rgba(0,0,0,0.1);*/
+	color: rgb(65,145,245);
+}
+#fileList li:active {
+	/*background-color: rgba(0,0,0,0.15);*/
+	color: #A5C220;
+}
 .footer {
 	position: absolute;
-	z-index: -1;
 	top: 100%;
 	margin-top: -35px;
 	font-size: 12px;
