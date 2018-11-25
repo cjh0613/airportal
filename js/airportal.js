@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w47e";
+var version="18w47f";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -29,6 +29,7 @@ var menu=document.getElementById("menu");
 var mask=document.getElementById("mask");
 var tickCnServer=document.getElementById("tickCnServer");
 var tickUsServer=document.getElementById("tickUsServer");
+var menuLogin=document.getElementById("menuItemLogin");
 var mainBox=document.getElementById("mainBox");
 var sendBox0=document.getElementById("sendBox0");
 var sendBox1=document.getElementById("sendBox1");
@@ -36,8 +37,13 @@ var sendBox2=document.getElementById("sendBox2");
 var popSend=document.getElementById("popSend");
 var popRecv=document.getElementById("popRecv");
 var popLogin=document.getElementById("popLogin");
-var lblUploadP=document.getElementById("uploadPercentage");
+var lblUploadP=document.getElementById("lblUploadP");
 var fileList=document.getElementById("fileList");
+window.onload=function(){
+	if(login.username){
+		menuLogin.innerHTML="已登录";
+	}
+}
 function downloadFile(code){
 	if(code){
 		ajax({
@@ -72,13 +78,10 @@ function downloadFile(code){
 							newLi.setAttribute("index",file+1)
 						}
 						newLi.onclick=function(mouse){
-							//var code=this.getAttribute("code")
 							index=this.getAttribute("index")-1,
 							location.href=e.multifile[index].download;
-							//downloadFile(code,index)
 						}
 						fileList.appendChild(newLi);
-						//return false
 					}
 				}
 					recvBox0.style.left="-500px";
@@ -262,7 +265,7 @@ document.getElementById("file").onchange=function(input){
 										sendBox0.style.left="-500px";
 										sendBox1.style.left="0px";
 										sendBox2.style.left="500px";
-										lblUploadP.innerHTML = "上传中...";
+										lblUploadP.innerHTML="上传中...";
 									}else{
 										//一个文件上传完成，开始上传下一个文件
 										setTimeout(function(){
@@ -272,7 +275,7 @@ document.getElementById("file").onchange=function(input){
 								}else{
 									uploadProgress++;
 									var uploadPercentage=uploadProgress/(fileSlice.length-1)*100;
-									lblUploadP.innerHTML = "上传中 "+Math.round(uploadPercentage)+"%"; //更新进度条
+									lblUploadP.innerHTML="上传中 "+Math.round(uploadPercentage)+"%"; //更新进度条
 									setTimeout(function(){
 										uploadSlice();
 										passedTime=0;
@@ -286,7 +289,7 @@ document.getElementById("file").onchange=function(input){
 											if(percentagePrediction>maxPercentage){
 												percentagePrediction=maxPercentage;
 											}
-											lblUploadP.innerHTML = "上传中 "+Math.round(percentagePrediction)+"%"; //更新进度条
+											lblUploadP.innerHTML="上传中 "+Math.round(percentagePrediction)+"%"; //更新进度条
 										},100);
 									},1000);
 								}
