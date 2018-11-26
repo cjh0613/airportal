@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w48a";
+var version="18w48a1";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -34,6 +34,8 @@ var mainBox=document.getElementById("mainBox");
 var sendBox0=document.getElementById("sendBox0");
 var sendBox1=document.getElementById("sendBox1");
 var sendBox2=document.getElementById("sendBox2");
+var recvBox0=document.getElementById("recvBox0");
+var recvBox1=document.getElementById("recvBox1");
 var popSend=document.getElementById("popSend");
 var popRecv=document.getElementById("popRecv");
 var popLogin=document.getElementById("popLogin");
@@ -183,6 +185,8 @@ function btnDone1(){
 	setTimeout(function(){
 		popRecv.style.display="none";
 	},250);
+	recvBox1.style.left="500px";
+	recvBox0.style.left="0px";
 }
 function btnBack0(){
 	sendBox1.style.left="0px";
@@ -194,8 +198,6 @@ function btnBack1(){
 	setTimeout(function(){
 		popRecv.style.display="none";
 	},250); 
-	recvBox1.style.left="500px";
-	recvBox0.style.left="0px";
 }
 document.getElementById("file").onchange=function(input){
 	var files=[];
