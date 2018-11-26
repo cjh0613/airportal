@@ -285,9 +285,13 @@ a,button {outline: none;}
 	background: white;
 	color: rgb(65,145,245);
 }
-#btnDone {
+#btnDone0 {
 	position: relative;
 	top: 260px;
+}
+#btnDone1 {
+	position: relative;
+	top: 5px;
 }
 .link1 {
 	text-decoration: none;
@@ -422,7 +426,7 @@ a,button {outline: none;}
 }
 #fileList {
 	width: 85%;
-	height: 300px;
+	height: 260px;
 	left: 0%;
 	overflow-y: scroll;
 	list-style: none;
