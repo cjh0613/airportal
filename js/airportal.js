@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w48a3";
+var version="18w48a4";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -96,7 +96,8 @@ function downloadFile(code){
 	}
 }
 function loggedIn(){
-	localStorage.setItem("Backend",login.backend);
+	fileBackend=backend+"userdata/file/";
+	localStorage.setItem("Backend",backend);
 	localStorage.setItem("Email",login.email);
 	localStorage.setItem("Username",login.username);
 	if(login.password){
@@ -126,6 +127,7 @@ function submitLogin(email,password,signUp){
 			"success":function(e){
 				if(e.index){
 					if(e.pass){
+						backend=e.backend;
 						login.email=email;
 						login.password=password;
 						login.username=e.username;
@@ -213,6 +215,7 @@ function menuItemLogin(){
 addEventListener("message",function(e){
 	try{
 		login=JSON.parse(atob(e.data));
+		backend=login.backend;
 		loggedIn();
 	}catch(e){}
 });
