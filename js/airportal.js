@@ -1,22 +1,26 @@
 var appName="AirPortal";
-var version="18w48a1";
+var version="18w48a2";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
 txtVer.innerHTML=version;
 
 var $_GET=(function(){
-	var json={}
+	var json={};
 	if(location.search){
-		var parameters=location.search.replace("?","").split("&")
+		var parameters=location.search.replace("?","").split("&");
 		for(var i=0;i<parameters.length;i++){
-			var split=parameters[i].split("=")
-			json[split[0]]=split[1]
+			var split=parameters[i].split("=");
+			json[split[0]]=split[1];
 		}
 	}
-	return json
+	return json;
 })();
-var backend="https://www.rthsoftware.cn/backend/userdata/file/";
+var backend=localStorage.getItem("Backend");
+if(!backend){
+	backend="https://www.rthsoftware.cn/backend/";
+}
+var fileBackend=backend+"userdata/file/";
 var isElectron=/Electron/i.test(navigator.userAgent);
 var isIE=/MSIE|Trident/i.test(navigator.userAgent);
 var login={
@@ -41,15 +45,10 @@ var popRecv=document.getElementById("popRecv");
 var popLogin=document.getElementById("popLogin");
 var lblUploadP=document.getElementById("lblUploadP");
 var fileList=document.getElementById("fileList");
-window.onload=function(){
-	if(login.username){
-		menuLogin.innerHTML="已登录";
-	}
-}
 function downloadFile(code){
 	if(code){
 		ajax({
-			"url":backend+"getinfo",
+			"url":fileBackend+"getinfo",
 			"data":{
 				"code":code
 			},
@@ -68,26 +67,23 @@ function downloadFile(code){
 						popRecv.style.display="none";
 					},250);
 				}else{
-					console.log(e.multifile);
-					//显示文件列表
-
 					for(var file=0;file<e.multifile.length;file++){
-						var newLi=document.createElement("li")
-						newLi.classList.add("menu")
-						newLi.innerText=e.multifile[file].name
-						newLi.setAttribute("code",e.code)
+						var newLi=document.createElement("li");
+						newLi.classList.add("menu");
+						newLi.innerText=e.multifile[file].name;
+						newLi.setAttribute("code",e.code);
 						if(e.multifile.length>1){
-							newLi.setAttribute("index",file+1)
+							newLi.setAttribute("index",file+1);
 						}
-						newLi.onclick=function(mouse){
-							index=this.getAttribute("index")-1,
+						newLi.onclick=function(){
+							var index=this.getAttribute("index")-1;
 							location.href=e.multifile[index].download;
 						}
 						fileList.appendChild(newLi);
 					}
 				}
-					recvBox0.style.left="-500px";
-					recvBox1.style.left="0px";
+				recvBox0.style.left="-500px";
+				recvBox1.style.left="0px";
 			},
 			"error":function(e){
 				if(e.status==200){
@@ -95,6 +91,74 @@ function downloadFile(code){
 				}else{
 					alert("无法连接至服务器");
 				}
+			}
+		});
+	}
+}
+function loggedIn(){
+	localStorage.setItem("Backend",login.backend);
+	localStorage.setItem("Email",login.email);
+	localStorage.setItem("Username",login.username);
+	if(login.password){
+		localStorage.setItem("Password",login.password);
+	}
+	location.reload();
+}
+function logOut(){
+	localStorage.removeItem("Backend");
+	localStorage.removeItem("Email");
+	localStorage.removeItem("Password");
+	localStorage.removeItem("Username");
+	location.reload();
+}
+function submitLogin(email,password,signUp){
+	if(email&&password){
+		email=email.toLowerCase();
+		password=MD5(password);
+		ajax({
+			"url":backend+"userdata/verify",
+			"data":{
+				"email":email,
+				"password":password
+			},
+			"dataType":"json",
+			"showLoading":true,
+			"success":function(e){
+				if(e.index){
+					if(e.pass){
+						login.email=email;
+						login.password=password;
+						login.username=e.username;
+						loggedIn();
+					}else if(confirm("密码错误。您想重置密码吗？")){
+						location.href="https://www.rthsoftware.cn/login?email="+encodeURIComponent(email)+"&page=resetpassword";
+					}
+				}else if(signUp){
+					var username=email.split("@")[0]+new Date().getTime().toString(36);
+					ajax({
+						"url":backend+"userdata/signup",
+						"data":{
+							"email":email,
+							"password":password,
+							"username":username
+						},
+						"method":"POST",
+						"success":function(){
+							login.email=email;
+							login.password=password;
+							login.username=username;
+							loggedIn();
+						},
+						"error":function(){
+							alert("无法连接至服务器");
+						}
+					});
+				}else{
+					alert("此用户不存在");
+				}
+			},
+			"error":function(){
+				alert("无法连接至服务器");
 			}
 		});
 	}
@@ -109,7 +173,7 @@ document.getElementById("receive").onclick=function(){
 	popRecv.style.display="block";
 	setTimeout(function(){
 		popRecv.style.opacity="1";
-	},250); 
+	},250);
 	inputCode.focus();
 }
 function btnSub(){
@@ -137,36 +201,34 @@ function hideMenu(){
 	},250);
 }
 function menuItemLogin(){
-	mainBox.style.opacity="0";
-	popLogin.style.display="block";
-	setTimeout(function(){
-		popLogin.style.opacity="1";
-	},250); 
-	hideMenu()
+	if(!login.username){
+		mainBox.style.opacity="0";
+		popLogin.style.display="block";
+		setTimeout(function(){
+			popLogin.style.opacity="1";
+		},250);
+		hideMenu();
+	}
 }
 addEventListener("message",function(e){
 	try{
-		login=JSON.parse(atob(e.data))
-		localStorage.setItem("Backend",login.backend)
-		localStorage.setItem("Email",login.email)
-		localStorage.setItem("Username",login.username)
-		if(login.password){
-			localStorage.setItem("Password",login.password)
-		}
-		location.reload()
+		login=JSON.parse(atob(e.data));
+		loggedIn();
 	}catch(e){}
-})
+});
 function menuItemCnServer(){
-	backend="https://www.rthsoftware.cn/backend/userdata/file/";
+	backend="https://www.rthsoftware.cn/backend/";
+	fileBackend=backend+"userdata/file/";
 	tickCnServer.style.opacity="1";
 	tickUsServer.style.opacity="0";
-	hideMenu()
+	hideMenu();
 }
 function menuItemUsServer(){
-	backend="https://us.rths.tk/backend/userdata/file/";
+	backend="https://cdn.rthsoftware.net/backend/";
+	fileBackend=backend+"userdata/file/";
 	tickCnServer.style.opacity="0";
 	tickUsServer.style.opacity="1";
-	hideMenu()
+	hideMenu();
 }
 function viewQRC(){
 	sendBox1.style.left="-500px";
@@ -197,7 +259,7 @@ function btnBack1(){
 	mainBox.style.opacity="1";
 	setTimeout(function(){
 		popRecv.style.display="none";
-	},250); 
+	},250);
 }
 document.getElementById("file").onchange=function(input){
 	var files=[];
@@ -210,7 +272,7 @@ document.getElementById("file").onchange=function(input){
 				"progress":0,
 				"type":input.target.files[i].type,
 				"size":input.target.files[i].size
-			})
+			});
 		}
 	}
 	sendBox0.style.left="0px";
@@ -223,7 +285,7 @@ document.getElementById("file").onchange=function(input){
 	},250);
 	//显示文件队列
 	ajax({
-		"url":backend+"getcode",
+		"url":fileBackend+"getcode",
 		"data":{
 			"info":JSON.stringify(files),
 			"username":login.username
@@ -245,12 +307,12 @@ document.getElementById("file").onchange=function(input){
 						fileSlice.push(file.slice(i*sliceSize,(i+1)*sliceSize));
 					}
 				}else{
-					fileSlice.push(file)
+					fileSlice.push(file);
 				}
 				var uploadSlice=function(){
 					clearInterval(timer);
 					ajax({
-						"url":backend+"uploadslice",
+						"url":fileBackend+"uploadslice",
 						"data":{
 							"code":code,
 							"file":fileSlice[uploadProgress],
@@ -269,7 +331,7 @@ document.getElementById("file").onchange=function(input){
 									if(fileIndex==input.target.files.length-1){
 										document.getElementById("QRBox").innerHTML="";
 										var qrcode=new Image(200,200);
-										qrcode.src="https://www.rthsoftware.cn/backend/get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text=https://www.rthsoftware.net/airportal/?code="+e.code)+"&username=admin";
+										qrcode.src=backend+"get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text=https://www.rthsoftware.net/airportal/?code="+e.code)+"&username=admin";
 										document.getElementById("QRBox").appendChild(qrcode);
 										var recvCode=document.getElementById("recvCode");
 										recvCode.innerHTML=e.code;
@@ -286,7 +348,7 @@ document.getElementById("file").onchange=function(input){
 								}else{
 									uploadProgress++;
 									var uploadPercentage=uploadProgress/(fileSlice.length-1)*100;
-									lblUploadP.innerHTML="上传中 "+Math.round(uploadPercentage)+"%"; //更新进度条
+									lblUploadP.innerHTML="上传中 "+Math.round(uploadPercentage)+"%";
 									setTimeout(function(){
 										uploadSlice();
 										passedTime=0;
@@ -295,12 +357,12 @@ document.getElementById("file").onchange=function(input){
 											var maxPercentage=(uploadProgress+1)/(fileSlice.length-1)*100;
 											var percentagePrediction=uploadPercentage*(1+passedTime/time);
 											if(maxPercentage>100){
-												maxPercentage=100
+												maxPercentage=100;
 											}
 											if(percentagePrediction>maxPercentage){
 												percentagePrediction=maxPercentage;
 											}
-											lblUploadP.innerHTML="上传中 "+Math.round(percentagePrediction)+"%"; //更新进度条
+											lblUploadP.innerHTML="上传中 "+Math.round(percentagePrediction)+"%";
 										},100);
 									},1000);
 								}
@@ -320,7 +382,7 @@ document.getElementById("file").onchange=function(input){
 						if(percentagePrediction>maxPercentage){
 							percentagePrediction=maxPercentage;
 						}
-						lblUploadP.innerHTML = "上传中 "+Math.round(percentagePrediction)+"%"; //更新进度条
+						lblUploadP.innerHTML = "上传中 "+Math.round(percentagePrediction)+"%";
 					},100);
 				}
 			}
@@ -342,7 +404,7 @@ if(!isIE){
 			window.onerror=null;
 			if(confirm(msg)){
 				ajax({
-					"url":"https://www.rthsoftware.cn/backend/feedback",
+					"url":backend+"feedback",
 					"data":{
 						"appname":appName,
 						"email":login.email,
@@ -358,19 +420,46 @@ if(!isIE){
 	}
 }
 if(navigator.language.indexOf("zh")==-1){
-	document.getElementById("send").innerText="Send"
-	document.getElementById("receive").innerText="Receive"
+	document.getElementById("send").innerText="Send";
+	document.getElementById("receive").innerText="Receive";
 }
 if($_GET["code"]){
 	downloadFile($_GET["code"]);
 }
-ajax({
-	"url":"https://us.rths.tk/backend/geo",
-	"success":function(e){
-		if(e!="CN"){
-			backend="https://us.rths.tk/backend/userdata/file/";
-			tickCnServer.style.opacity="0";
-			tickUsServer.style.opacity="1";
-		}
+if(login.username){
+	menuLogin.innerHTML="已登录";
+	if(login.password){
+		ajax({
+			"url":backend+"userdata/verify",
+			"data":{
+				"email":login.email,
+				"password":login.password
+			},
+			"dataType":"json",
+			"showLoading":true,
+			"success":function(e){
+				if(e.pass){
+					backend=e.backend;
+					localStorage.setItem("Backend",backend);
+					fileBackend=backend+"userdata/file/";
+				}else{
+					alert("密码错误");
+					logOut();
+				}
+			}
+		});
 	}
-});
+}else{
+	popLogin.src="https://www.rthsoftware.cn/login";
+	ajax({
+		"url":"https://cdn.rthsoftware.net/backend/geo",
+		"success":function(e){
+			if(e!="CN"){
+				backend="https://cdn.rthsoftware.net/backend/";
+				fileBackend=backend+"userdata/file/";
+				tickCnServer.style.opacity="0";
+				tickUsServer.style.opacity="1";
+			}
+		}
+	});
+}
