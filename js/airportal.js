@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w48b3";
+var version="18w48b4";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -20,6 +20,8 @@ var backend=localStorage.getItem("Backend");
 if(!backend){
 	backend="https://rthsoftware.cn/backend/";
 }
+var cnBackend="https://www.rthsoftware.cn/backend/";
+var usBackend="https://cdn.rthsoftware.net/backend/";
 var fileBackend=backend+"userdata/file/";
 var isElectron=/Electron/i.test(navigator.userAgent);
 var isIE=/MSIE|Trident/i.test(navigator.userAgent);
@@ -222,14 +224,14 @@ addEventListener("message",function(e){
 	}catch(e){}
 });
 function menuItemCnServer(){
-	backend="https://www.rthsoftware.cn/backend/";
+	backend=cnBackend;
 	fileBackend=backend+"userdata/file/";
 	tickCnServer.style.opacity="1";
 	tickUsServer.style.opacity="0";
 	hideMenu();
 }
 function menuItemUsServer(){
-	backend="https://cdn.rthsoftware.net/backend/";
+	backend=usBackend;
 	fileBackend=backend+"userdata/file/";
 	tickCnServer.style.opacity="0";
 	tickUsServer.style.opacity="1";
@@ -438,6 +440,14 @@ if(login.username){
 	newItem.innerText=login.email.split("@")[0];
 	menu.style.height="163px";
 	menu.insertBefore(newItem,menu.firstChild);
+	switch(backend){
+		case cnBackend:
+		tickCnServer.style.opacity="1";
+		break;
+		case usBackend:
+		tickUsServer.style.opacity="1";
+		break;
+	}
 	ajax({
 		"url":backend+"get",
 		"data":{
