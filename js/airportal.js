@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w48b4";
+var version="18w48b5";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -119,7 +119,7 @@ function submitLogin(email,password,signUp){
 		email=email.toLowerCase();
 		password=MD5(password);
 		ajax({
-			"url":backend+"userdata/verify",
+			"url":"https://rthsoftware.cn/backend/userdata/verify",
 			"data":{
 				"email":email,
 				"password":password
@@ -135,12 +135,12 @@ function submitLogin(email,password,signUp){
 						login.username=e.username;
 						loggedIn();
 					}else if(confirm("密码错误。您想重置密码吗？")){
-						location.href="https://www.rthsoftware.cn/login?email="+encodeURIComponent(email)+"&page=resetpassword";
+						location.href="https://rthsoftware.cn/login?email="+encodeURIComponent(email)+"&page=resetpassword";
 					}
 				}else if(signUp){
 					var username=email.split("@")[0]+new Date().getTime().toString(36);
 					ajax({
-						"url":backend+"userdata/signup",
+						"url":e.backend+"userdata/signup",
 						"data":{
 							"email":email,
 							"password":password,
@@ -338,7 +338,7 @@ document.getElementById("file").onchange=function(input){
 									if(fileIndex==input.target.files.length-1){
 										document.getElementById("QRBox").innerHTML="";
 										var qrcode=new Image(200,200);
-										qrcode.src=backend+"get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text=https://www.rthsoftware.net/airportal/?code="+e.code)+"&username=admin";
+										qrcode.src="https://rthsoftware.cn/backend/get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text=https://www.rthsoftware.net/airportal/?code="+e.code)+"&username=admin";
 										document.getElementById("QRBox").appendChild(qrcode);
 										var recvCode=document.getElementById("recvCode");
 										recvCode.innerHTML=e.code;
@@ -411,7 +411,7 @@ if(!isIE){
 			window.onerror=null;
 			if(confirm(msg)){
 				ajax({
-					"url":backend+"feedback",
+					"url":"https://rthsoftware.cn/backend/feedback",
 					"data":{
 						"appname":appName,
 						"email":login.email,
