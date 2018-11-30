@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w48b2";
+var version="18w48b3";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -18,7 +18,7 @@ var $_GET=(function(){
 })();
 var backend=localStorage.getItem("Backend");
 if(!backend){
-	backend="https://www.rthsoftware.cn/backend/";
+	backend="https://rthsoftware.cn/backend/";
 }
 var fileBackend=backend+"userdata/file/";
 var isElectron=/Electron/i.test(navigator.userAgent);
@@ -435,7 +435,7 @@ if(login.username){
 	menuLogin.innerHTML="退出登录";
 	var newItem=document.createElement("a");
 	newItem.className="menuItem";
-	newItem.innerText=login.username;
+	newItem.innerText=login.email.split("@")[0];
 	menu.style.height="163px";
 	menu.insertBefore(newItem,menu.firstChild);
 	ajax({
@@ -444,15 +444,12 @@ if(login.username){
 			"url":"userdata/privilege",
 			"username":"admin"
 		},
-		"dataType":"JSON",
+		"dataType":"json",
 		"success":function(e){
-			console.log(e);
-			var expTime=new Date().getTime()/1000-e.airportal[login.username];
+			var expTime=Math.round((e.airportal[login.username]-new Date().getTime()/1000)/86400);
 			console.log(expTime);
-
 		}
 	});
-
 	if(login.password){
 		ajax({
 			"url":backend+"userdata/verify",
@@ -475,16 +472,5 @@ if(login.username){
 		});
 	}
 }else{
-	popLogin.src="https://www.rthsoftware.cn/login";
-	ajax({
-		"url":"https://cdn.rthsoftware.net/backend/geo",
-		"success":function(e){
-			if(e!="CN"){
-				backend="https://cdn.rthsoftware.net/backend/";
-				fileBackend=backend+"userdata/file/";
-				tickCnServer.style.opacity="0";
-				tickUsServer.style.opacity="1";
-			}
-		}
-	});
+	popLogin.src="https://rthsoftware.cn/login";
 }

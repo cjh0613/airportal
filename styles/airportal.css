@@ -206,7 +206,7 @@ a,button {outline: none;}
 	-ms-transition: all 0.25s;
 }
 #tickCnServer {
-	opacity: 1;
+	opacity: 0;
 }
 #tickUsServer {
 	opacity: 0;
