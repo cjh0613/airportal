@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w48c5";
+var version="18w48c7";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -23,8 +23,6 @@ if(!backend){
 var cnBackend="https://www.rthsoftware.cn/backend/";
 var usBackend="https://cdn.rthsoftware.net/backend/";
 var fileBackend=backend+"userdata/file/";
-var isElectron=/Electron/i.test(navigator.userAgent);
-var isIE=/MSIE|Trident/i.test(navigator.userAgent);
 var login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -324,121 +322,143 @@ document.getElementById("file").onchange=function(input){
 	setTimeout(function(){
 		popSend.style.opacity="1";
 	},250);
-	//显示文件队列
-	ajax({
-		"url":fileBackend+"getcode",
-		"data":{
-			"info":JSON.stringify(files),
-			"username":login.username
-		},
-		"dataType":"json",
-		"method":"POST",
-		"success":function(code){
-			var upload=function(fileIndex){
-				var file=input.target.files[fileIndex];
-				var fileSlice=[];
-				var passedTime=0;
-				var progressCalc;
-				var sliceSize=10240000;
-				var time=0;
-				var timer;
-				var uploadProgress=0;
-				if(file.size>10240000){
-					for(var i=0;i<file.size/sliceSize;i++){
-						fileSlice.push(file.slice(i*sliceSize,(i+1)*sliceSize));
-					}
+	var uploadSuccess=function(code){
+		document.getElementById("QRBox").innerHTML="";
+		var qrcode=new Image(200,200);
+		qrcode.src="https://rthsoftware.cn/backend/get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text=http://rthe.cn/"+code)+"&username=admin";
+		document.getElementById("QRBox").appendChild(qrcode);
+		var recvCode=document.getElementById("recvCode");
+		recvCode.innerHTML=code;
+		sendBox0.style.left="-500px";
+		sendBox1.style.left="0px";
+		sendBox2.style.left="500px";
+		lblUploadP.innerHTML="上传中...";
+	}
+	if(files.length<=1&&files[0].size<=10240000){
+		ajax({
+			"url":fileBackend+"upload",
+			"data":{
+				"file":input.target.files[0],
+				"username":login.username
+			},
+			"dataType":"json",
+			"method":"POST",
+			"processData":false,
+			"success":function(e){
+				if(e.error){
+					alert(e.error);
 				}else{
-					fileSlice.push(file);
+					uploadSuccess(e.code);
 				}
-				var uploadSlice=function(){
-					clearInterval(timer);
-					ajax({
-						"url":fileBackend+"uploadslice",
-						"data":{
-							"code":code,
-							"file":fileSlice[uploadProgress],
-							"index":fileIndex+1,
-							"progress":uploadProgress+1
-						},
-						"dataType":"json",
-						"method":"POST",
-						"processData":false,
-						"success":function(e){
-							clearInterval(progressCalc);
-							if(e.error){
-								alert(e.error);
-							}else if(e.success==uploadProgress+1){
-								if(uploadProgress==fileSlice.length-1){
-									if(fileIndex==input.target.files.length-1){
-										document.getElementById("QRBox").innerHTML="";
-										var qrcode=new Image(200,200);
-										qrcode.src="https://rthsoftware.cn/backend/get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text=https://www.rthsoftware.net/airportal/?code="+e.code)+"&username=admin";
-										document.getElementById("QRBox").appendChild(qrcode);
-										var recvCode=document.getElementById("recvCode");
-										recvCode.innerHTML=e.code;
-										sendBox0.style.left="-500px";
-										sendBox1.style.left="0px";
-										sendBox2.style.left="500px";
-										lblUploadP.innerHTML="上传中...";
-									}else{
-										//一个文件上传完成，开始上传下一个文件
-										setTimeout(function(){
-											upload(fileIndex+1);
-										},1000);
-									}
-								}else{
-									uploadProgress++;
-									var uploadPercentage=uploadProgress/(fileSlice.length-1)*100;
-									lblUploadP.innerHTML="上传中 "+Math.round(uploadPercentage)+"%";
-									setTimeout(function(){
-										uploadSlice();
-										passedTime=0;
-										progressCalc=setInterval(function(){
-											passedTime+=100;
-											var maxPercentage=(uploadProgress+1)/(fileSlice.length-1)*100;
-											var percentagePrediction=uploadPercentage*(1+passedTime/time);
-											if(maxPercentage>100){
-												maxPercentage=100;
-											}
-											if(percentagePrediction>maxPercentage){
-												percentagePrediction=maxPercentage;
-											}
-											lblUploadP.innerHTML="上传中 "+Math.round(percentagePrediction)+"%";
-										},100);
-									},1000);
-								}
-							}
-						},
-						"error":function(){
-							alert("无法连接至服务器");
-						}
-					});
-				}
-				uploadSlice();
-				if(fileSlice.length>1){
-					timer=setInterval(function(){
-						time+=100;
-						var maxPercentage=1/(fileSlice.length-1)*100;
-						var percentagePrediction=maxPercentage*(time/10000);
-						if(percentagePrediction>maxPercentage){
-							percentagePrediction=maxPercentage;
-						}
-						lblUploadP.innerHTML = "上传中 "+Math.round(percentagePrediction)+"%";
-					},100);
-				}
-			}
-			upload(0);
-		},
-		"error":function(e){
-			if(e.status==402){
-				alert("批量上传功能需要付费");
-			}else{
+			},
+			"error":function(){
 				alert("无法连接至服务器");
 			}
-		}
-	});
+		});
+	}else{
+		ajax({
+			"url":fileBackend+"getcode",
+			"data":{
+				"info":JSON.stringify(files),
+				"username":login.username
+			},
+			"dataType":"json",
+			"method":"POST",
+			"success":function(code){
+				var upload=function(fileIndex){
+					var file=input.target.files[fileIndex];
+					var fileSlice=[];
+					var passedTime=0;
+					var progressCalc;
+					var sliceSize=10240000;
+					var time=0;
+					var timer;
+					var uploadProgress=0;
+					var uploadSlice=function(){
+						clearInterval(timer);
+						ajax({
+							"url":fileBackend+"uploadslice",
+							"data":{
+								"code":code,
+								"file":fileSlice[uploadProgress],
+								"index":fileIndex+1,
+								"progress":uploadProgress+1
+							},
+							"dataType":"json",
+							"method":"POST",
+							"processData":false,
+							"success":function(e){
+								clearInterval(progressCalc);
+								if(e.error){
+									alert(e.error);
+								}else if(e.success==uploadProgress+1){
+									if(uploadProgress==fileSlice.length-1){
+										if(fileIndex==input.target.files.length-1){
+											uploadSuccess(code);
+										}else{
+											setTimeout(function(){
+												upload(fileIndex+1);
+											},1000);
+										}
+									}else{
+										uploadProgress++;
+										var uploadPercentage=uploadProgress/(fileSlice.length-1)*100;
+										lblUploadP.innerHTML="上传中 "+Math.round(uploadPercentage)+"%";
+										setTimeout(function(){
+											uploadSlice();
+											passedTime=0;
+											progressCalc=setInterval(function(){
+												passedTime+=100;
+												var maxPercentage=(uploadProgress+1)/(fileSlice.length-1)*100;
+												var percentagePrediction=uploadPercentage*(1+passedTime/time);
+												if(maxPercentage>100){
+													maxPercentage=100;
+												}
+												if(percentagePrediction>maxPercentage){
+													percentagePrediction=maxPercentage;
+												}
+												lblUploadP.innerHTML="上传中 "+Math.round(percentagePrediction)+"%";
+											},100);
+										},1000);
+									}
+								}
+							},
+							"error":function(){
+								alert("无法连接至服务器");
+							}
+						});
+					}
+					if(file.size>10240000){
+						for(var i=0;i<file.size/sliceSize;i++){
+							fileSlice.push(file.slice(i*sliceSize,(i+1)*sliceSize));
+						}
+						timer=setInterval(function(){
+							time+=100;
+							var maxPercentage=1/(fileSlice.length-1)*100;
+							var percentagePrediction=maxPercentage*(time/10000);
+							if(percentagePrediction>maxPercentage){
+								percentagePrediction=maxPercentage;
+							}
+							lblUploadP.innerHTML = "上传中 "+Math.round(percentagePrediction)+"%";
+						},100);
+					}else{
+						fileSlice.push(file);
+					}
+					uploadSlice();
+				}
+				upload(0);
+			},
+			"error":function(e){
+				if(e.status==402){
+					alert("批量上传功能需要付费");
+				}else{
+					alert("无法连接至服务器");
+				}
+			}
+		});
+	}
 }
-if(!isIE){
+if(!/MSIE|Trident/i.test(navigator.userAgent)){
 	window.onerror=function(msg,url,lineNo){
 		if(msg&&url&&lineNo&&msg!="Script error."&&lineNo!=1){
 			var text=msg+" at "+url+" : "+lineNo;
@@ -465,7 +485,11 @@ if(navigator.language.indexOf("zh")==-1){
 	document.getElementById("receive").innerText="Receive";
 }
 if($_GET["code"]){
-	getInfo($_GET["code"]);
+	if(/(MicroMessenger|QQ)\//i.test(navigator.userAgent)){
+		alert("请在浏览器中打开此页面")
+	}else{
+		getInfo($_GET["code"]);
+	}
 }
 if(login.username){
 	menuLogin.innerHTML="退出登录";
@@ -526,3 +550,5 @@ if(login.username){
 }else{
 	popLogin.src="https://rthsoftware.cn/login";
 }
+var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cspan style='display:none;' id='cnzz_stat_icon_1261177803'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1261177803' type='text/javascript'%3E%3C/script%3E"));
