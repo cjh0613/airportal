@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w48c7";
+var version="18w48c8";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -506,9 +506,7 @@ if(login.username){
 			var expTime=Math.round((e.airportal[login.username]-new Date().getTime()/1000)/86400);
 			newItem.innerText=login.email;
 			var newP=document.createElement("p");
-			if(expTime<0){
-				newP.innerText="高级账号 未激活";
-			}else if(expTime){
+			if(expTime>0){
 				newP.innerText="高级账号 剩余"+expTime+"天";
 			}else{
 				newP.innerText="高级账号 未激活";
