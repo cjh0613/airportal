@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w48b5";
+var version="18w48c";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -47,7 +47,45 @@ var popRecv=document.getElementById("popRecv");
 var popLogin=document.getElementById("popLogin");
 var lblUploadP=document.getElementById("lblUploadP");
 var fileList=document.getElementById("fileList");
-function downloadFile(code){
+function downloadFile(fileInfo,code,index){
+	if(fileInfo.type=="text/plain"){
+		prompt(fileInfo.content);
+	}else if(fileInfo.slice){
+		var slice=[];
+		var downloadSlice=function(progress){
+			var xhr=new XMLHttpRequest();
+			xhr.responseType="arraybuffer";
+			xhr.onload=function(){
+				if(xhr.status==200){
+					if(progress>fileInfo.slice){
+						var newA=document.createElement("a");
+						var url=URL.createObjectURL(new Blob(slice,{
+							"type":fileInfo.type
+						}));
+						newA.href=url;
+						newA.download=fileInfo.name;
+						newA.click();
+					}else{
+						slice.push(xhr.response);
+						progress++;
+						downloadSlice(progress);
+					}
+				}
+			}
+			xhr.onprogress=function(e){
+				if(e.lengthComputable){
+					console.log("下载进度：("+progress+"/"+fileInfo.slice+") "+Math.round(e.loaded/e.total*100)+"%");
+				}
+			}
+			xhr.open("GET",fileBackend+"download?code="+code+"&index="+index+"&slice="+progress,true);
+			xhr.send();
+		}
+		downloadSlice(1);
+	}else{
+		location.href=fileInfo.download;
+	}
+}
+function getInfo(code){
 	if(code){
 		ajax({
 			"url":fileBackend+"getinfo",
@@ -57,11 +95,7 @@ function downloadFile(code){
 			"dataType":"json",
 			"success":function(e){
 				if(e.multifile.length==1){
-					if(e.multifile[0].type=="text/plain"){
-						prompt(e.multifile[0].content);
-					}else{
-						location.href=e.multifile[0].download;
-					}
+					downloadFile(e.multifile[0],code,1);
 					popRecv.style.opacity="0";
 					mainBox.style.opacity="1";
 					setTimeout(function(){
@@ -79,7 +113,7 @@ function downloadFile(code){
 						}
 						newLi.onclick=function(){
 							var index=this.getAttribute("index")-1;
-							location.href=e.multifile[index].download;
+							downloadFile(e.multifile[index],code,index+1);
 						}
 						fileList.appendChild(newLi);
 					}
@@ -181,7 +215,7 @@ document.getElementById("receive").onclick=function(){
 	inputCode.focus();
 }
 function btnSub(){
-	downloadFile(document.getElementById("inputCode").value);
+	getInfo(document.getElementById("inputCode").value);
 }
 function inputSub(event){
 	event = event || window.event;
@@ -431,7 +465,7 @@ if(navigator.language.indexOf("zh")==-1){
 	document.getElementById("receive").innerText="Receive";
 }
 if($_GET["code"]){
-	downloadFile($_GET["code"]);
+	getInfo($_GET["code"]);
 }
 if(login.username){
 	menuLogin.innerHTML="退出登录";
