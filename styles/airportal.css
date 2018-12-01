@@ -141,8 +141,8 @@ a,button {outline: none;}
 	position: absolute;
 	top: 10px;
 	left: 100%;
-	margin-left: -160px;
-	width: 150px;
+	margin-left: -210px;
+	width: 200px;
 	height: 125px;
 	padding-top: 15px;
 	background: white;
@@ -181,6 +181,19 @@ a,button {outline: none;}
 	background: rgb(65,145,245);
 }
 .menuItem:hover > .tick::before {
+	color: white;
+}
+.menuItem p {
+	line-height: 0;
+	font-size: 10px;
+	color: rgb(65,145,245);
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
+.menuItem:hover > p {
 	color: white;
 }
 .tick {
