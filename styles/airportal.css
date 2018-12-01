@@ -140,9 +140,8 @@ a,button {outline: none;}
 #menu {
 	position: absolute;
 	top: 10px;
-	left: 100%;
-	margin-left: -210px;
-	width: 200px;
+	right: 10px;
+	width: auto;
 	height: 125px;
 	padding-top: 15px;
 	background: white;
@@ -165,6 +164,7 @@ a,button {outline: none;}
 	display: block;
 	width: 100%;
 	padding-left: 40px;
+	padding-right: 40px;
 	padding-top: 10px;
 	padding-bottom: 10px;
 	font-size: small;
