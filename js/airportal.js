@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w48c9";
+var version="18w48c10";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -201,6 +201,7 @@ function submitLogin(email,password,signUp){
 document.getElementById("send").onclick=function(){
 	document.getElementById("file").value="";
 	document.getElementById("file").click();
+	uplProgress.style.width="0px";
 }
 document.getElementById("receive").onclick=function(){
 	var inputCode=document.getElementById("inputCode");
@@ -405,7 +406,7 @@ document.getElementById("file").onchange=function(input){
 										uploadProgress++;
 										var uploadPercentage=uploadProgress/(fileSlice.length-1)*100;
 										lblUploadP.innerHTML="上传中 "+Math.round(uploadPercentage)+"%";
-										uplProgress.value=Math.round(uploadPercentage);
+										uplProgress.style.width=Math.round(uploadPercentage)+"px";
 										setTimeout(function(){
 											uploadSlice();
 											passedTime=0;
@@ -420,7 +421,7 @@ document.getElementById("file").onchange=function(input){
 													percentagePrediction=maxPercentage;
 												}
 												lblUploadP.innerHTML="上传中 "+Math.round(percentagePrediction)+"%";
-												uplProgress.value=Math.round(percentagePrediction);
+												uplProgress.style.width=Math.round(percentagePrediction)+"px";
 											},100);
 										},1000);
 									}
@@ -443,7 +444,7 @@ document.getElementById("file").onchange=function(input){
 								percentagePrediction=maxPercentage;
 							}
 							lblUploadP.innerHTML = "上传中 "+Math.round(percentagePrediction)+"%";
-							uplProgress.value=Math.round(uploadPercentage);
+							uplProgress.style.width=Math.round(uploadPercentage)+"px";
 						},100);
 					}else{
 						fileSlice.push(file);
