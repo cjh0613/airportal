@@ -317,6 +317,13 @@ a,button {outline: none;}
 .link1:link,.link1:visted {color: rgb(65,145,245);}
 .link1:hover {color: #A5C220;}
 .link1:active {color: rgba(65,145,245,0.8);}
+#uplProgress {
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
 #sendBox0 {
 	z-index: 99;
 	position: absolute;
