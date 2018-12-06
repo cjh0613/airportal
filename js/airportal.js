@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w49a5";
+var version="18w49a6";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -133,14 +133,70 @@ function getInfo(code){
 	}
 }
 function loggedIn(){
-	fileBackend=backend+"userdata/file/";
-	localStorage.setItem("Backend",backend);
-	localStorage.setItem("Email",login.email);
-	localStorage.setItem("Username",login.username);
-	if(login.password){
-		localStorage.setItem("Password",login.password);
+	if(popLogin.src){
+		fileBackend=backend+"userdata/file/";
+		localStorage.setItem("Backend",backend);
+		localStorage.setItem("Email",login.email);
+		localStorage.setItem("Username",login.username);
+		if(login.password){
+			localStorage.setItem("Password",login.password);
+		}
+		mainBox.style.opacity="1";
+		popLogin.style.display="none";
 	}
-	location.reload();
+	menuLogin.innerHTML="退出登录";
+	var newItem=document.createElement("a");
+	newItem.className="menuItem";
+	ajax({
+		"url":backend+"get",
+		"data":{
+			"url":"userdata/privilege",
+			"username":"admin"
+		},
+		"dataType":"json",
+		"success":function(e){
+			var expTime=Math.round((e.airportal[login.username]-new Date().getTime()/1000)/86400);
+			newItem.innerText=login.email;
+			var newP=document.createElement("p");
+			if(expTime>0){
+				newP.innerText="高级账号 剩余"+expTime+"天";
+			}else{
+				newP.innerText="高级账号 未激活";
+			}
+			newItem.appendChild(newP);
+		}
+	});
+	menu.style.height="183px";
+	menu.insertBefore(newItem,menu.firstChild);
+	switch(backend){
+		case cnBackend:
+		tickCnServer.style.opacity="1";
+		break;
+		case usBackend:
+		tickUsServer.style.opacity="1";
+		break;
+	}
+	if(!popLogin.src&&login.password){
+		ajax({
+			"url":backend+"userdata/verify",
+			"data":{
+				"email":login.email,
+				"password":login.password
+			},
+			"dataType":"json",
+			"showLoading":true,
+			"success":function(e){
+				if(e.pass){
+					backend=e.backend;
+					localStorage.setItem("Backend",backend);
+					fileBackend=backend+"userdata/file/";
+				}else{
+					alert("密码错误");
+					logOut();
+				}
+			}
+		});
+	}
 }
 function logOut(){
 	localStorage.removeItem("Backend");
@@ -512,59 +568,7 @@ if($_GET["code"]){
 	}
 }
 if(login.username){
-	menuLogin.innerHTML="退出登录";
-	var newItem=document.createElement("a");
-	newItem.className="menuItem";
-	ajax({
-		"url":backend+"get",
-		"data":{
-			"url":"userdata/privilege",
-			"username":"admin"
-		},
-		"dataType":"json",
-		"success":function(e){
-			var expTime=Math.round((e.airportal[login.username]-new Date().getTime()/1000)/86400);
-			newItem.innerText=login.email;
-			var newP=document.createElement("p");
-			if(expTime>0){
-				newP.innerText="高级账号 剩余"+expTime+"天";
-			}else{
-				newP.innerText="高级账号 未激活";
-			}
-			newItem.appendChild(newP);
-		}
-	});
-	menu.style.height="183px";
-	menu.insertBefore(newItem,menu.firstChild);
-	switch(backend){
-		case cnBackend:
-		tickCnServer.style.opacity="1";
-		break;
-		case usBackend:
-		tickUsServer.style.opacity="1";
-		break;
-	}
-	if(login.password){
-		ajax({
-			"url":backend+"userdata/verify",
-			"data":{
-				"email":login.email,
-				"password":login.password
-			},
-			"dataType":"json",
-			"showLoading":true,
-			"success":function(e){
-				if(e.pass){
-					backend=e.backend;
-					localStorage.setItem("Backend",backend);
-					fileBackend=backend+"userdata/file/";
-				}else{
-					alert("密码错误");
-					logOut();
-				}
-			}
-		});
-	}
+	loggedIn();
 }else{
 	var ssoIFrame=document.createElement("iframe");
 	ssoIFrame.style.display="none";
