@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w49a2";
+var version="18w49a3";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -44,7 +44,7 @@ var popSend=document.getElementById("popSend");
 var popRecv=document.getElementById("popRecv");
 var popLogin=document.getElementById("popLogin");
 var lblUploadP=document.getElementById("lblUploadP");
-var uplProgress=document.getElementById("uplProgress");
+var progressBar0=document.getElementById("progressBar0");
 var fileList=document.getElementById("fileList");
 function downloadFile(fileInfo,code,index){
 	if(fileInfo.slice){
@@ -212,7 +212,7 @@ function submitLogin(email,password,signUp){
 document.getElementById("send").onclick=function(){
 	document.getElementById("file").value="";
 	document.getElementById("file").click();
-	uplProgress.style.width="0px";
+	progressBar0.style.width="0px";
 }
 document.getElementById("receive").onclick=function(){
 	var inputCode=document.getElementById("inputCode");
@@ -421,7 +421,7 @@ document.getElementById("file").onchange=function(input){
 										uploadProgress++;
 										var uploadPercentage=uploadProgress/(fileSlice.length-1)*100;
 										lblUploadP.innerHTML="上传中 "+Math.round(uploadPercentage)+"%";
-										uplProgress.style.width=Math.round(uploadPercentage)+"px";
+										progressBar0.style.width=Math.round(uploadPercentage)+"px";
 										setTimeout(function(){
 											uploadSlice();
 											passedTime=0;
@@ -436,7 +436,7 @@ document.getElementById("file").onchange=function(input){
 													percentagePrediction=maxPercentage;
 												}
 												lblUploadP.innerHTML="上传中 "+Math.round(percentagePrediction)+"%";
-												uplProgress.style.width=Math.round(percentagePrediction)+"px";
+												progressBar0.style.width=Math.round(percentagePrediction)+"px";
 											},100);
 										},1000);
 									}
@@ -459,7 +459,7 @@ document.getElementById("file").onchange=function(input){
 								percentagePrediction=maxPercentage;
 							}
 							lblUploadP.innerHTML = "上传中 "+Math.round(percentagePrediction)+"%";
-							uplProgress.style.width=Math.round(uploadPercentage)+"px";
+							progressBar0.style.width=Math.round(uploadPercentage)+"px";
 						},100);
 					}else{
 						fileSlice.push(file);

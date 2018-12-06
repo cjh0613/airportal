@@ -317,16 +317,22 @@ a,button {outline: none;}
 .link1:link,.link1:visted {color: rgb(65,145,245);}
 .link1:hover {color: #A5C220;}
 .link1:active {color: rgba(65,145,245,0.8);}
-#uplProgress {
+.progressBar {
 	position: absolute;
 	left: 50%;
 	margin-left: -50px;
-	width: 0;
 	height: 3px;
-	background: rgb(65,145,245);
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
+}
+#progressBarBg {
+	width: 100px;
+	background: rgb(0,0,0,0.1);
+}
+#progressBar0 {
+	width: 0;
+	background: rgb(65,145,245);
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
