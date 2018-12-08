@@ -248,19 +248,7 @@ a,button {outline: none;}
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
 }
-#popSend {
-	display: none;
-	opacity: 0;
-}
-#popRecv {
-	display: none;
-	opacity: 0;
-}
-#popDownl {
-	display: none;
-	opacity: 0;
-}
-#popLogin {
+#popSend,#popRecv,#popDownl,#popAccount,#popLogin {
 	display: none;
 	opacity: 0;
 }
