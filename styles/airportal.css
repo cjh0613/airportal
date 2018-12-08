@@ -482,6 +482,14 @@ a,button {outline: none;}
 	/*background-color: rgba(0,0,0,0.15);*/
 	color: #A5C220;
 }
+.line {
+	position: absolute;
+	width: 60%;
+	height: 1px;
+	left: 20%;
+	margin-top: -10px;
+	background: rgba(0,0,0,0.1);
+}
 .footer {
 	position: absolute;
 	top: 100%;

@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w49b1";
+var version="18w49b2";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -52,6 +52,8 @@ var progressBar2=document.getElementById("progressBar2");
 var lblDownloadP=document.getElementById("lblDownloadP1");
 var lblDownloadP2=document.getElementById("lblDownloadP2");
 var fileList=document.getElementById("fileList");
+var lblUsername=document.getElementById("lblUsername");
+var lblExpTime=document.getElementById("lblExpTime");
 function downloadFile(fileInfo,code,index){
 	if(fileInfo.slice){
 		mainBox.style.opacity="0";
@@ -167,6 +169,15 @@ function loggedIn(){
 	menuLogin.innerHTML="退出登录";
 	var newItem=document.createElement("a");
 	newItem.className="menuItem";
+	newItem.onclick=function(){
+		mainBox.style.opacity="0";
+		popAccount.style.display="block";
+		setTimeout(function(){
+			popAccount.style.opacity="1";
+		},250);
+		hideMenu();
+	}
+	lblUsername.innerText=login.email;
 	ajax({
 		"url":backend+"get",
 		"data":{
@@ -180,8 +191,10 @@ function loggedIn(){
 			var newP=document.createElement("p");
 			if(expTime>0){
 				newP.innerText="高级账号 剩余"+expTime+"天";
+				lblExpTime.innerText="高级账号 剩余"+expTime+"天";
 			}else{
 				newP.innerText="高级账号 未激活";
+				lblExpTime.innerText="高级账号 未激活";
 			}
 			newItem.appendChild(newP);
 		}
