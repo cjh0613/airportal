@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w49a10";
+var version="18w49b";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -42,12 +42,23 @@ var recvBox0=document.getElementById("recvBox0");
 var recvBox1=document.getElementById("recvBox1");
 var popSend=document.getElementById("popSend");
 var popRecv=document.getElementById("popRecv");
+var popDownl=document.getElementById("popDownl");
 var popLogin=document.getElementById("popLogin");
 var lblUploadP=document.getElementById("lblUploadP");
+var progressBarBg0=document.getElementById("progressBarBg0");
 var progressBar0=document.getElementById("progressBar0");
+var progressBar1=document.getElementById("progressBar1");
+var progressBar2=document.getElementById("progressBar2");
+var lblDownloadP=document.getElementById("lblDownloadP1");
+var lblDownloadP2=document.getElementById("lblDownloadP2");
 var fileList=document.getElementById("fileList");
 function downloadFile(fileInfo,code,index){
 	if(fileInfo.slice){
+		mainBox.style.opacity="0";
+		popDownl.style.display="block";
+		setTimeout(function(){
+			popDownl.style.opacity="1";
+		},250);
 		var slice=[];
 		var downloadSlice=function(progress){
 			var xhr=new XMLHttpRequest();
@@ -65,6 +76,11 @@ function downloadFile(fileInfo,code,index){
 						newA.style.display="none";
 						document.body.appendChild(newA);
 						newA.click();
+						popDownl.style.opacity="0";
+						mainBox.style.opacity="1";
+						setTimeout(function(){
+							popDownl.style.display="none";
+						},250);
 					}else{
 						progress++;
 						downloadSlice(progress);
@@ -75,7 +91,11 @@ function downloadFile(fileInfo,code,index){
 			}
 			xhr.onprogress=function(e){
 				if(e.lengthComputable){
-					console.log("下载进度：("+progress+"/"+fileInfo.slice+") "+Math.round(e.loaded/e.total*100)+"%");
+					//console.log("下载进度：("+progress+"/"+fileInfo.slice+") "+Math.round(e.loaded/e.total*100)+"%");
+					progressBar1.style.width=Math.round(e.loaded/e.total*100)+"px";
+					lblDownloadP1.innerText="下载文件碎片中 "+Math.round(e.loaded/e.total*100)+"%";
+					progressBar2.style.width=Math.round(progress/fileInfo.slice*100)+"px";
+					lblDownloadP2.innerText="总下载进度 "+progress+"/"+fileInfo.slice;
 				}
 			}
 			xhr.open("GET",fileBackend+"tmp/"+code+"-"+index+"-"+progress,true);
@@ -269,12 +289,15 @@ function submitLogin(email,password,signUp){
 document.getElementById("send").onclick=function(){
 	document.getElementById("file").value="";
 	document.getElementById("file").click();
+	progressBarBg0.style.background="rgba(0,0,0,0)"
 	progressBar0.style.width="0px";
 }
 document.getElementById("receive").onclick=function(){
 	var inputCode=document.getElementById("inputCode");
 	recvBox1.style.left="500px";
 	recvBox0.style.left="0px";
+	fileList.innerHTML="";
+	inputCode.value="";
 	mainBox.style.opacity="0";
 	popRecv.style.display="block";
 	setTimeout(function(){
@@ -475,6 +498,7 @@ document.getElementById("file").onchange=function(input){
 											},1000);
 										}
 									}else{
+										progressBarBg0.style.background="rgba(0,0,0,0.1)"
 										uploadProgress++;
 										var uploadPercentage=uploadProgress/(fileSlice.length-1)*100;
 										lblUploadP.innerHTML="上传中 "+Math.round(uploadPercentage)+"%";
@@ -516,7 +540,7 @@ document.getElementById("file").onchange=function(input){
 								percentagePrediction=maxPercentage;
 							}
 							lblUploadP.innerHTML = "上传中 "+Math.round(percentagePrediction)+"%";
-							progressBar0.style.width=Math.round(uploadPercentage)+"px";
+							progressBar0.style.width=Math.round(percentagePrediction)+"px";
 						},100);
 					}else{
 						fileSlice.push(file);
