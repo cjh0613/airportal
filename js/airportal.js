@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w49b2";
+var version="18w49b3";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -44,6 +44,7 @@ var popSend=document.getElementById("popSend");
 var popRecv=document.getElementById("popRecv");
 var popDownl=document.getElementById("popDownl");
 var popLogin=document.getElementById("popLogin");
+var popHistory=document.getElementById("popHistory");
 var lblUploadP=document.getElementById("lblUploadP");
 var progressBarBg0=document.getElementById("progressBarBg0");
 var progressBar0=document.getElementById("progressBar0");
@@ -52,6 +53,8 @@ var progressBar2=document.getElementById("progressBar2");
 var lblDownloadP=document.getElementById("lblDownloadP1");
 var lblDownloadP2=document.getElementById("lblDownloadP2");
 var fileList=document.getElementById("fileList");
+var historyList=document.getElementById("historyList");
+var lblEmpty=document.getElementById("lblEmpty");
 var lblUsername=document.getElementById("lblUsername");
 var lblExpTime=document.getElementById("lblExpTime");
 function downloadFile(fileInfo,code,index){
@@ -199,7 +202,7 @@ function loggedIn(){
 			newItem.appendChild(newP);
 		}
 	});
-	menu.style.height="183px";
+	//menu.style.height="183px";
 	menu.insertBefore(newItem,menu.firstChild);
 	switch(backend){
 		case cnBackend:
@@ -354,6 +357,14 @@ function menuItemLogin(){
 	}
 	hideMenu();
 }
+function menuItemHistory(){
+	mainBox.style.opacity="0";
+	popHistory.style.display="block";
+	setTimeout(function(){
+		popHistory.style.opacity="1";
+	},250);
+	hideMenu();
+}
 addEventListener("message",function(e){
 	try{
 		login=JSON.parse(atob(e.data));
@@ -399,6 +410,13 @@ function btnDone1(){
 	recvBox1.style.left="500px";
 	recvBox0.style.left="0px";
 }
+function btnDone2(){
+	popHistory.style.opacity="0";
+	mainBox.style.opacity="1";
+	setTimeout(function(){
+		popHistory.style.display="none";
+	},250);
+}
 function btnBack0(){
 	sendBox1.style.left="0px";
 	sendBox2.style.left="500px";
@@ -439,6 +457,12 @@ document.getElementById("file").onchange=function(input){
 		document.getElementById("QRBox").appendChild(qrcode);
 		var recvCode=document.getElementById("recvCode");
 		recvCode.innerHTML=code;
+		var newHistory=document.createElement("span");
+		newHistory.className="historyItem";
+		newHistory.innerHTML=code;
+		historyList.appendChild(newHistory);
+		lblEmpty.style.display="none";
+		historyList.style.marginTop="0px";
 		sendBox0.style.left="-500px";
 		sendBox1.style.left="0px";
 		sendBox2.style.left="500px";
