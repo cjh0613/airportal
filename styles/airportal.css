@@ -510,11 +510,17 @@ a,button {outline: none;}
 	width: 100%;
 	left: 0%;
 	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-bottom: 7.5px;
 	border-bottom: solid 1px rgba(0,0,0,0.1);
 	text-align: left;
 	font-family: "Microsoft Yahei";
 	font-weight: bold;
+}
+.historyItem p{
+	font-size: 10px;
+	line-height: 0px;
+	font-weight: normal;
+	color: rgba(0,0,0,0.5);
 }
 .footer {
 	position: absolute;
