@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w49c";
+var version="18w50a";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -45,6 +45,7 @@ var popRecv=document.getElementById("popRecv");
 var popDownl=document.getElementById("popDownl");
 var popLogin=document.getElementById("popLogin");
 var popHistory=document.getElementById("popHistory");
+var popRecvCode=document.getElementById("popRecvCode");
 var lblUploadP=document.getElementById("lblUploadP");
 var progressBarBg0=document.getElementById("progressBarBg0");
 var progressBar0=document.getElementById("progressBar0");
@@ -396,9 +397,39 @@ function viewQRC(){
 function btnDone0(){
 	popSend.style.opacity="0";
 	mainBox.style.opacity="1";
+	popRecvCode.style.display="block";
 	setTimeout(function(){
 		popSend.style.display="none";
+		popRecvCode.style.opacity="1";
 	},250);
+	setTimeout(function(){
+		popRecvCode.style.MozTransform="scale(0.5,0.5)";
+		popRecvCode.style.WebkitTransform="scale(0.5,0.5)";
+	},500);
+	setTimeout(function(){
+		popRecvCode.style.top="0px";
+		popRecvCode.style.left="100%";
+		popRecvCode.style.marginTop="0px";
+		popRecvCode.style.marginLeft="-135px";
+	},750);
+	setTimeout(function(){
+		popRecvCode.style.MozTransformOrigin="65% 50%";
+		popRecvCode.style.WebkitTransformOrigin="65% 50%";
+		popRecvCode.style.MozTransform="scale(0,0)";
+		popRecvCode.style.WebkitTransform="scale(0,0)";
+	},1750);
+	setTimeout(function(){
+		popRecvCode.style.opacity="0";
+		popRecvCode.style.display="none";
+		popRecvCode.style.MozTransformOrigin="50% 50%";
+		popRecvCode.style.WebkitTransformOrigin="50% 50%";
+		popRecvCode.style.MozTransform="scale(1,1)";
+		popRecvCode.style.WebkitTransform="scale(1,1)";
+		popRecvCode.style.top="50%";
+		popRecvCode.style.left="50%";
+		popRecvCode.style.marginTop="-66px";
+		popRecvCode.style.marginLeft="-78px";
+	},2250);
 }
 function btnDone1(){
 	popRecv.style.opacity="0";
@@ -456,6 +487,7 @@ document.getElementById("file").onchange=function(input){
 		document.getElementById("QRBox").appendChild(qrcode);
 		var recvCode=document.getElementById("recvCode");
 		recvCode.innerHTML=code;
+		popRecvCode.innerHTML=code;
 		var newHistory=document.createElement("span");
 		var newP=document.createElement("p");
 		newHistory.className="historyItem";
