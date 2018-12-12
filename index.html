@@ -60,10 +60,10 @@
 		</div>
 		<div class="popUp" id="popDownl">
 			<p class="p1" style="padding-top: 20px;">正在从服务器预读取文件</p>
-			<p id="lblDownloadP1" style="padding-top: 30px; color: rgba(0,0,0,0.5);">下载文件碎片中...</p>
+			<p class="p3" id="lblDownloadP1" style="padding-top: 30px;">下载文件碎片中...</p>
 			<span class="progressBar" id="progressBarBg1"></span>
 			<span class="progressBar" id="progressBar1"></span>
-			<p id="lblDownloadP2" style="padding-top: 30px; color: rgba(0,0,0,0.5);">总下载进度</p>
+			<p class="p3" id="lblDownloadP2" style="padding-top: 30px;">总下载进度</p>
 			<span class="progressBar" id="progressBarBg2"></span>
 			<span class="progressBar" id="progressBar2"></span>
 			<p style="padding-top: 50px;">读取完成后，文件会立即保存到您的电脑上</p>
@@ -71,12 +71,23 @@
 		<div class="popUp" id="popAccount">
 			<p class="p1" id="lblUsername"></p>
 			<span class="line"></span>
-			<p id="lblExpTime" style="color: rgba(0,0,0,0.5); ">高级账号 剩余 天</p>
+			<p class="p3" id="lblExpTime">高级账号 剩余 天</p>
+			<div class="payPlans">
+				<p class="p2">激活 / 续期高级账号</p>
+				<p class="p4">支付方案</p>
+				<span class="payItem"><p class="p2">¥6 <span class="pDel">¥10</span></p><p class="p4">一个月</p></span>
+				<span class="payItem"><p class="p2">¥18 <span class="pDel">¥30</span></p><p class="p4">三个月</p></span>
+				<span class="payItem"><p class="p2">¥72 <span class="pDel">¥120</span></p><p class="p4">一年</p></span>
+				<p class="p4" style="margin-top: 0px;">支付方式</p>
+				<span class="payItem"><p class="p5">支付宝</p></span>
+				<span class="payItem"><p class="p5">微信支付</p></span>
+			</div>
+			<button class="btn1" id="btnDone3" onclick="btnDone3()">确认支付</button>
 		</div>
 		<div class="popUp" id="popHistory">
 			<p class="p1">历史记录</p>
 			<span class="line"></span>
-			<p id="lblEmpty" style="color: rgba(0,0,0,0.3); ">您尚未上传任何文件</p>
+			<p id="lblEmpty" style="color: rgba(0,0,0,0.3);">您尚未上传任何文件</p>
 			<div id="historyList"></div>
 			<button class="btn1" id="btnDone2" onclick="btnDone2()">关闭</button>
 		</div>
