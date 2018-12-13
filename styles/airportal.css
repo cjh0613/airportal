@@ -15,6 +15,9 @@ body {
 	-khtml-user-select: none;
 	user-select: none; 
 }
+* {
+  outline: none;
+}
 @-webkit-keyframes fadeIn {
 	0% {opacity: 0;}
 	50% {opacity: 0;}
