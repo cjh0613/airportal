@@ -249,7 +249,7 @@ a,button {outline: none;}
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
 }
-#popSend,#popRecv,#popDownl,#popAccount,#popLogin,#popHistory,#popRecvCode {
+#popSend,#popRecv,#popDownl,#popAccount,#popLogin,#popHistory,#popRecvCode,#popSetPri {
 	display: none;
 	opacity: 0;
 }

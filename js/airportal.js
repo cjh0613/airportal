@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w50b";
+var version="18w50c";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -46,6 +46,7 @@ var popDownl=document.getElementById("popDownl");
 var popLogin=document.getElementById("popLogin");
 var popHistory=document.getElementById("popHistory");
 var popRecvCode=document.getElementById("popRecvCode");
+var popSetPri=document.getElementById("popSetPri");
 var lblUploadP=document.getElementById("lblUploadP");
 var progressBarBg0=document.getElementById("progressBarBg0");
 var progressBar0=document.getElementById("progressBar0");
@@ -204,6 +205,20 @@ function loggedIn(){
 		}
 	});
 	menu.insertBefore(newItem,menu.firstChild);
+	if(login.username=="admin"){
+		var newItem0=document.createElement("a");
+		newItem0.className="menuItem";
+		newItem0.innerText="设置高级账号";
+		newItem0.onclick=function(){
+			mainBox.style.opacity="0";
+			popSetPri.style.display="block";
+			setTimeout(function(){
+				popSetPri.style.opacity="1";
+			},250);
+			hideMenu();
+		}
+		menu.insertBefore(newItem0,document.getElementById("menuItemCnServer"));
+	}
 	switch(backend){
 		case cnBackend:
 		tickCnServer.style.opacity="1";
@@ -676,3 +691,17 @@ newStatDiv.style.display="none";
 newScript.src="https://s4.cnzz.com/z_stat.php?id=1261177803&web_id=1261177803";
 newStatDiv.appendChild(newScript);
 document.body.appendChild(newStatDiv);
+
+function setPrivilege() {
+	ajax({
+	    "url":backend+"userdata/renew",
+	    "data":{
+	        "appname":appName,
+	        "email":document.getElementById("inputPriEmail").value,
+	        "password":login.password,
+	        "time":new Date(document.getElementById("inputPriExpDate").value).getTime()/1000,
+	        "username":login.username
+	    },
+	    "method":"POST"
+	})
+}
