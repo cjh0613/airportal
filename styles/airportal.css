@@ -322,6 +322,10 @@ a,button {outline: none;}
 	position: relative;
 	top: 20px;
 }
+#btnSetPri {
+	position: relative;
+	top: 100px;
+}
 .link1 {
 	text-decoration: none;
 	color: rgb(65,145,245);
@@ -658,6 +662,39 @@ a,button {outline: none;}
 	-moz-transition: all 0.5s;
 	-o-transition: all 0.5s;
 	-ms-transition: all 0.5s;
+}
+.input1 {
+	position: relative;
+	left: 20%;
+	top: 45px;
+	display: block;
+	border: none;
+	width: 55%;
+	padding: 10px 2.5%;
+	margin-top: 20px;
+	text-align: center;
+	font-size: small;
+	color: rgba(0,0,0,0.8);
+	background: rgba(0,0,0,0.05);
+	-webkit-border-radius: 50px;
+	-moz-border-radius: 50px;
+	border-radius: 50px;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	-ms-transition: all 0.5s;
+}
+.input1:hover {
+	background: rgba(0,0,0,0.1);
+}
+.input1:focus {
+	background: rgba(0,0,0,0.15);
+}
+#inputPriExpDate {
+	width: 55.5%;
+	padding-left: 2.5%;
+	padding-right: 2%;
 }
 .footer {
 	position: absolute;
