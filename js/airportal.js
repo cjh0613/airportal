@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w50c1";
+var version="18w50c3";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -262,6 +262,23 @@ function logOut(){
 		ssoIFrame.src="https://rthsoftware.cn/sso?action=logout";
 		document.body.appendChild(ssoIFrame);
 	}
+}
+function setPrivilege(){
+	ajax({
+		"url":backend+"userdata/renew",
+		"data":{
+			"appname":appName,
+			"email":document.getElementById("inputPriEmail").value,
+			"password":login.password,
+			"time":new Date(document.getElementById("inputPriExpDate").value).getTime()/1000,
+			"username":login.username
+		},
+		"method":"POST",
+		"success":function(){
+			alert("设置成功");
+			document.getElementById("inputPriEmail").value="";
+		}
+	});
 }
 function submitLogin(email,password,signUp){
 	if(email&&password){
@@ -637,7 +654,7 @@ document.getElementById("file").onchange=function(input){
 			},
 			"error":function(e){
 				if(e.status==402){
-					alert("批量上传功能需要付费");
+					alert("批量上传和上传大文件需要付费");
 				}else{
 					alert("无法连接至服务器");
 				}
@@ -691,17 +708,3 @@ newStatDiv.style.display="none";
 newScript.src="https://s4.cnzz.com/z_stat.php?id=1261177803&web_id=1261177803";
 newStatDiv.appendChild(newScript);
 document.body.appendChild(newStatDiv);
-
-function setPrivilege() {
-	ajax({
-	    "url":backend+"userdata/renew",
-	    "data":{
-	        "appname":appName,
-	        "email":document.getElementById("inputPriEmail").value,
-	        "password":login.password,
-	        "time":new Date(document.getElementById("inputPriExpDate").value).getTime()/1000,
-	        "username":login.username
-	    },
-	    "method":"POST"
-	})
-}
