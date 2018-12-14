@@ -1,8 +1,7 @@
 var appName="AirPortal";
-var version="18w50c5";
+var version="18w50c6";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
-var txtVer=document.getElementById("version");
 txtVer.innerHTML=version;
 
 var $_GET=(function(){
@@ -28,39 +27,6 @@ var login={
 	"password":localStorage.getItem("Password"),
 	"username":localStorage.getItem("Username")
 };
-var menuIcon=document.getElementById("menuIcon");
-var menu=document.getElementById("menu");
-var mask=document.getElementById("mask");
-var tickCnServer=document.getElementById("tickCnServer");
-var tickUsServer=document.getElementById("tickUsServer");
-var menuLogin=document.getElementById("menuItemLogin");
-var mainBox=document.getElementById("mainBox");
-var sendBox0=document.getElementById("sendBox0");
-var sendBox1=document.getElementById("sendBox1");
-var sendBox2=document.getElementById("sendBox2");
-var recvBox0=document.getElementById("recvBox0");
-var recvBox1=document.getElementById("recvBox1");
-var popSend=document.getElementById("popSend");
-var popRecv=document.getElementById("popRecv");
-var popDownl=document.getElementById("popDownl");
-var popLogin=document.getElementById("popLogin");
-var popHistory=document.getElementById("popHistory");
-var popRecvCode=document.getElementById("popRecvCode");
-var popSetPri=document.getElementById("popSetPri");
-var lblUploadP=document.getElementById("lblUploadP");
-var progressBarBg0=document.getElementById("progressBarBg0");
-var progressBar0=document.getElementById("progressBar0");
-var progressBar1=document.getElementById("progressBar1");
-var progressBar2=document.getElementById("progressBar2");
-var lblDownloadP=document.getElementById("lblDownloadP1");
-var lblDownloadP2=document.getElementById("lblDownloadP2");
-var fileList=document.getElementById("fileList");
-var historyList=document.getElementById("historyList");
-var lblEmpty=document.getElementById("lblEmpty");
-var lblUsername=document.getElementById("lblUsername");
-var lblExpTime=document.getElementById("lblExpTime");
-var inputEmail=document.getElementById("inputEmail");
-var lblExpTime=document.getElementById("inputPsw");
 function downloadFile(fileInfo,code,index){
 	if(fileInfo.slice){
 		mainBox.style.opacity="0";
@@ -100,7 +66,6 @@ function downloadFile(fileInfo,code,index){
 			}
 			xhr.onprogress=function(e){
 				if(e.lengthComputable){
-					//console.log("下载进度：("+progress+"/"+fileInfo.slice+") "+Math.round(e.loaded/e.total*100)+"%");
 					progressBar1.style.width=Math.round(e.loaded/e.total*100)+"px";
 					lblDownloadP1.innerText="下载文件碎片中 "+Math.round(e.loaded/e.total*100)+"%";
 					progressBar2.style.width=Math.round(progress/fileInfo.slice*100)+"px";
@@ -129,7 +94,7 @@ function getInfo(code){
 					popRecv.style.opacity="0";
 					mainBox.style.opacity="1";
 					setTimeout(function(){
-						document.getElementById("inputCode").value="";
+						inputCode.value="";
 						popRecv.style.display="none";
 					},250);
 				}else{
@@ -197,11 +162,9 @@ function loggedIn(){
 			newItem.innerText=login.email;
 			var newP=document.createElement("p");
 			if(expTime>0){
-				newP.innerText="高级账号 剩余"+expTime+"天";
-				lblExpTime.innerText="高级账号 剩余"+expTime+"天";
+				newP.innerText=lblExpTime.innerText="高级账号 剩余"+expTime+"天";
 			}else{
-				newP.innerText="高级账号 未激活";
-				lblExpTime.innerText="高级账号 未激活";
+				newP.innerText=lblExpTime.innerText="高级账号 未激活";
 			}
 			newItem.appendChild(newP);
 		}
@@ -219,7 +182,7 @@ function loggedIn(){
 			},250);
 			hideMenu();
 		}
-		menu.insertBefore(newItem0,document.getElementById("menuItemCnServer"));
+		menu.insertBefore(newItem0,menuItemCnServer);
 	}
 	switch(backend){
 		case cnBackend:
@@ -270,15 +233,15 @@ function setPrivilege(){
 		"url":backend+"userdata/renew",
 		"data":{
 			"appname":appName,
-			"email":document.getElementById("inputPriEmail").value,
+			"email":inputPriEmail.value,
 			"password":login.password,
-			"time":new Date(document.getElementById("inputPriExpDate").value).getTime()/1000,
+			"time":new Date(inputPriExpDate.value).getTime()/1000,
 			"username":login.username
 		},
 		"method":"POST",
 		"success":function(){
 			alert("设置成功");
-			document.getElementById("inputPriEmail").value="";
+			inputPriEmail.value="";
 		}
 	});
 }
@@ -336,14 +299,13 @@ function submitLogin(email,password,signUp){
 		});
 	}
 }
-document.getElementById("send").onclick=function(){
-	document.getElementById("file").value="";
-	document.getElementById("file").click();
+send.onclick=function(){
+	file.value="";
+	file.click();
 	progressBarBg0.style.background="rgba(0,0,0,0)"
 	progressBar0.style.width="0px";
 }
-document.getElementById("receive").onclick=function(){
-	var inputCode=document.getElementById("inputCode");
+receive.onclick=function(){
 	recvBox1.style.left="500px";
 	recvBox0.style.left="0px";
 	fileList.innerHTML="";
@@ -356,7 +318,7 @@ document.getElementById("receive").onclick=function(){
 	inputCode.focus();
 }
 function btnSub(){
-	getInfo(document.getElementById("inputCode").value);
+	getInfo(inputCode.value);
 }
 function inputSub(event){
 	event = event || window.event;
@@ -513,7 +475,7 @@ function btnClose2(){
 		popSetPri.style.display="none";
 	},250);
 }
-document.getElementById("file").onchange=function(input){
+file.onchange=function(input){
 	var files=[];
 	for(var i=0;i<input.target.files.length;i++){
 		if(input.target.files[i].type=="text/php"){
@@ -536,11 +498,10 @@ document.getElementById("file").onchange=function(input){
 		popSend.style.opacity="1";
 	},250);
 	var uploadSuccess=function(code){
-		document.getElementById("QRBox").innerHTML="";
+		QRBox.innerHTML="";
 		var qrcode=new Image(200,200);
 		qrcode.src="https://rthsoftware.cn/backend/get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text=http://rthe.cn/"+code)+"&username=admin";
-		document.getElementById("QRBox").appendChild(qrcode);
-		var recvCode=document.getElementById("recvCode");
+		QRBox.appendChild(qrcode);
 		recvCode.innerHTML=code;
 		popRecvCode.innerHTML=code;
 		var newHistory=document.createElement("span");
@@ -589,7 +550,7 @@ document.getElementById("file").onchange=function(input){
 			"method":"POST",
 			"success":function(code){
 				var upload=function(fileIndex){
-					var file=input.target.files[fileIndex];
+					var thisFile=input.target.files[fileIndex];
 					var fileSlice=[];
 					var passedTime=0;
 					var progressCalc;
@@ -654,9 +615,9 @@ document.getElementById("file").onchange=function(input){
 							}
 						});
 					}
-					if(file.size>10240000){
-						for(var i=0;i<file.size/sliceSize;i++){
-							fileSlice.push(file.slice(i*sliceSize,(i+1)*sliceSize));
+					if(thisFile.size>10240000){
+						for(var i=0;i<thisFile.size/sliceSize;i++){
+							fileSlice.push(thisFile.slice(i*sliceSize,(i+1)*sliceSize));
 						}
 						timer=setInterval(function(){
 							time+=100;
@@ -669,7 +630,7 @@ document.getElementById("file").onchange=function(input){
 							progressBar0.style.width=Math.round(percentagePrediction)+"px";
 						},100);
 					}else{
-						fileSlice.push(file);
+						fileSlice.push(thisFile);
 					}
 					uploadSlice();
 				}
@@ -706,8 +667,8 @@ window.onerror=function(msg,url,lineNo){
 	}
 }
 if(navigator.language.indexOf("zh")==-1){
-	document.getElementById("send").innerText="Send";
-	document.getElementById("receive").innerText="Receive";
+	send.innerText="Send";
+	receive.innerText="Receive";
 }
 if($_GET["code"]){
 	if(/(MicroMessenger|QQ)\//i.test(navigator.userAgent)){
@@ -726,8 +687,8 @@ if(login.username){
 	popLogin.src="https://rthsoftware.cn/login";
 }
 var newStatDiv=document.createElement("div");
-var newScript=document.createElement("script");
+var newStatScript=document.createElement("script");
 newStatDiv.style.display="none";
-newScript.src="https://s4.cnzz.com/z_stat.php?id=1261177803&web_id=1261177803";
-newStatDiv.appendChild(newScript);
+newStatScript.src="https://s4.cnzz.com/z_stat.php?id=1261177803&web_id=1261177803";
+newStatDiv.appendChild(newStatScript);
 document.body.appendChild(newStatDiv);
