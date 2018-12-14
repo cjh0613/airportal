@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w50c6";
+var version="18w50c7";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 txtVer.innerHTML=version;
@@ -126,8 +126,8 @@ function getInfo(code){
 		});
 	}
 }
-function loggedIn(){
-	if(popLogin.src){
+function loggedIn(newLogin){
+	if(newLogin){
 		fileBackend=backend+"userdata/file/";
 		localStorage.setItem("Backend",backend);
 		localStorage.setItem("Email",login.email);
@@ -192,7 +192,7 @@ function loggedIn(){
 		tickUsServer.style.opacity="1";
 		break;
 	}
-	if(!popLogin.src&&login.password){
+	if(!newLogin&&login.password){
 		ajax({
 			"url":"https://rthsoftware.cn/backend/userdata/verify",
 			"data":{
@@ -245,7 +245,7 @@ function setPrivilege(){
 		}
 	});
 }
-function submitLogin(email,password,signUp){
+function submitLogin(signUp){
 	if(inputEmail.value&&inputPsw.value){
 		email=inputEmail.value.toLowerCase();
 		password=MD5(inputPsw.value);
@@ -264,7 +264,7 @@ function submitLogin(email,password,signUp){
 						login.email=email;
 						login.password=password;
 						login.username=e.username;
-						loggedIn();
+						loggedIn(true);
 					}else if(confirm("密码错误。您想重置密码吗？")){
 						location.href="https://rthsoftware.cn/login?email="+encodeURIComponent(email)+"&page=resetpassword";
 					}
@@ -283,7 +283,7 @@ function submitLogin(email,password,signUp){
 							login.email=email;
 							login.password=password;
 							login.username=username;
-							loggedIn();
+							loggedIn(true);
 						},
 						"error":function(){
 							alert("无法连接至服务器");
@@ -684,7 +684,6 @@ if(login.username){
 	ssoIFrame.style.display="none";
 	ssoIFrame.src="https://rthsoftware.cn/sso";
 	document.body.appendChild(ssoIFrame);
-	popLogin.src="https://rthsoftware.cn/login";
 }
 var newStatDiv=document.createElement("div");
 var newStatScript=document.createElement("script");
