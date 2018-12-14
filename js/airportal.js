@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w50c7";
+var version="18w50c8";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 txtVer.innerHTML=version;
@@ -138,7 +138,7 @@ function loggedIn(newLogin){
 		mainBox.style.opacity="1";
 		popLogin.style.display="none";
 	}
-	menuLogin.innerHTML="退出登录";
+	menuItemLogin.innerHTML="退出登录";
 	var newItem=document.createElement("a");
 	newItem.className="menuItem";
 	newItem.onclick=function(){
@@ -228,7 +228,7 @@ function logOut(){
 		document.body.appendChild(ssoIFrame);
 	}
 }
-function setPrivilege(){
+btnSetPri.onclick=function(){
 	ajax({
 		"url":backend+"userdata/renew",
 		"data":{
@@ -299,6 +299,11 @@ function submitLogin(signUp){
 		});
 	}
 }
+inputPsw.onkeydown=function(event){
+	if(event.keyCode==13){
+		submitLogin();
+	}
+}
 send.onclick=function(){
 	file.value="";
 	file.click();
@@ -317,17 +322,15 @@ receive.onclick=function(){
 	},250);
 	inputCode.focus();
 }
-function btnSub(){
+btnSub.onclick=function(){
 	getInfo(inputCode.value);
 }
-function inputSub(event){
-	event = event || window.event;
-	source = event.srcElement;
+inputCode.onkeydown=function(event){
 	if(event.keyCode==13){
-		btnSub();
+		btnSub.click();
 	}
 }
-function showMenu(){
+menuIcon.onclick=function(){
 	menu.style.display="block";
 	setTimeout(function(){
 		menu.style.opacity="1";
@@ -341,7 +344,7 @@ function hideMenu(){
 		menu.style.display="none";
 	},250);
 }
-function menuItemLogin(){
+menuItemLogin.onclick=function(){
 	if(!login.username){
 		mainBox.style.opacity="0";
 		popLogin.style.display="block";
@@ -353,7 +356,7 @@ function menuItemLogin(){
 	}
 	hideMenu();
 }
-function menuItemHistory(){
+menuItemHistory.onclick=function(){
 	mainBox.style.opacity="0";
 	popHistory.style.display="block";
 	setTimeout(function(){
@@ -368,29 +371,29 @@ addEventListener("message",function(e){
 			location.reload()
 		}else{
 			backend=login.backend;
-			loggedIn();
+			loggedIn(true);
 		}
 	}catch(e){}
 });
-function menuItemCnServer(){
+menuItemCnServer.onclick=function(){
 	backend=cnBackend;
 	fileBackend=backend+"userdata/file/";
 	tickCnServer.style.opacity="1";
 	tickUsServer.style.opacity="0";
 	hideMenu();
 }
-function menuItemUsServer(){
+menuItemUsServer.onclick=function(){
 	backend=usBackend;
 	fileBackend=backend+"userdata/file/";
 	tickCnServer.style.opacity="0";
 	tickUsServer.style.opacity="1";
 	hideMenu();
 }
-function viewQRC(){
+viewQRC.onclick=function(){
 	sendBox1.style.left="-500px";
 	sendBox2.style.left="0px";
 }
-function btnDone0(){
+btnDone0.onclick=function(){
 	popSend.style.opacity="0";
 	mainBox.style.opacity="1";
 	popRecvCode.style.display="block";
@@ -427,7 +430,7 @@ function btnDone0(){
 		popRecvCode.style.marginLeft="-78px";
 	},2250);
 }
-function btnDone1(){
+btnDone1.onclick=function(){
 	popRecv.style.opacity="0";
 	mainBox.style.opacity="1";
 	setTimeout(function(){
@@ -436,39 +439,39 @@ function btnDone1(){
 	recvBox1.style.left="500px";
 	recvBox0.style.left="0px";
 }
-function btnDone2(){
+btnDone2.onclick=function(){
 	popHistory.style.opacity="0";
 	mainBox.style.opacity="1";
 	setTimeout(function(){
 		popHistory.style.display="none";
 	},250);
 }
-function btnBack0(){
+btnBack0.onclick=function(){
 	sendBox1.style.left="0px";
 	sendBox2.style.left="500px";
 }
-function btnBack1(){
+btnBack1.onclick=function(){
 	popRecv.style.opacity="0";
 	mainBox.style.opacity="1";
 	setTimeout(function(){
 		popRecv.style.display="none";
 	},250);
 }
-function btnClose0(){
+btnClose0.onclick=function(){
 	popAccount.style.opacity="0";
 	mainBox.style.opacity="1";
 	setTimeout(function(){
 		popAccount.style.display="none";
 	},250);
 }
-function btnClose1(){
+btnClose1.onclick=function(){
 	popLogin.style.opacity="0";
 	mainBox.style.opacity="1";
 	setTimeout(function(){
 		popLogin.style.display="none";
 	},250);
 }
-function btnClose2(){
+btnClose2.onclick=function(){
 	popSetPri.style.opacity="0";
 	mainBox.style.opacity="1";
 	setTimeout(function(){
