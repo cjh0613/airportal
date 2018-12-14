@@ -69,6 +69,7 @@
 			<p style="padding-top: 50px;">读取完成后，文件会立即保存到您的电脑上</p>
 		</div>
 		<div class="popUp" id="popAccount">
+			<span class="btnClose" id="btnClose0" onclick="btnClose0()"></span>
 			<p class="p1" id="lblUsername"></p>
 			<span class="line"></span>
 			<p class="p3" id="lblExpTime">高级账号 剩余 天</p>
@@ -91,8 +92,15 @@
 			<div id="historyList"></div>
 			<button class="btn1" id="btnDone2" onclick="btnDone2()">关闭</button>
 		</div>
-		<iframe class="popUp" id="popLogin" frameborder="0"></iframe>
+		<!--<iframe class="popUp" id="popLogin" frameborder="0"></iframe>-->
+		<div class="popUp" id="popLogin">
+			<span class="btnClose" id="btnClose1" onclick="btnClose1()"></span>
+			<input type="email" name="email" class="input1" id="inputEmail" placeholder="邮箱">
+			<input type="password" name="password" class="input1" id="inputPsw" placeholder="密码">
+			<input class="btn1" id="btnLogin" onclick="submitLogin()" value="登录">
+		</div>
 		<div class="popUp" id="popSetPri">
+			<span class="btnClose" id="btnClose2" onclick="btnClose2()"></span>
 			<p class="p1">设置高级账号</p>
 			<span class="line"></span>
 			<input type="email" class="input1" id="inputPriEmail" placeholder="邮箱">

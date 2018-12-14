@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w50c3";
+var version="18w50c4";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 var txtVer=document.getElementById("version");
@@ -59,6 +59,8 @@ var historyList=document.getElementById("historyList");
 var lblEmpty=document.getElementById("lblEmpty");
 var lblUsername=document.getElementById("lblUsername");
 var lblExpTime=document.getElementById("lblExpTime");
+var inputEmail=document.getElementById("inputEmail");
+var lblExpTime=document.getElementById("inputPsw");
 function downloadFile(fileInfo,code,index){
 	if(fileInfo.slice){
 		mainBox.style.opacity="0";
@@ -281,9 +283,9 @@ function setPrivilege(){
 	});
 }
 function submitLogin(email,password,signUp){
-	if(email&&password){
-		email=email.toLowerCase();
-		password=MD5(password);
+	if(inputEmail.value&&inputPsw.value){
+		email=inputEmail.value.toLowerCase();
+		password=MD5(inputPsw.value);
 		ajax({
 			"url":"https://rthsoftware.cn/backend/userdata/verify",
 			"data":{
@@ -488,6 +490,27 @@ function btnBack1(){
 	mainBox.style.opacity="1";
 	setTimeout(function(){
 		popRecv.style.display="none";
+	},250);
+}
+function btnClose0(){
+	popAccount.style.opacity="0";
+	mainBox.style.opacity="1";
+	setTimeout(function(){
+		popAccount.style.display="none";
+	},250);
+}
+function btnClose1(){
+	popLogin.style.opacity="0";
+	mainBox.style.opacity="1";
+	setTimeout(function(){
+		popLogin.style.display="none";
+	},250);
+}
+function btnClose2(){
+	popSetPri.style.opacity="0";
+	mainBox.style.opacity="1";
+	setTimeout(function(){
+		popSetPri.style.display="none";
 	},250);
 }
 document.getElementById("file").onchange=function(input){

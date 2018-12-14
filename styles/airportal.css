@@ -329,6 +329,10 @@ a,button {outline: none;}
 	position: relative;
 	top: 100px;
 }
+#btnLogin {
+	position: relative;
+	top: 100px;
+}
 .link1 {
 	text-decoration: none;
 	color: rgb(65,145,245);
@@ -699,12 +703,55 @@ a,button {outline: none;}
 	padding-left: 2.5%;
 	padding-right: 2%;
 }
+.btnClose {
+	position: absolute;
+	width: 25px;
+	height: 25px;
+	top: 50px;
+	right: 50px;
+	cursor: pointer;
+}
+.btnClose::before, .btnClose::after {
+	content: '';
+	position: absolute;
+	height: 2px;
+	width: 100%;
+	top: 50%;
+	left: 0;
+	margin-top: -1px;
+	background: rgb(180,180,180);
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
+.btnClose::before {
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+.btnClose::after {
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+.btnClose:hover::before,.btnClose:hover::after {
+	background: rgb(65,145,245);
+}
+.btnClose:active::before,.btnClose:active::after {
+	background: rgba(65,145,245,0.5);
+}
 .footer {
 	position: absolute;
 	top: 100%;
 	margin-top: -35px;
 	font-size: 12px;
-	color: rgba(0,0,0,0.5);
+	color: rgba(0,0,0,0.35);
 }
 #footerL {
 	text-align: left;
