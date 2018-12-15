@@ -70,7 +70,7 @@ a,button {outline: none;}
 #send {
 	border: none;
 	color: white;
-	background: rgb(65,145,245);
+	background-color: rgb(65,145,245);
 	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
 	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
@@ -82,7 +82,7 @@ a,button {outline: none;}
 }
 #send:active {
 	color: rgb(65,145,245);
-	background: white;
+	background-color: white;
 	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
@@ -90,7 +90,7 @@ a,button {outline: none;}
 #receive {
 	border: none;
 	color: rgb(65,145,245);
-	background: white;
+	background-color: white;
 	-webkit-box-shadow: rgba(65,145,245,0.2) 0px 5px 20px;
 	-moz-box-shadow: rgba(65,145,245,0.2) 0px 5px 20px;
 	box-shadow: rgba(65,145,245,0.2) 0px 5px 20px;
@@ -102,7 +102,7 @@ a,button {outline: none;}
 }
 #receive:active {
 	color: white;
-	background: rgb(65,145,245);
+	background-color: rgb(65,145,245);
 	-webkit-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 	-moz-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
@@ -147,7 +147,7 @@ a,button {outline: none;}
 	height: auto;
 	padding-top: 15px;
 	padding-bottom: 13px;
-	background: white;
+	background-color: white;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
@@ -180,7 +180,7 @@ a,button {outline: none;}
 }
 .menuItem:hover {
 	color: white;
-	background: rgb(65,145,245);
+	background-color: rgb(65,145,245);
 }
 .menuItem:hover > .tick::before {
 	color: white;
@@ -236,7 +236,7 @@ a,button {outline: none;}
 	left: 50%;
 	margin-left: -250px;
 	padding-top: 40px;
-	background: white;
+	background-color: white;
 	text-align: center;
 	font-size: small;
 	-webkit-border-radius: 20px;
@@ -294,7 +294,7 @@ a,button {outline: none;}
 	border: none;
 	color: white;
 	font-size: small;
-	background: rgb(65,145,245);
+	background-color: rgb(65,145,245);
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
@@ -307,7 +307,7 @@ a,button {outline: none;}
 	box-shadow: rgba(65,145,245,0.35) 0px 5px 30px;
 }
 .btn1:active {
-	background: white;
+	background-color: white;
 	color: rgb(65,145,245);
 }
 #btnDone0 {
@@ -353,11 +353,11 @@ a,button {outline: none;}
 }
 #progressBarBg0,#progressBarBg1,#progressBarBg2 {
 	width: 100px;
-	background: rgba(0,0,0,0.1);
+	background-color: rgba(0,0,0,0.1);
 }
 #progressBar0,#progressBar1,#progressBar2 {
 	width: 0;
-	background: rgb(65,145,245);
+	background-color: rgb(65,145,245);
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
@@ -371,7 +371,7 @@ a,button {outline: none;}
 	height: 200px;
 	left: 0px;
 	top: 160px;
-	background: white;
+	background-color: white;
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
@@ -476,7 +476,7 @@ a,button {outline: none;}
 	width: 100%;
 	left: 500px;
 	margin-top: 30px;
-	background: white;
+	background-color: white;
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
@@ -521,7 +521,7 @@ a,button {outline: none;}
 	height: 1px;
 	left: 20%;
 	margin-top: -10px;
-	background: rgba(0,0,0,0.1);
+	background-color: rgba(0,0,0,0.1);
 }
 #historyList {
 	position: relative;
@@ -559,7 +559,7 @@ a,button {outline: none;}
 	padding: 20px;
 	padding-right: 10px;
 	max-width: 166px;
-	background: white;
+	background-color: white;
 
 	text-align: center;
 	font-size: 35px;
@@ -589,14 +589,14 @@ a,button {outline: none;}
 	text-align: left;
 	overflow-y: scroll;
 }
-.payItem,.payItemSelected {
+.payItem {
 	position: relative;
 	display: inline-block;
 	margin-right: 10px;
 	margin-bottom: 10px;
 	width: 80px;
 	padding-bottom: 5px;
-	background: white;
+	background-color: white;
 	border: solid 1px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -613,26 +613,30 @@ a,button {outline: none;}
 	border-color: rgba(65,145,245,0.8);
 }
 .payItem:hover {
-	background: rgba(65,145,245,0.15);
+	background-color: rgba(65,145,245,0.15);
 	border-color:rgba(65,145,245,0.15);
 }
-.payItem:active,.payItemSelected {
-	background: rgb(65,145,245);
+.payItem.selected:hover{
+	background-color: rgb(65,145,245);
+	border-color: rgb(65,145,245);
+}
+.payItem:active,.selected {
+	background-color: rgb(65,145,245);
 	border-color:rgb(65,145,245);
 	color: white;
 }
-.payItem:active > .p2,.payItem:active > .p4,.payItem:active > .p5,.payItemSelected > .p2,.payItemSelected > .p4,.payItemSelected > .p5 {
+.payItem:active > .p2,.payItem:active > .p4,.payItem:active > .p5,.selected > .p2,.selected > .p4,.selected > .p5 {
 	color: white;
 }
-.payItem:active > .p2 > .pDel,.payItemSelected > .p2 > .pDel {
+.payItem:active > .p2 > .pDel,.selected > .p2 > .pDel {
 	color: rgba(255,255,255,0.5);
 }
-.payItem .p2,.payItem .p4,.payItem .p5,.payItemSelected .p2,.payItemSelected .p4,.payItemSelected .p5 {
+.payItem .p2,.payItem .p4,.payItem .p5 {
 	font-size: 15px;
 	line-height: 0px;
 	text-align: center;
 }
-.payItem .p2,.payItemSelected .p2 {
+.payItem .p2 {
 	font-family: "Microsoft Yahei";
 	font-weight: bold;
 	color: rgb(65,145,245);
@@ -642,10 +646,10 @@ a,button {outline: none;}
 	-o-transition: all 0.5s;
 	-ms-transition: all 0.5s;
 }
-.payItemSelected .p2 {
+.selected .p2 {
 	color: white;
 }
-.payItem .p4,.payItemSelected .p4 {
+.payItem .p4 {
 	font-size: 10px;
 	transition: all 0.5s;
 	-webkit-transition: all 0.5s;
@@ -653,7 +657,7 @@ a,button {outline: none;}
 	-o-transition: all 0.5s;
 	-ms-transition: all 0.5s;
 }
-.payItem .p5,.payItemSelected .p5 {
+.payItem .p5 {
 	font-size: 12px;
 	padding-top: 3.5px;
 	transition: all 0.5s;
@@ -684,7 +688,7 @@ a,button {outline: none;}
 	text-align: center;
 	font-size: small;
 	color: rgba(0,0,0,0.8);
-	background: rgba(0,0,0,0.05);
+	background-color: rgba(0,0,0,0.05);
 	-webkit-border-radius: 50px;
 	-moz-border-radius: 50px;
 	border-radius: 50px;
@@ -695,10 +699,10 @@ a,button {outline: none;}
 	-ms-transition: all 0.5s;
 }
 .input1:hover {
-	background: rgba(0,0,0,0.1);
+	background-color: rgba(0,0,0,0.1);
 }
 .input1:focus {
-	background: rgba(0,0,0,0.15);
+	background-color: rgba(0,0,0,0.15);
 }
 #inputPriExpDate {
 	width: 55.5%;
@@ -721,7 +725,7 @@ a,button {outline: none;}
 	top: 50%;
 	left: 0;
 	margin-top: -1px;
-	background: rgb(180,180,180);
+	background-color: rgb(180,180,180);
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
@@ -743,10 +747,10 @@ a,button {outline: none;}
 	transform: rotate(-45deg);
 }
 .btnClose:hover::before,.btnClose:hover::after {
-	background: rgb(65,145,245);
+	background-color: rgb(65,145,245);
 }
 .btnClose:active::before,.btnClose:active::after {
-	background: rgba(65,145,245,0.5);
+	background-color: rgba(65,145,245,0.5);
 }
 .footer {
 	position: absolute;
