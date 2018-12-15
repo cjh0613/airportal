@@ -284,6 +284,7 @@ a,button {outline: none;}
 	letter-spacing: 10px;
 }
 .btn1 {
+	position: relative;
 	padding: 10px 35px;
 	-webkit-border-radius: 20px;
 	-moz-border-radius: 20px;
@@ -310,27 +311,22 @@ a,button {outline: none;}
 	color: rgb(65,145,245);
 }
 #btnDone0 {
-	position: relative;
 	top: 260px;
 }
-#btnDone1 {
-	position: relative;
+#btnDone1,#btnDone2 {
 	top: 10px;
 }
-#btnDone2 {
-	position: relative;
-	top: 10px;
-}
-#btnDone3 {
-	position: relative;
+#btnDone3,#btnPay0 {
 	top: 20px;
 }
-#btnSetPri {
-	position: relative;
-	top: 100px;
+#btnPay0 {
+	opacity: 0.5;
+	pointer-events: none;
 }
 #btnLogin {
-	position: relative;
+	top: 30px;
+}
+#btnSetPri {
 	top: 100px;
 }
 .link1 {
@@ -752,6 +748,24 @@ a,button {outline: none;}
 	margin-top: -35px;
 	font-size: 12px;
 	color: rgba(0,0,0,0.35);
+}
+.loginLogo {
+	position: relative;
+	width: 250px;
+	height: 60px;
+	left: 50%;
+	margin-left: -125px;
+	top: 30px;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-image: url("../images/loginLogo.png");
+}
+#popLogin input {
+	top: 0px;
+}
+#popLogin .p4 {
+	text-align: center;
+	margin-top: 50px;
 }
 #footerL {
 	text-align: left;
