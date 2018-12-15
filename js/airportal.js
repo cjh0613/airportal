@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w50d";
+var version="18w50e";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 txtVer.innerHTML=version;
@@ -501,9 +501,62 @@ btnClose2.onclick=function(){
 		popSetPri.style.display="none";
 	},250);
 }
+function btnPay0State(){
+	if(document.getElementsByClassName('payItemSelected').length==2){
+		btnPay0.style.pointerEvents="auto";
+		btnPay0.style.opacity="1";
+	}else{
+		btnPay0.style.pointerEvents="none";
+		btnPay0.style.opacity="0.5";
+	}
+}
 payItem1M.onclick=function() {
-	//payItem1M.style.background="rgb(65,145,245)";
-
+	if(payItem1M.className!="payItemSelected"){
+		payItem1M.className="payItemSelected";
+		payItem3M.className="payItem";
+		payItem1Y.className="payItem";
+	}else{
+		payItem1M.className="payItem";
+	}
+	btnPay0State()
+}
+payItem3M.onclick=function() {
+	if(payItem3M.className!="payItemSelected"){
+		payItem3M.className="payItemSelected";
+		payItem1M.className="payItem";
+		payItem1Y.className="payItem";
+	}else{
+		payItem3M.className="payItem";
+	}
+	btnPay0State()
+}
+payItem1Y.onclick=function() {
+	if(payItem1Y.className!="payItemSelected"){
+		payItem1Y.className="payItemSelected";
+		payItem3M.className="payItem";
+		payItem1M.className="payItem";
+	}else{
+		payItem1Y.className="payItem";
+	}
+	btnPay0State()
+}
+payItemAli.onclick=function() {
+	if(payItemAli.className!="payItemSelected"){
+		payItemAli.className="payItemSelected";
+		payItemWechat.className="payItem";
+	}else{
+		payItemAli.className="payItem";
+	}
+	btnPay0State()
+}
+payItemWechat.onclick=function() {
+	if(payItemWechat.className!="payItemSelected"){
+		payItemWechat.className="payItemSelected";
+		payItemAli.className="payItem";
+	}else{
+		payItemWechat.className="payItem";
+	}
+	btnPay0State()
 }
 file.onchange=function(input){
 	var files=[];
