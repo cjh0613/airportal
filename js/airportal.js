@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w50c9";
+var version="18w50c10";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 txtVer.innerHTML=version;
@@ -27,6 +27,17 @@ var login={
 	"password":localStorage.getItem("Password"),
 	"username":localStorage.getItem("Username")
 };
+function addHistory(filename,code){
+	var newHistory=document.createElement("span");
+	var newP=document.createElement("p");
+	newHistory.className="historyItem";
+	newHistory.innerHTML=code;
+	newP.innerHTML=filename;
+	newHistory.appendChild(newP);
+	historyList.insertBefore(newHistory,historyList.firstChild);
+	lblEmpty.style.display="none";
+	historyList.style.marginTop="-10px";
+}
 function downloadFile(fileInfo,code,index){
 	if(fileInfo.slice){
 		mainBox.style.opacity="0";
@@ -167,9 +178,21 @@ function loggedIn(newLogin){
 				newP.innerText=lblExpTime.innerText="高级账号 未激活";
 			}
 			newItem.appendChild(newP);
+			menu.insertBefore(newItem,menu.firstChild);
 		}
 	});
-	menu.insertBefore(newItem,menu.firstChild);
+	ajax({
+		"url":fileBackend+"get",
+		"data":{
+			"username":login.username
+		},
+		"dataType":"json",
+		"success":function(e){
+			for(var i=0;i<e.length;i++){
+				addHistory(e[i].multifile[0].name,e[i].code);
+			}
+		}
+	});
 	if(login.username=="admin"){
 		var newItem0=document.createElement("a");
 		newItem0.className="menuItem";
@@ -492,14 +515,16 @@ file.onchange=function(input){
 			});
 		}
 	}
-	sendBox0.style.left="0px";
-	sendBox1.style.left="500px";
-	sendBox2.style.left="1000px";
-	mainBox.style.opacity="0";
-	popSend.style.display="block";
-	setTimeout(function(){
-		popSend.style.opacity="1";
-	},250);
+	var showUploading=function(){
+		sendBox0.style.left="0px";
+		sendBox1.style.left="500px";
+		sendBox2.style.left="1000px";
+		mainBox.style.opacity="0";
+		popSend.style.display="block";
+		setTimeout(function(){
+			popSend.style.opacity="1";
+		},250);
+	}
 	var uploadSuccess=function(code){
 		QRBox.innerHTML="";
 		var qrcode=new Image(200,200);
@@ -507,21 +532,14 @@ file.onchange=function(input){
 		QRBox.appendChild(qrcode);
 		recvCode.innerHTML=code;
 		popRecvCode.innerHTML=code;
-		var newHistory=document.createElement("span");
-		var newP=document.createElement("p");
-		newHistory.className="historyItem";
-		newHistory.innerHTML=code;
-		newP.innerHTML=input.target.files[0].name;
-		newHistory.appendChild(newP);
-		historyList.insertBefore(newHistory,historyList.firstChild);
-		lblEmpty.style.display="none";
-		historyList.style.marginTop="-10px";
+		addHistory(input.target.files[0].name,code);
 		sendBox0.style.left="-500px";
 		sendBox1.style.left="0px";
 		sendBox2.style.left="500px";
 		lblUploadP.innerHTML="上传中...";
 	}
 	if(files.length<=1&&files[0].size<=10240000){
+		showUploading();
 		ajax({
 			"url":fileBackend+"upload",
 			"data":{
@@ -637,6 +655,7 @@ file.onchange=function(input){
 					}
 					uploadSlice();
 				}
+				showUploading();
 				upload(0);
 			},
 			"error":function(e){
