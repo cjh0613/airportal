@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w50c8";
+var version="18w50c9";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 txtVer.innerHTML=version;
@@ -266,7 +266,7 @@ function submitLogin(signUp){
 						login.username=e.username;
 						loggedIn(true);
 					}else if(confirm("密码错误。您想重置密码吗？")){
-						location.href="https://rthsoftware.cn/login?email="+encodeURIComponent(email)+"&page=resetpassword";
+						location.href="https://rthsoftware.cn/login?email="+email+"&page=resetpassword";
 					}
 				}else if(signUp){
 					var username=email.split("@")[0]+new Date().getTime().toString(36);
@@ -481,7 +481,7 @@ btnClose2.onclick=function(){
 file.onchange=function(input){
 	var files=[];
 	for(var i=0;i<input.target.files.length;i++){
-		if(input.target.files[i].type=="text/php"){
+		if(input.target.files[i].name.indexOf(".php")!=-1||input.target.files[i].type=="text/php"){
 			alert("不允许传输 PHP 文件");
 		}else{
 			files.push({
