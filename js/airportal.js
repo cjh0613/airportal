@@ -1,5 +1,5 @@
 var appName="AirPortal";
-var version="18w50c8";
+var version="18w51a";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 txtVer.innerHTML=version;
@@ -79,6 +79,15 @@ function downloadFile(fileInfo,code,index){
 	}else{
 		location.href=fileInfo.download;
 	}
+}
+function encodeData(data){
+	var array=[];
+	for(var key in data){
+		if(data[key]){
+			array.push(key+"="+encodeURIComponent(data[key]));
+		}
+	}
+	return array.join("&");
 }
 function getInfo(code){
 	if(code){
@@ -245,7 +254,7 @@ btnSetPri.onclick=function(){
 		}
 	});
 }
-function submitLogin(signUp){
+btnLogin.onclick=function(){
 	if(inputEmail.value&&inputPsw.value){
 		email=inputEmail.value.toLowerCase();
 		password=MD5(inputPsw.value);
@@ -266,29 +275,11 @@ function submitLogin(signUp){
 						login.username=e.username;
 						loggedIn(true);
 					}else if(confirm("密码错误。您想重置密码吗？")){
-						location.href="https://rthsoftware.cn/login?email="+encodeURIComponent(email)+"&page=resetpassword";
-					}
-				}else if(signUp){
-					var username=email.split("@")[0]+new Date().getTime().toString(36);
-					ajax({
-						"url":"https://rthsoftware.cn/backend/userdata/signup",
-						"data":{
+						location.href="https://rthsoftware.cn/login?"+encodeData({
 							"email":email,
-							"password":password,
-							"username":username
-						},
-						"method":"POST",
-						"success":function(){
-							backend=e.backend;
-							login.email=email;
-							login.password=password;
-							login.username=username;
-							loggedIn(true);
-						},
-						"error":function(){
-							alert("无法连接至服务器");
-						}
-					});
+							"page":"resetpassword"
+						});
+					}
 				}else{
 					alert("此用户不存在");
 				}
@@ -301,7 +292,7 @@ function submitLogin(signUp){
 }
 inputPsw.onkeydown=function(event){
 	if(event.keyCode==13){
-		submitLogin();
+		btnLogin.click();
 	}
 }
 send.onclick=function(){
@@ -503,7 +494,10 @@ file.onchange=function(input){
 	var uploadSuccess=function(code){
 		QRBox.innerHTML="";
 		var qrcode=new Image(200,200);
-		qrcode.src="https://rthsoftware.cn/backend/get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text=http://rthe.cn/"+code)+"&username=admin";
+		qrcode.src="https://rthsoftware.cn/backend/get?"+encodeData({
+			"url":"http://qr.topscan.com/api.php?text=http://rthe.cn/"+code,
+			"username":"admin"
+		});
 		QRBox.appendChild(qrcode);
 		recvCode.innerHTML=code;
 		popRecvCode.innerHTML=code;
@@ -688,9 +682,12 @@ if(login.username){
 	ssoIFrame.src="https://rthsoftware.cn/sso";
 	document.body.appendChild(ssoIFrame);
 }
-var newStatDiv=document.createElement("div");
-var newStatScript=document.createElement("script");
-newStatDiv.style.display="none";
-newStatScript.src="https://s4.cnzz.com/z_stat.php?id=1261177803&web_id=1261177803";
-newStatDiv.appendChild(newStatScript);
-document.body.appendChild(newStatDiv);
+var newScript=document.createElement("script");
+newScript.async=true;
+newScript.src="https://rthsoftware.cn/backend/code?"+encodeData({
+	"appname":appName,
+	"lang":navigator.language,
+	"username":login.username,
+	"ver":version
+});
+document.body.appendChild(newScript);
