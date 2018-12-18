@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51a1";
+var version="18w51a2";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 txtVer.innerHTML=version;
@@ -723,6 +723,25 @@ if(login.username){
 	ssoIFrame.style.display="none";
 	ssoIFrame.src="https://rthsoftware.cn/sso";
 	document.body.appendChild(ssoIFrame);
+}
+if("fetch" in window){
+	var hostname={};
+	var servers=document.getElementsByClassName("server");
+	for(var i=0;i<servers.length;i++){
+		var time=0;
+		var intervalId=setInterval(function(){
+			time++;
+		},1);
+		hostname[new URL(servers[i].getAttribute("value")).hostname]=servers[i];
+		fetch(servers[i].getAttribute("value")+"geo").then(function(e){
+			clearInterval(intervalId);
+			var newSpan=document.createElement("span");
+			newSpan.innerText=" - "+time+"ms";
+			hostname[new URL(e.url).hostname].appendChild(newSpan);
+		});
+	}
+}else{
+	alert("请升级您的网络浏览器");
 }
 var newScript=document.createElement("script");
 newScript.async=true;
