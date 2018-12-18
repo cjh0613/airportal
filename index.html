@@ -76,14 +76,14 @@
 			<div class="payPlans">
 				<p class="p2">激活 / 续期高级账号</p>
 				<p class="p4">支付方案</p>
-				<span class="payItem"><p class="p2">¥6 <span class="pDel">¥10</span></p><p class="p4">一个月</p></span>
-				<span class="payItem"><p class="p2">¥18 <span class="pDel">¥30</span></p><p class="p4">三个月</p></span>
-				<span class="payItem"><p class="p2">¥72 <span class="pDel">¥120</span></p><p class="p4">一年</p></span>
+				<span class="payItem plan" id="payItem1M"><p class="p2">¥6 <span class="pDel">¥10</span></p><p class="p4">一个月</p></span>
+				<span class="payItem plan" id="payItem3M"><p class="p2">¥18 <span class="pDel">¥30</span></p><p class="p4">三个月</p></span>
+				<span class="payItem plan" id="payItem1Y"><p class="p2">¥72 <span class="pDel">¥120</span></p><p class="p4">一年</p></span>
 				<p class="p4" style="margin-top: 0px;">支付方式</p>
-				<span class="payItem"><p class="p5">支付宝</p></span>
-				<span class="payItem"><p class="p5">微信支付</p></span>
+				<span class="payItem method" id="payItemAli"><p class="p5">支付宝</p></span>
+				<span class="payItem method" id="payItemWechat"><p class="p5">微信支付</p></span>
 			</div>
-			<button class="btn1" id="btnDone3">确认支付</button>
+			<button class="btn1" id="btnPay0">确认支付</button>
 		</div>
 		<div class="popUp" id="popHistory">
 			<p class="p1">历史记录</p>
@@ -94,6 +94,8 @@
 		</div>
 		<div class="popUp" id="popLogin">
 			<span class="btnClose" id="btnClose1"></span>
+			<div class="loginLogo"></div>
+			<p class="p4">使用RTH通行证来登录到AirPortal <a href="https://rthsoftware.cn/login?page=signup" target="_blank" class="link1" >注册</a></p>
 			<input type="email" name="email" class="input1" id="inputEmail" placeholder="邮箱">
 			<input type="password" name="password" class="input1" id="inputPsw" placeholder="密码">
 			<button class="btn1" id="btnLogin">登录</button>

@@ -27,6 +27,17 @@ var login={
 	"password":localStorage.getItem("Password"),
 	"username":localStorage.getItem("Username")
 };
+function addHistory(filename,code){
+	var newHistory=document.createElement("span");
+	var newP=document.createElement("p");
+	newHistory.className="historyItem";
+	newHistory.innerHTML=code;
+	newP.innerHTML=filename;
+	newHistory.appendChild(newP);
+	historyList.insertBefore(newHistory,historyList.firstChild);
+	lblEmpty.style.display="none";
+	historyList.style.marginTop="-10px";
+}
 function downloadFile(fileInfo,code,index){
 	if(fileInfo.slice){
 		mainBox.style.opacity="0";
@@ -176,9 +187,21 @@ function loggedIn(newLogin){
 				newP.innerText=lblExpTime.innerText="高级账号 未激活";
 			}
 			newItem.appendChild(newP);
+			menu.insertBefore(newItem,menu.firstChild);
 		}
 	});
-	menu.insertBefore(newItem,menu.firstChild);
+	ajax({
+		"url":fileBackend+"get",
+		"data":{
+			"username":login.username
+		},
+		"dataType":"json",
+		"success":function(e){
+			for(var i=0;i<e.length;i++){
+				addHistory(e[i].multifile[0].name,e[i].code);
+			}
+		}
+	});
 	if(login.username=="admin"){
 		var newItem0=document.createElement("a");
 		newItem0.className="menuItem";
@@ -469,10 +492,40 @@ btnClose2.onclick=function(){
 		popSetPri.style.display="none";
 	},250);
 }
+function btnPay0State(){
+	if(document.getElementsByClassName("selected").length==2){
+		btnPay0.style.pointerEvents="auto";
+		btnPay0.style.opacity="1";
+	}else{
+		btnPay0.style.pointerEvents="none";
+		btnPay0.style.opacity="0.5";
+	}
+}
+function payItemClick(element,className){
+	if(element.classList.contains("selected")){
+		element.classList.remove("selected")
+	}else{
+		var elements=document.getElementsByClassName(className)
+		for(var i=0;i<elements.length;i++){
+			if(elements[i]==element){
+				element.classList.add("selected")
+			}else{
+				elements[i].classList.remove("selected")
+			}
+		}
+	}
+	btnPay0State();
+}
+payItem1M.onclick=payItem3M.onclick=payItem1Y.onclick=function() {
+	payItemClick(this,"plan");
+}
+payItemAli.onclick=payItemWechat.onclick=function() {
+	payItemClick(this,"method");
+}
 file.onchange=function(input){
 	var files=[];
 	for(var i=0;i<input.target.files.length;i++){
-		if(input.target.files[i].type=="text/php"){
+		if(input.target.files[i].name.indexOf(".php")!=-1||input.target.files[i].type=="text/php"){
 			alert("不允许传输 PHP 文件");
 		}else{
 			files.push({
@@ -483,14 +536,16 @@ file.onchange=function(input){
 			});
 		}
 	}
-	sendBox0.style.left="0px";
-	sendBox1.style.left="500px";
-	sendBox2.style.left="1000px";
-	mainBox.style.opacity="0";
-	popSend.style.display="block";
-	setTimeout(function(){
-		popSend.style.opacity="1";
-	},250);
+	var showUploading=function(){
+		sendBox0.style.left="0px";
+		sendBox1.style.left="500px";
+		sendBox2.style.left="1000px";
+		mainBox.style.opacity="0";
+		popSend.style.display="block";
+		setTimeout(function(){
+			popSend.style.opacity="1";
+		},250);
+	}
 	var uploadSuccess=function(code){
 		QRBox.innerHTML="";
 		var qrcode=new Image(200,200);
@@ -501,21 +556,14 @@ file.onchange=function(input){
 		QRBox.appendChild(qrcode);
 		recvCode.innerHTML=code;
 		popRecvCode.innerHTML=code;
-		var newHistory=document.createElement("span");
-		var newP=document.createElement("p");
-		newHistory.className="historyItem";
-		newHistory.innerHTML=code;
-		newP.innerHTML=input.target.files[0].name;
-		newHistory.appendChild(newP);
-		historyList.insertBefore(newHistory,historyList.firstChild);
-		lblEmpty.style.display="none";
-		historyList.style.marginTop="-10px";
+		addHistory(input.target.files[0].name,code);
 		sendBox0.style.left="-500px";
 		sendBox1.style.left="0px";
 		sendBox2.style.left="500px";
 		lblUploadP.innerHTML="上传中...";
 	}
 	if(files.length<=1&&files[0].size<=10240000){
+		showUploading();
 		ajax({
 			"url":fileBackend+"upload",
 			"data":{
@@ -631,6 +679,7 @@ file.onchange=function(input){
 					}
 					uploadSlice();
 				}
+				showUploading();
 				upload(0);
 			},
 			"error":function(e){
