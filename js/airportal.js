@@ -1,5 +1,6 @@
+"use strict";
 var appName="AirPortal";
-var version="18w51a";
+var version="18w51a1";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 txtVer.innerHTML=version;
@@ -19,8 +20,6 @@ var backend=localStorage.getItem("Backend");
 if(!backend){
 	backend="https://rthsoftware.cn/backend/";
 }
-var cnBackend="https://www.rthsoftware.cn/backend/";
-var usBackend="https://rthsoftware.net/backend/";
 var fileBackend=backend+"userdata/file/";
 var login={
 	"email":localStorage.getItem("Email"),
@@ -216,14 +215,6 @@ function loggedIn(newLogin){
 		}
 		menu.insertBefore(newItem0,menuItemCnServer);
 	}
-	switch(backend){
-		case cnBackend:
-		tickCnServer.style.opacity="1";
-		break;
-		case usBackend:
-		tickUsServer.style.opacity="1";
-		break;
-	}
 	if(!newLogin&&login.password){
 		ajax({
 			"url":"https://rthsoftware.cn/backend/userdata/verify",
@@ -279,8 +270,8 @@ btnSetPri.onclick=function(){
 }
 btnLogin.onclick=function(){
 	if(inputEmail.value&&inputPsw.value){
-		email=inputEmail.value.toLowerCase();
-		password=MD5(inputPsw.value);
+		var email=inputEmail.value.toLowerCase();
+		var password=MD5(inputPsw.value);
 		ajax({
 			"url":"https://rthsoftware.cn/backend/userdata/verify",
 			"data":{
@@ -389,18 +380,20 @@ addEventListener("message",function(e){
 		}
 	}catch(e){}
 });
-menuItemCnServer.onclick=function(){
-	backend=cnBackend;
+menuItemAutoServer.onclick=
+menuItemCnServer.onclick=
+menuItemUsServer1.onclick=
+menuItemUsServer2.onclick=function(){
+	backend=this.getAttribute("value");
 	fileBackend=backend+"userdata/file/";
-	tickCnServer.style.opacity="1";
-	tickUsServer.style.opacity="0";
-	hideMenu();
-}
-menuItemUsServer.onclick=function(){
-	backend=usBackend;
-	fileBackend=backend+"userdata/file/";
-	tickCnServer.style.opacity="0";
-	tickUsServer.style.opacity="1";
+	var tick=document.getElementsByClassName("tick");
+	for(var i=0;i<tick.length;i++){
+		if(tick[i].getAttribute("for")==this.id){
+			tick[i].style.opacity="1";
+		}else{
+			tick[i].style.opacity="0";
+		}
+	}
 	hideMenu();
 }
 viewQRC.onclick=function(){

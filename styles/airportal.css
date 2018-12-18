@@ -220,10 +220,10 @@ a,button {outline: none;}
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
 }
-#tickCnServer {
-	opacity: 0;
+#tickAutoServer {
+	opacity: 1;
 }
-#tickUsServer {
+#tickCnServer,#tickUsServer1,#tickUsServer2 {
 	opacity: 0;
 }
 .popUp {
