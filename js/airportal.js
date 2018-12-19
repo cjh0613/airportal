@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51b6";
+var version="18w51b7";
 var consoleStyle="font-family:'Microsoft Yahei';color:rgb(65,145,245)";
 console.info("%c"+appName+" 由 毛若昕 和 杨尚臻 联合开发。",consoleStyle);
 console.info("%c版本："+version,consoleStyle);
@@ -72,7 +72,7 @@ function downloadFile(fileInfo,code,index){
 						downloadSlice(progress);
 					}
 				}else{
-					alert("无法连接至服务器");
+					alert("无法连接至服务器。");
 				}
 			}
 			xhr.onprogress=function(e){
@@ -138,9 +138,9 @@ function getInfo(code){
 			},
 			"error":function(e){
 				if(e.status==200){
-					alert("文件不存在");
+					alert("文件不存在。");
 				}else{
-					alert("无法连接至服务器");
+					alert("无法连接至服务器。");
 				}
 			}
 		});
@@ -238,7 +238,7 @@ function loggedIn(newLogin){
 					localStorage.setItem("Backend",backend);
 					fileBackend=backend+"userdata/file/";
 				}else{
-					alert("密码错误");
+					alert("密码错误。");
 					logOut();
 				}
 			}
@@ -271,7 +271,7 @@ btnSetPri.onclick=function(){
 		},
 		"method":"POST",
 		"success":function(){
-			alert("设置成功");
+			alert("设置成功。");
 			inputPriEmail.value="";
 		}
 	});
@@ -303,11 +303,11 @@ btnLogin.onclick=function(){
 						});
 					}
 				}else{
-					alert("此用户不存在");
+					alert("此用户不存在。");
 				}
 			},
 			"error":function(){
-				alert("无法连接至服务器");
+				alert("无法连接至服务器。");
 			}
 		});
 	}
@@ -578,14 +578,24 @@ btnPay1.onclick=function(){
 			"text":"用户通过 "+pubPayMethod+" 激活 / 续期了 "+pubPayPlan+" 的高级账号。",
 			"ver":version
 		},
-		"method":"POST"
+		"method":"POST",
+		"success":function(){
+			alert("请求提交成功。如果订单在24小时内没有得到确认，请联系开发者。");
+		},
+		"error":function(e){
+			if(e.status==504){
+				alert("服务器无法及时响应，请再试一次。");
+			}else{
+				alert("无法连接至服务器。");
+			}
+		}
 	});
 }
 file.onchange=function(input){
 	var files=[];
 	for(var i=0;i<input.target.files.length;i++){
 		if(input.target.files[i].name.indexOf(".php")!=-1||input.target.files[i].type=="text/php"){
-			alert("不允许传输 PHP 文件");
+			alert("不允许传输 PHP 文件。");
 		}else{
 			files.push({
 				"name":input.target.files[i].name,
@@ -637,7 +647,7 @@ file.onchange=function(input){
 				}
 			},
 			"error":function(){
-				alert("无法连接至服务器");
+				alert("无法连接至服务器。");
 			}
 		});
 	}else{
@@ -712,7 +722,7 @@ file.onchange=function(input){
 								}
 							},
 							"error":function(){
-								alert("无法连接至服务器");
+								alert("无法连接至服务器。");
 							}
 						});
 					}
@@ -740,9 +750,9 @@ file.onchange=function(input){
 			},
 			"error":function(e){
 				if(e.status==402){
-					alert("批量上传和上传大文件需要付费");
+					alert("批量上传和上传大文件需要付费。");
 				}else{
-					alert("无法连接至服务器");
+					alert("无法连接至服务器。");
 				}
 			}
 		});
@@ -775,7 +785,7 @@ if(navigator.language.indexOf("zh")==-1){
 }
 if($_GET["code"]){
 	if(/(MicroMessenger|QQ)\//i.test(navigator.userAgent)){
-		alert("请在浏览器中打开此页面")
+		alert("请在浏览器中打开此页面。")
 	}else{
 		getInfo($_GET["code"]);
 	}
@@ -813,7 +823,7 @@ if("fetch" in window){
 		});
 	}
 }else{
-	alert("请升级您的网络浏览器");
+	alert("请升级您的网络浏览器。");
 }
 var newScript=document.createElement("script");
 newScript.async=true;
