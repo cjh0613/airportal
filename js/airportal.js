@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51b5";
+var version="18w51b6";
 var consoleStyle="font-family:'Microsoft Yahei';color:rgb(65,145,245)";
 console.info("%c"+appName+" 由 毛若昕 和 杨尚臻 联合开发。",consoleStyle);
 console.info("%c版本："+version,consoleStyle);
@@ -574,6 +574,7 @@ btnPay1.onclick=function(){
 			"email":login.email,
 			"lang":navigator.language,
 			"name":login.username,
+			"recipient":"405801769@qq.com",
 			"text":"用户通过 "+pubPayMethod+" 激活 / 续期了 "+pubPayPlan+" 的高级账号。",
 			"ver":version
 		},
@@ -759,6 +760,7 @@ window.onerror=function(msg,url,lineNo){
 					"email":login.email,
 					"lang":navigator.language,
 					"name":login.username,
+					"recipient":"405801769@qq.com",
 					"text":text,
 					"ver":version
 				},
