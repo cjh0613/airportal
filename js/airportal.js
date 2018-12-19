@@ -389,7 +389,7 @@ menuItemUsServer2.onclick=function(){
 	fileBackend=backend+"userdata/file/";
 	var tick=document.getElementsByClassName("tick");
 	for(var i=0;i<tick.length;i++){
-		if(tick[i].getAttribute("for")==this.id){
+		if(tick[i].parentElement==this){
 			tick[i].style.opacity="1";
 		}else{
 			tick[i].style.opacity="0";
