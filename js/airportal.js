@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51b2";
+var version="18w51b3";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 txtVer.innerHTML=version;
@@ -520,35 +520,54 @@ payItem1M.onclick=payItem3M.onclick=payItem1Y.onclick=function() {
 payItemAli.onclick=payItemWechat.onclick=function() {
 	payItemClick(this,"method");
 }
-btnPay0.onclick=function() {
+var pubPayPlan="N/A";
+var pubPayMethod="N/A";
+btnPay0.onclick=function(){
 	var payPlan=document.getElementsByClassName("payItem plan selected").item(0).lastElementChild;
 	var payMethod=document.getElementsByClassName("payItem method selected").item(0).lastElementChild;
+	pubPayPlan=payPlan.innerText;
+	pubPayMethod=payMethod.innerText;
 	payQRC.innerHTML="";
 	var qrcode=new Image(200,200);
-	if(payMethod.innerText=="支付宝"){
-		if(payPlan.innerText=="一个月"){
+	if(pubPayMethod=="支付宝"){
+		if(pubPayPlan=="一个月"){
 			qrcode.src="https://rthsoftware.cn/img/alipay_6.jpg";
 		}
-		if(payPlan.innerText=="三个月"){
+		if(pubPayPlan=="三个月"){
 			qrcode.src="https://rthsoftware.cn/img/alipay_18.jpg";
 		}
-		if(payPlan.innerText=="一年"){
+		if(pubPayPlan=="一年"){
 			qrcode.src="https://rthsoftware.cn/img/alipay_72.jpg";
 		}
 	}else{
-		if(payPlan.innerText=="一个月"){
+		if(pubPayPlan=="一个月"){
 			qrcode.src="https://rthsoftware.cn/img/wechatpay_6.png";
 		}
-		if(payPlan.innerText=="三个月"){
+		if(pubPayPlan=="三个月"){
 			qrcode.src="https://rthsoftware.cn/img/wechatpay_18.png";
 		}
-		if(payPlan.innerText=="一年"){
+		if(pubPayPlan=="一年"){
 			qrcode.src="https://rthsoftware.cn/img/wechatpay_72.png";
 		}
 	}
 	payQRC.appendChild(qrcode);
+	lblPayTip.innerHTML="您正在为 "+login.email+"<br/>激活 / 续期"+pubPayPlan+"的高级账号";
 	accBox0.style.left="-500px";
 	accBox1.style.left="0px";
+}
+btnPay1.onclick=function(){
+	ajax({
+		"url":"https://rthsoftware.cn/backend/feedback",
+		"data":{
+			"appname":appName,
+			"email":login.email,
+			"lang":navigator.language,
+			"name":login.username,
+			"text":"用户 "+login.email+" 通过 "+pubPayMethod+" 激活 / 续期了 "+pubPayPlan+" 的高级账号。",
+			"ver":version
+		},
+		"method":"POST"
+	});
 }
 file.onchange=function(input){
 	var files=[];
