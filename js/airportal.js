@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51b";
+var version="18w51b1";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 txtVer.innerHTML=version;
@@ -515,6 +515,34 @@ payItem1M.onclick=payItem3M.onclick=payItem1Y.onclick=function() {
 }
 payItemAli.onclick=payItemWechat.onclick=function() {
 	payItemClick(this,"method");
+}
+btnPay0.onclick=function() {
+	var payPlan=document.getElementsByClassName("payItem plan selected").item(0).lastElementChild;
+	var payMethod=document.getElementsByClassName("payItem method selected").item(0).lastElementChild;
+	payQRC.innerHTML="";
+	var qrcode=new Image(200,200);
+	if(payMethod.innerText=="支付宝"){
+		if(payPlan.innerText=="一个月"){
+			qrcode.src="https://rthsoftware.cn/img/alipay_6.jpg";
+		}
+		if(payPlan.innerText=="三个月"){
+			qrcode.src="https://rthsoftware.cn/img/alipay_18.jpg";
+		}
+		if(payPlan.innerText=="一年"){
+			qrcode.src="https://rthsoftware.cn/img/alipay_72.jpg";
+		}
+	}else{
+		if(payPlan.innerText=="一个月"){
+			qrcode.src="https://rthsoftware.cn/img/wechatpay_6.png";
+		}
+		if(payPlan.innerText=="三个月"){
+			qrcode.src="https://rthsoftware.cn/img/wechatpay_18.png";
+		}
+		if(payPlan.innerText=="一年"){
+			qrcode.src="https://rthsoftware.cn/img/wechatpay_72.png";
+		}
+	}
+	payQRC.appendChild(qrcode);
 }
 file.onchange=function(input){
 	var files=[];

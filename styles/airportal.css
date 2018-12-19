@@ -693,6 +693,23 @@ a,button {outline: none;}
 	-o-transition: all 0.5s;
 	-ms-transition: all 0.5s;
 }
+#accBox0 {
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
+#accBox1 {
+	position: absolute;
+	width: 100%;
+	left: 500px;
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
 .input1 {
 	position: relative;
 	left: 20%;

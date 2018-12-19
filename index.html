@@ -70,24 +70,30 @@
 			<p class="p3" id="lblDownloadP2" style="padding-top: 30px;">总下载进度</p>
 			<span class="progressBar" id="progressBarBg2"></span>
 			<span class="progressBar" id="progressBar2"></span>
-			<p style="padding-top: 50px;">读取完成后，文件会立即保存到您的电脑上</p>
+			<p style="padding-top: 50px;">读取完成后，文件会立即保存到您的设备上</p>
 		</div>
 		<div class="popUp" id="popAccount">
-			<span class="btnClose" id="btnClose0"></span>
-			<p class="p1" id="lblUsername"></p>
-			<span class="line"></span>
-			<p class="p3" id="lblExpTime">高级账号 剩余 天</p>
-			<div class="payPlans">
-				<p class="p2">激活 / 续期高级账号</p>
-				<p class="p4">支付方案</p>
-				<span class="payItem plan" id="payItem1M"><p class="p2">¥6 <span class="pDel">¥10</span></p><p class="p4">一个月</p></span>
-				<span class="payItem plan" id="payItem3M"><p class="p2">¥18 <span class="pDel">¥30</span></p><p class="p4">三个月</p></span>
-				<span class="payItem plan" id="payItem1Y"><p class="p2">¥72 <span class="pDel">¥120</span></p><p class="p4">一年</p></span>
-				<p class="p4" style="margin-top: 0px;">支付方式</p>
-				<span class="payItem method" id="payItemAli"><p class="p5">支付宝</p></span>
-				<span class="payItem method" id="payItemWechat"><p class="p5">微信支付</p></span>
+			<div id="accBox0">
+				<span class="btnClose" id="btnClose0"></span>
+				<p class="p1" id="lblUsername"></p>
+				<span class="line"></span>
+				<p class="p3" id="lblExpTime">高级账号 剩余 天</p>
+				<div class="payPlans">
+					<p class="p2">激活 / 续期高级账号</p>
+					<p class="p4">支付方案</p>
+					<span class="payItem plan" id="payItem1M"><p class="p2">¥6 <span class="pDel">¥10</span></p><p class="p4">一个月</p></span>
+					<span class="payItem plan" id="payItem3M"><p class="p2">¥18 <span class="pDel">¥30</span></p><p class="p4">三个月</p></span>
+					<span class="payItem plan" id="payItem1Y"><p class="p2">¥72 <span class="pDel">¥120</span></p><p class="p4">一年</p></span>
+					<p class="p4" style="margin-top: 0px;">支付方式</p>
+					<span class="payItem method" id="payItemAli"><p class="p5">支付宝</p></span>
+					<span class="payItem method" id="payItemWechat"><p class="p5">微信支付</p></span>
+				</div>
+				<button class="btn1" id="btnPay0">确认支付</button>
 			</div>
-			<button class="btn1" id="btnPay0">确认支付</button>
+			<div id="accBox1">
+				支付二维码页面
+				<div id="payQRC"></div>
+			</div>
 		</div>
 		<div class="popUp" id="popHistory">
 			<p class="p1">历史记录</p>
