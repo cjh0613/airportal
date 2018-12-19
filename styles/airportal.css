@@ -447,7 +447,7 @@ a,button {outline: none;}
 	border-right: 3px solid rgba(65,145,245,0.5);
 	border-top: 3px solid rgba(65,145,245,0.5);
 }
-#btnBack0 {
+#btnBack0,#btnBack2 {
 	top: 16px;
 }
 #btnBack1 {
@@ -694,6 +694,10 @@ a,button {outline: none;}
 	-ms-transition: all 0.5s;
 }
 #accBox0 {
+	position: absolute;
+	width: 100%;
+	left: 0px;
+	
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
@@ -785,6 +789,9 @@ a,button {outline: none;}
 }
 .btnClose:active::before,.btnClose:active::after {
 	background-color: rgba(65,145,245,0.5);
+}
+#btnClose0 {
+	top: 10px;
 }
 .footer {
 	position: absolute;
