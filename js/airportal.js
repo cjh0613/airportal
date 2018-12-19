@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51b3";
+var version="18w51b4";
 console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
 console.info("版本："+version);
 txtVer.innerHTML=version;
@@ -563,7 +563,7 @@ btnPay1.onclick=function(){
 			"email":login.email,
 			"lang":navigator.language,
 			"name":login.username,
-			"text":"用户 "+login.email+" 通过 "+pubPayMethod+" 激活 / 续期了 "+pubPayPlan+" 的高级账号。",
+			"text":"用户通过 "+pubPayMethod+" 激活 / 续期了 "+pubPayPlan+" 的高级账号。",
 			"ver":version
 		},
 		"method":"POST"
