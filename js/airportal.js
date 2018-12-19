@@ -1,8 +1,9 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51b4";
-console.info(appName+" 由 毛若昕 和 杨尚臻 联合开发。");
-console.info("版本："+version);
+var version="18w51b5";
+var consoleStyle="font-family:'Microsoft Yahei';color:rgb(65,145,245)";
+console.info("%c"+appName+" 由 毛若昕 和 杨尚臻 联合开发。",consoleStyle);
+console.info("%c版本："+version,consoleStyle);
 txtVer.innerHTML=version;
 
 var $_GET=(function(){
@@ -144,6 +145,12 @@ function getInfo(code){
 			}
 		});
 	}
+}
+function getQRCode(content){
+	return "https://rthsoftware.cn/backend/get?"+encodeData({
+		"url":"http://qr.topscan.com/api.php?text="+content,
+		"username":"admin"
+	});
 }
 function loggedIn(newLogin){
 	if(newLogin){
@@ -530,28 +537,32 @@ btnPay0.onclick=function(){
 	payQRC.innerHTML="";
 	var qrcode=new Image(200,200);
 	if(pubPayMethod=="支付宝"){
-		if(pubPayPlan=="一个月"){
-			qrcode.src="https://rthsoftware.cn/img/alipay_6.jpg";
-		}
-		if(pubPayPlan=="三个月"){
-			qrcode.src="https://rthsoftware.cn/img/alipay_18.jpg";
-		}
-		if(pubPayPlan=="一年"){
-			qrcode.src="https://rthsoftware.cn/img/alipay_72.jpg";
+		switch(pubPayPlan){
+			case "一个月":
+			qrcode.src=getQRCode("https://qr.alipay.com/fkx02092n7a5cnoyefdqq2b");
+			break;
+			case "三个月":
+			qrcode.src=getQRCode("https://qr.alipay.com/fkx00124uvonhtlsxnt2xa2");
+			break;
+			case "一年":
+			qrcode.src=getQRCode("https://qr.alipay.com/fkx072186uvrmcy58xmln84");
+			break;
 		}
 	}else{
-		if(pubPayPlan=="一个月"){
-			qrcode.src="https://rthsoftware.cn/img/wechatpay_6.png";
-		}
-		if(pubPayPlan=="三个月"){
-			qrcode.src="https://rthsoftware.cn/img/wechatpay_18.png";
-		}
-		if(pubPayPlan=="一年"){
-			qrcode.src="https://rthsoftware.cn/img/wechatpay_72.png";
+		switch(pubPayPlan){
+			case "一个月":
+			qrcode.src=getQRCode("wxp://f2f1jNiIrDW81otqZ3R6_RxG2RbEzdHKpSRM");
+			break;
+			case "三个月":
+			qrcode.src=getQRCode("wxp://f2f182i6p_EnYZxEZBPpOEynDVlxt2W7SRjt");
+			break;
+			case "一年":
+			qrcode.src=getQRCode("wxp://f2f1IYH_otxR9kny_9OpxExI7-_B6xL_f6FW");
+			break;
 		}
 	}
 	payQRC.appendChild(qrcode);
-	lblPayTip.innerHTML="您正在为 "+login.email+"<br/>激活 / 续期"+pubPayPlan+"的高级账号";
+	lblPayTip.innerHTML="使用 "+pubPayMethod+" 为 "+login.email+"<br/>激活 / 续期"+pubPayPlan+"的高级账号";
 	accBox0.style.left="-500px";
 	accBox1.style.left="0px";
 }
@@ -596,10 +607,7 @@ file.onchange=function(input){
 	var uploadSuccess=function(code){
 		QRBox.innerHTML="";
 		var qrcode=new Image(200,200);
-		qrcode.src="https://rthsoftware.cn/backend/get?"+encodeData({
-			"url":"http://qr.topscan.com/api.php?text=http://rthe.cn/"+code,
-			"username":"admin"
-		});
+		qrcode.src=getQRCode("http://rthe.cn/"+code);
 		QRBox.appendChild(qrcode);
 		recvCode.innerHTML=code;
 		popRecvCode.innerHTML=code;
@@ -789,21 +797,17 @@ if("fetch" in window){
 		hostname[new URL(servers[i].getAttribute("value")).hostname]=servers[i];
 		fetch(servers[i].getAttribute("value")+"geo").then(function(e){
 			clearInterval(intervalId);
-			//var newSpan=document.createElement("span");
-			//newSpan.className="latencyStatus"
-			//newSpan.innerText=" ●";
-			//newSpan.innerText=" - "+time+"ms";
 			var thisServer=hostname[new URL(e.url).hostname];
-			console.log(thisServer.innerText+" "+time+"ms");
 			if(time<200){
-				thisServer.lastElementChild.style.color="#A5C220";//27c54a
+				console.log("%c"+thisServer.innerText+" "+time+"ms","color:#A5C220");
+				thisServer.lastElementChild.classList.add("good");
+			}else if(time<500){
+				console.log("%c"+thisServer.innerText+" "+time+"ms","color:#F5B641");
+				thisServer.lastElementChild.classList.add("soso");
 			}else{
-				thisServer.lastElementChild.style.color="#F5B641";//ffc100
+				console.log("%c"+thisServer.innerText+" "+time+"ms","color:#F7695A");
+				thisServer.lastElementChild.classList.add("bad");
 			}
-			if(time>500){
-				thisServer.lastElementChild.style.color="#F7695A";//fc5243
-			}
-			//hostname[new URL(e.url).hostname].appendChild(newSpan);
 		});
 	}
 }else{
