@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51d2";
+var version="18w51d3";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -833,23 +833,28 @@ if(login.username){
 }
 if("fetch" in window){
 	const servers=document.getElementsByClassName("server");
-	for(let i=0;i<servers.length;i++){
+	const speedTest=function(index){
 		const start=performance.now();
-		fetch(servers[i].getAttribute("value")+"geo").then(function(){
+		fetch(servers[index].getAttribute("value")+"geo").then(function(){
 			const end=performance.now();
 			const time=Math.round((end-start)/2);
 			if(time<200){
-				console.log("%c%s %dms",consoleGeneralStyle+"color:#A5C220;",servers[i].innerText,time);
-				servers[i].lastElementChild.classList.add("good");
+				console.log("%c%s %dms",consoleGeneralStyle+"color:#A5C220;",servers[index].innerText,time);
+				servers[index].lastElementChild.classList.add("good");
 			}else if(time<500){
-				console.log("%c%s %dms",consoleGeneralStyle+"color:#F5B641;",servers[i].innerText,time);
-				servers[i].lastElementChild.classList.add("soso");
+				console.log("%c%s %dms",consoleGeneralStyle+"color:#F5B641;",servers[index].innerText,time);
+				servers[index].lastElementChild.classList.add("soso");
 			}else{
-				console.log("%c%s %dms",consoleGeneralStyle+"color:#F7695A;",servers[i].innerText,time);
-				servers[i].lastElementChild.classList.add("bad");
+				console.log("%c%s %dms",consoleGeneralStyle+"color:#F7695A;",servers[index].innerText,time);
+				servers[index].lastElementChild.classList.add("bad");
+			}
+			index++;
+			if(index<servers.length){
+				speedTest(index);
 			}
 		});
 	}
+	speedTest(0);
 }else{
 	alert("请升级您的网络浏览器。");
 }
