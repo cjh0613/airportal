@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51d";
+var version="18w51d1";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -46,7 +46,7 @@ function downloadFile(fileInfo,code,index){
 		setTimeout(function(){
 			popDownl.style.opacity="1";
 		},250);
-		setInterval(function(){
+		var intervalId=setInterval(function(){
 			if(dlTip0.style.marginTop=="0px"){
 				dlTip0.style.marginTop="-20px";
 				dlTip1.style.marginTop="-10px";
@@ -63,6 +63,7 @@ function downloadFile(fileInfo,code,index){
 				if(xhr.status==200){
 					slice.push(xhr.response);
 					if(progress>=fileInfo.slice){
+						clearInterval(intervalId);
 						var newA=document.createElement("a");
 						var url=URL.createObjectURL(new Blob(slice,{
 							"type":fileInfo.type
@@ -834,11 +835,13 @@ if("fetch" in window){
 	var hostname={};
 	var servers=document.getElementsByClassName("server");
 	for(var i=0;i<servers.length;i++){
-		var start=performance.now();
+		var time=0;
+		var intervalId=setInterval(function(){
+			time++;
+		},10);
 		hostname[new URL(servers[i].getAttribute("value")).hostname]=servers[i];
 		fetch(servers[i].getAttribute("value")+"geo").then(function(e){
-			var end=performance.now();
-			var time=Math.round(end-start)/2;
+			clearInterval(intervalId);
 			var thisServer=hostname[new URL(e.url).hostname];
 			if(time<200){
 				console.log("%c%s %dms",consoleGeneralStyle+"color:#A5C220;",thisServer.innerText,time);
