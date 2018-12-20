@@ -198,6 +198,9 @@ a,button {outline: none;}
 .menuItem:hover > p {
 	color: white;
 }
+.server {
+	padding-right: 60px;
+}
 .tick {
 	position: relative;
 }
