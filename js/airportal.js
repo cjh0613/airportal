@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51b8";
+var version="18w51c";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -581,16 +581,38 @@ btnPay1.onclick=function(){
 		},
 		"method":"POST",
 		"success":function(){
-			alert("请求提交成功。如果订单在24小时内没有得到确认，请联系开发者。");
+			lblPayState0.innerText="提交成功";
+			lblPayState1.innerHTML="我们正在处理您的支付订单。<br/>您的高级账号剩余天数会在24小时内自动更新;<br/>否则请在确保您已支付后与我们联系。";
+			btnDone3.style.pointerEvents="auto";
+			btnDone3.style.opacity="1";
 		},
 		"error":function(e){
+			lblPayState0.innerText="Oops...出错了";
 			if(e.status==504){
-				alert("服务器无法及时响应，请再试一次。");
+				lblPayState1.innerHTML="服务器无法及时响应<br/>请您再试一次（但无需再次扫码付款）<br/>如需更多帮助，请与我们联系。";
 			}else{
-				alert("无法连接至服务器。");
+				lblPayState1.innerHTML="无法连接至服务器。<br/>请您再试一次（但无需再次扫码付款）<br/>如需更多帮助，请与我们联系。";
 			}
+			btnDone3.style.pointerEvents="auto";
+			btnDone3.style.opacity="1";
 		}
 	});
+	accBox1.style.left="-500px";
+	accBox2.style.left="0px";
+}
+btnDone3.onclick=function(){
+	popAccount.style.opacity="0";
+	mainBox.style.opacity="1";
+	setTimeout(function(){
+		popAccount.style.display="none";
+		accBox0.style.left="0px";
+		accBox1.style.left="500px";
+		accBox2.style.left="1000px";
+		btnDone3.style.pointerEvents="none";
+		btnDone3.style.opacity="0.5";
+		lblPayState0.innerText="提交中";
+		lblPayState1.innerHTML="我们正在处理您的支付订单<br/>请稍候<br/>如需帮助，请与我们联系。";
+	},250);
 }
 file.onchange=function(input){
 	var files=[];
@@ -807,7 +829,7 @@ if("fetch" in window){
 		hostname[new URL(servers[i].getAttribute("value")).hostname]=servers[i];
 		fetch(servers[i].getAttribute("value")+"geo").then(function(e){
 			var end=performance.now();
-			var time=Math.round(end-start);
+			var time=Math.round(end-start)/2;
 			var thisServer=hostname[new URL(e.url).hostname];
 			if(time<200){
 				console.log("%c%s %dms",consoleGeneralStyle+"color:#A5C220;",thisServer.innerText,time);
