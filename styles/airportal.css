@@ -287,7 +287,6 @@ a,button {outline: none;}
 	display: none;
 	opacity: 0;
 }
-
 .p1 {
 	font-size: 18px;
 }
@@ -393,6 +392,18 @@ a,button {outline: none;}
 #progressBar0,#progressBar1,#progressBar2 {
 	width: 0;
 	background-color: rgb(65,145,245);
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
+.dlTipBox {
+	height: 30px;
+	overflow-y: hidden;
+}
+.dlTipBox p {
+	line-height: 10px;
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
