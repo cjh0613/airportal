@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51d1";
+var version="18w51d2";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -832,26 +832,21 @@ if(login.username){
 	document.body.appendChild(ssoIFrame);
 }
 if("fetch" in window){
-	var hostname={};
-	var servers=document.getElementsByClassName("server");
-	for(var i=0;i<servers.length;i++){
-		var time=0;
-		var intervalId=setInterval(function(){
-			time++;
-		},10);
-		hostname[new URL(servers[i].getAttribute("value")).hostname]=servers[i];
-		fetch(servers[i].getAttribute("value")+"geo").then(function(e){
-			clearInterval(intervalId);
-			var thisServer=hostname[new URL(e.url).hostname];
+	const servers=document.getElementsByClassName("server");
+	for(let i=0;i<servers.length;i++){
+		const start=performance.now();
+		fetch(servers[i].getAttribute("value")+"geo").then(function(){
+			const end=performance.now();
+			const time=Math.round((end-start)/2);
 			if(time<200){
-				console.log("%c%s %dms",consoleGeneralStyle+"color:#A5C220;",thisServer.innerText,time);
-				thisServer.lastElementChild.classList.add("good");
+				console.log("%c%s %dms",consoleGeneralStyle+"color:#A5C220;",servers[i].innerText,time);
+				servers[i].lastElementChild.classList.add("good");
 			}else if(time<500){
-				console.log("%c%s %dms",consoleGeneralStyle+"color:#F5B641;",thisServer.innerText,time);
-				thisServer.lastElementChild.classList.add("soso");
+				console.log("%c%s %dms",consoleGeneralStyle+"color:#F5B641;",servers[i].innerText,time);
+				servers[i].lastElementChild.classList.add("soso");
 			}else{
-				console.log("%c%s %dms",consoleGeneralStyle+"color:#F7695A;",thisServer.innerText,time);
-				thisServer.lastElementChild.classList.add("bad");
+				console.log("%c%s %dms",consoleGeneralStyle+"color:#F7695A;",servers[i].innerText,time);
+				servers[i].lastElementChild.classList.add("bad");
 			}
 		});
 	}
