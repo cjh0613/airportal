@@ -283,7 +283,7 @@ a,button {outline: none;}
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
 }
-#popSend,#popRecv,#popDownl,#popAccount,#popLogin,#popHistory,#popRecvCode,#popFeedback,#popSetPri {
+#popSend,#popRecv,#popDownl,#popAccount,#popLogin,#popHistory,#popRecvCode,#popFeedback,#popSetPri,#popUpdate {
 	display: none;
 	opacity: 0;
 }
@@ -357,7 +357,7 @@ a,button {outline: none;}
 	opacity: 0.5;
 	pointer-events: none;
 }
-#btnLogin {
+#btnLogin,#btnDone4 {
 	top: 30px;
 }
 #btnSetPri {
