@@ -10,12 +10,20 @@ body {
 	cursor: default;
 	-webkit-tap-highlight-color: transparent;
 	-moz-user-select: none; 
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    -khtml-user-select: none;
-    user-select: none; 
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	-khtml-user-select: none;
+	user-select: none; 
+}
+* {
+  outline: none;
 }
 @-webkit-keyframes fadeIn {
+	0% {opacity: 0;}
+	50% {opacity: 0;}
+	100% {opacity: 1;}
+}
+@keyframes fadeIn {
 	0% {opacity: 0;}
 	50% {opacity: 0;}
 	100% {opacity: 1;}
@@ -45,7 +53,7 @@ a,button {outline: none;}
 	-ms-transition: all 0.25s;
 }
 .btnMain {
-	padding: 15px 100px;
+	padding: 15px 10px;
 	margin-bottom: 20px;
 	-webkit-border-radius: 30px;
 	-moz-border-radius: 30px;
@@ -57,60 +65,60 @@ a,button {outline: none;}
 	-moz-transition: all 0.25s;
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
+	width: 224px;
 }
 #send {
 	border: none;
 	color: white;
-	background: rgb(65,145,245);
+	background-color: rgb(65,145,245);
 	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
- 	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
+	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
 }
 #send:hover {
 	-webkit-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
- 	-moz-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
+	-moz-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 }
 #send:active {
 	color: rgb(65,145,245);
-	background: white;
+	background-color: white;
 	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
- 	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
+	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 }
 #receive {
 	border: none;
 	color: rgb(65,145,245);
-	background: white;
+	background-color: white;
 	-webkit-box-shadow: rgba(65,145,245,0.2) 0px 5px 20px;
- 	-moz-box-shadow: rgba(65,145,245,0.2) 0px 5px 20px;
+	-moz-box-shadow: rgba(65,145,245,0.2) 0px 5px 20px;
 	box-shadow: rgba(65,145,245,0.2) 0px 5px 20px;
 }
 #receive:hover {
 	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
- 	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
+	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 }
 #receive:active {
 	color: white;
-	background: rgb(65,145,245);
+	background-color: rgb(65,145,245);
 	-webkit-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
- 	-moz-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
+	-moz-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 }
 #menuIcon {
 	position: absolute;
 	top: 25px;
-	left: 100%;
-	margin-left: -50px;
+	right: 25px;
 	width: 25px;
-    height: 2px;
-    padding: 6px 0;
-    border-top: 2px solid rgb(65,145,245);
-    border-bottom: 2px solid rgb(65,145,245);
-    background-color: rgb(65,145,245);
-    background-clip: content-box;
-    -webkit-transition: all 0.25s;
+	height: 2px;
+	padding: 6px 0;
+	border-top: 2px solid rgb(65,145,245);
+	border-bottom: 2px solid rgb(65,145,245);
+	background-color: rgb(65,145,245);
+	background-clip: content-box;
+	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
@@ -133,19 +141,19 @@ a,button {outline: none;}
 }
 #menu {
 	position: absolute;
+	z-index: 101;
 	top: 10px;
-	left: 100%;
-	margin-left: -160px;
-	width: 150px;
-    height: 90px;
-    padding-top: 15px;
-    background: white;
-    -webkit-border-radius: 10px;
+	right: 10px;
+	height: auto;
+	padding-top: 15px;
+	padding-bottom: 13px;
+	background-color: white;
+	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 	overflow: hidden;
 	-webkit-box-shadow: rgba(0,0,0,0.1) 0px 5px 35px;
- 	-moz-box-shadow: rgba(0,0,0,0.1) 0px 5px 35px;
+	-moz-box-shadow: rgba(0,0,0,0.1) 0px 5px 35px;
 	box-shadow: rgba(0,0,0,0.1) 0px 5px 35px;
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
@@ -157,11 +165,11 @@ a,button {outline: none;}
 }
 .menuItem {
 	display: block;
-	width: 100%;
 	padding-left: 40px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	font-size: small;
+	padding-right: 40px;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	font-size: 12px;
 	color: rgba(0,0,0,0.6);
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
@@ -172,10 +180,26 @@ a,button {outline: none;}
 }
 .menuItem:hover {
 	color: white;
-	background: rgb(65,145,245);
+	background-color: rgb(65,145,245);
 }
 .menuItem:hover > .tick::before {
 	color: white;
+}
+.menuItem p {
+	line-height: 0;
+	font-size: 10px;
+	color: rgb(65,145,245);
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
+.menuItem:hover > p {
+	color: white;
+}
+.server {
+	padding-right: 60px;
 }
 .tick {
 	position: relative;
@@ -189,7 +213,7 @@ a,button {outline: none;}
 	border-bottom: 2px solid;
 	border-right: 2px solid;
 	left: -15px;
-	top: 3px;
+	top: 2px;
 	transform-origin: center;
 	transform: translate(-50%, -30%) rotate(45deg);
 	-webkit-transform: translate(-50%, -30%) rotate(45deg);
@@ -199,14 +223,43 @@ a,button {outline: none;}
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
 }
-#tickCnServer {
+#tickAutoServer {
 	opacity: 1;
 }
-#tickUsServer {
+#tickCnServer,#tickUsServer1,#tickUsServer2 {
 	opacity: 0;
+}
+.menuLine {
+	display: block;
+	width: 100%;
+	height: 1px;
+	background-color: rgba(0,0,0,0.07);
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.latencyStatus {
+	display: inline;
+	color: rgba(0,0,0,0.15);
+	position: absolute;
+	right: 37px;
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
+.latencyStatus.good{
+	color: #A5C220;
+}
+.latencyStatus.soso{
+	color: #F5B641;
+}
+.latencyStatus.bad{
+	color: #F7695A;
 }
 .popUp {
 	position: absolute;
+	z-index: 100;
 	width: 500px;
 	height: 350px;
 	top: 50%;
@@ -214,7 +267,7 @@ a,button {outline: none;}
 	left: 50%;
 	margin-left: -250px;
 	padding-top: 40px;
-	background: white;
+	background-color: white;
 	text-align: center;
 	font-size: small;
 	-webkit-border-radius: 20px;
@@ -222,7 +275,7 @@ a,button {outline: none;}
 	border-radius: 20px;
 	overflow: hidden;
 	-webkit-box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
- 	-moz-box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
+	-moz-box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
 	box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
@@ -230,16 +283,29 @@ a,button {outline: none;}
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
 }
-#popSend {
-	display: none;
-	opacity: 0;
-}
-#popRecv {
+#popSend,#popRecv,#popDownl,#popAccount,#popLogin,#popHistory,#popRecvCode,#popFeedback,#popSetPri,#popUpdate {
 	display: none;
 	opacity: 0;
 }
 .p1 {
 	font-size: 18px;
+}
+.p2,.p4 {
+	position: relative;
+	text-align: left;
+	line-height: 10px;
+}
+.p2 {
+	color: rgba(0,0,0,0.8);
+}
+.p3,.p4 {
+	color: rgba(0,0,0,0.5);
+}
+.p4 {
+	font-size: 12px;
+}
+.p5 {
+	color: rgb(65,145,245);
 }
 #recvCode {
 	font-size: 35px;
@@ -249,6 +315,7 @@ a,button {outline: none;}
 	letter-spacing: 10px;
 }
 .btn1 {
+	position: relative;
 	padding: 10px 35px;
 	-webkit-border-radius: 20px;
 	-moz-border-radius: 20px;
@@ -258,7 +325,7 @@ a,button {outline: none;}
 	border: none;
 	color: white;
 	font-size: small;
-	background: rgb(65,145,245);
+	background-color: rgb(65,145,245);
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
@@ -267,16 +334,34 @@ a,button {outline: none;}
 }
 .btn1:hover {
 	-webkit-box-shadow: rgba(65,145,245,0.35) 0px 5px 30px;
- 	-moz-box-shadow: rgba(65,145,245,0.35) 0px 5px 30px;
+	-moz-box-shadow: rgba(65,145,245,0.35) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.35) 0px 5px 30px;
 }
 .btn1:active {
-	background: white;
+	background-color: white;
 	color: rgb(65,145,245);
 }
-#btnDone {
-	position: relative;
+#btnDone0 {
 	top: 260px;
+}
+#btnDone1,#btnDone2,#btnSendFeed {
+	top: 10px;
+}
+#btnDone3 {
+	top: 40px;
+	opacity: 0.5;
+	pointer-events: none;
+}
+#btnPay0 {
+	top: 20px;
+	opacity: 0.5;
+	pointer-events: none;
+}
+#btnLogin,#btnDone4 {
+	top: 30px;
+}
+#btnSetPri {
+	top: 100px;
 }
 .link1 {
 	text-decoration: none;
@@ -291,6 +376,41 @@ a,button {outline: none;}
 .link1:link,.link1:visted {color: rgb(65,145,245);}
 .link1:hover {color: #A5C220;}
 .link1:active {color: rgba(65,145,245,0.8);}
+.progressBar {
+	position: absolute;
+	left: 50%;
+	margin-left: -50px;
+	height: 3px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+}
+#progressBarBg0,#progressBarBg1,#progressBarBg2 {
+	width: 100px;
+	background-color: rgba(0,0,0,0.1);
+}
+#progressBar0,#progressBar1,#progressBar2 {
+	width: 0;
+	background-color: rgb(65,145,245);
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
+.dlTipBox {
+	margin-top: 65px;
+	height: 20px;
+	overflow-y: hidden;
+}
+.dlTipBox p {
+	margin-top: 0px;
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
 #sendBox0 {
 	z-index: 99;
 	position: absolute;
@@ -298,7 +418,7 @@ a,button {outline: none;}
 	height: 200px;
 	left: 0px;
 	top: 160px;
-	background: white;
+	background-color: white;
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
@@ -337,13 +457,13 @@ a,button {outline: none;}
 	position: absolute;
 	left: 60px;
 	border-right: 3px solid rgba(0,0,0,0.35);
-    border-top: 3px solid rgba(0,0,0,0.35);
-    height: 15px;
-    width: 15px;
-    -webkit-transform: rotate(225deg);
-    transform: rotate(225deg);
-    cursor: pointer;
-    -webkit-transition: all 0.25s;
+	border-top: 3px solid rgba(0,0,0,0.35);
+	height: 15px;
+	width: 15px;
+	-webkit-transform: rotate(225deg);
+	transform: rotate(225deg);
+	cursor: pointer;
+	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
@@ -351,13 +471,13 @@ a,button {outline: none;}
 }
 .btnBack:hover {
 	border-right: 3px solid rgb(65,145,245);
-    border-top: 3px solid rgb(65,145,245);
+	border-top: 3px solid rgb(65,145,245);
 }
 .btnBack:active {
 	border-right: 3px solid rgba(65,145,245,0.5);
-    border-top: 3px solid rgba(65,145,245,0.5);
+	border-top: 3px solid rgba(65,145,245,0.5);
 }
-#btnBack0 {
+#btnBack0,#btnBack2 {
 	top: 16px;
 }
 #btnBack1 {
@@ -388,12 +508,386 @@ a,button {outline: none;}
 #inputCode:focus {
 	border-bottom: 2px solid rgb(65,145,245);
 }
+#recvBox0 {
+	position: absolute;
+	width: 100%;
+	left: 0px;
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
+#recvBox1 {
+	position: absolute;
+	width: 100%;
+	left: 500px;
+	margin-top: 30px;
+	background-color: white;
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
+#fileList {
+	width: 85%;
+	height: 200px;
+	margin-top: 20px;
+	left: 0%;
+	overflow-y: scroll;
+	list-style: none;
+	text-align: left;
+}
+#fileList li {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-left: 30px;
+	background-color: white;
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+	cursor: pointer;
+}
+#fileList li:nth-child(2n+1){
+	background-color: rgba(0,0,0,0.03);
+}
+#fileList li:hover {
+	/*background-color: rgba(0,0,0,0.1);*/
+	color: rgb(65,145,245);
+}
+#fileList li:active {
+	/*background-color: rgba(0,0,0,0.15);*/
+	color: #A5C220;
+}
+.line {
+	position: absolute;
+	width: 60%;
+	height: 1px;
+	left: 20%;
+	margin-top: -10px;
+	background-color: rgba(0,0,0,0.1);
+}
+#historyList {
+	position: relative;
+	width: 60%;
+	height: 200px;
+	left: 20%;
+	margin-top: -40px;
+	overflow-y: scroll;
+}
+.historyItem {
+	position: relative;
+	display: block;
+	width: 100%;
+	left: 0%;
+	padding-top: 10px;
+	padding-bottom: 7.5px;
+	border-bottom: solid 1px rgba(0,0,0,0.1);
+	text-align: left;
+	font-family: "Microsoft Yahei";
+	font-weight: bold;
+}
+.historyItem p{
+	font-size: 10px;
+	line-height: 0px;
+	font-weight: normal;
+	color: rgba(0,0,0,0.5);
+}
+#popRecvCode {
+	position: absolute;
+	z-index: 102;
+	left: 50%;
+	top: 50%;
+	margin-top: -66px;
+	margin-left: -78px;
+	padding: 20px;
+	padding-right: 10px;
+	max-width: 166px;
+	background-color: white;
+
+	text-align: center;
+	font-size: 35px;
+	font-family: "Microsoft Yahei";
+	font-weight: bold;
+	line-height: 30px;
+	letter-spacing: 10px;
+
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+	overflow: hidden;
+	-webkit-box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
+	-moz-box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
+	box-shadow: rgba(0,0,0,0.1) 0px 10px 20px;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	-ms-transition: all 0.5s;
+}
+.payPlans {
+	position: relative;
+	width: 60%;
+	height: 150px;
+	left: 20%;
+	text-align: left;
+	overflow-y: scroll;
+}
+.payPlans .p4 span {
+	color: #A5C220;
+}
+.payItem {
+	position: relative;
+	display: inline-block;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	width: 80px;
+	padding-bottom: 5px;
+	background-color: white;
+	border: solid 1px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	-ms-transition: all 0.5s;
+}
+.payItem {
+	color: rgb(65,145,245);
+	border-color: rgba(65,145,245,0.8);
+}
+.payItem:hover {
+	background-color: rgba(65,145,245,0.15);
+	border-color:rgba(65,145,245,0.15);
+}
+.payItem.selected:hover{
+	background-color: rgb(65,145,245);
+	border-color: rgb(65,145,245);
+}
+.payItem:active,.selected {
+	background-color: rgb(65,145,245);
+	border-color:rgb(65,145,245);
+	color: white;
+}
+.payItem:active > .p2,.payItem:active > .p4,.payItem:active > .p5,.selected > .p2,.selected > .p4,.selected > .p5 {
+	color: white;
+}
+.payItem:active > .p2 > .pDel,.selected > .p2 > .pDel {
+	color: rgba(255,255,255,0.5);
+}
+.payItem .p2,.payItem .p4,.payItem .p5 {
+	font-size: 15px;
+	line-height: 0px;
+	text-align: center;
+}
+.payItem .p2 {
+	font-family: "Microsoft Yahei";
+	font-weight: bold;
+	color: rgb(65,145,245);
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	-ms-transition: all 0.5s;
+}
+.selected .p2 {
+	color: white;
+}
+.payItem .p4 {
+	font-size: 10px;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	-ms-transition: all 0.5s;
+}
+.payItem .p5 {
+	font-size: 12px;
+	padding-top: 3.5px;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	-ms-transition: all 0.5s;
+}
+.pDel {
+	font-size: 10px;
+	color: rgba(0,0,0,0.35);
+	text-decoration: line-through;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	-ms-transition: all 0.5s;
+}
+#accBox0 {
+	position: absolute;
+	width: 100%;
+	left: 0px;
+	
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
+#accBox1 {
+	position: absolute;
+	width: 100%;
+	left: 500px;
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
+#accBox2 {
+	position: absolute;
+	width: 100%;
+	left: 1000px;
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
+#payQRC {
+	margin-top: -10px;
+}
+.input1 {
+	position: relative;
+	left: 20%;
+	top: 45px;
+	display: block;
+	border: none;
+	width: 55%;
+	padding: 10px 2.5%;
+	margin-top: 20px;
+	text-align: center;
+	font-size: small;
+	color: rgba(0,0,0,0.8);
+	background-color: rgba(0,0,0,0.05);
+	-webkit-border-radius: 50px;
+	-moz-border-radius: 50px;
+	border-radius: 50px;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	-ms-transition: all 0.5s;
+}
+.input1:hover,#txtFeedback:hover {
+	background-color: rgba(0,0,0,0.1);
+}
+.input1:focus,#txtFeedback:focus {
+	background-color: rgba(0,0,0,0.15);
+}
+#inputPriExpDate {
+	width: 55.5%;
+	padding-left: 2.5%;
+	padding-right: 2%;
+}
+.btnClose {
+	position: absolute;
+	width: 25px;
+	height: 25px;
+	top: 50px;
+	right: 50px;
+	cursor: pointer;
+}
+.btnClose::before, .btnClose::after {
+	content: '';
+	position: absolute;
+	height: 2px;
+	width: 100%;
+	top: 50%;
+	left: 0;
+	margin-top: -1px;
+	background-color: rgb(180,180,180);
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
+.btnClose::before {
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+.btnClose::after {
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+.btnClose:hover::before,.btnClose:hover::after {
+	background-color: rgb(65,145,245);
+}
+.btnClose:active::before,.btnClose:active::after {
+	background-color: rgba(65,145,245,0.5);
+}
+#btnClose0 {
+	top: 10px;
+}
 .footer {
 	position: absolute;
 	top: 100%;
 	margin-top: -35px;
 	font-size: 12px;
-	color: rgba(0,0,0,0.5);
+	color: rgba(0,0,0,0.35);
+}
+.loginLogo {
+	position: relative;
+	width: 250px;
+	height: 60px;
+	left: 50%;
+	margin-left: -125px;
+	top: 30px;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-image: url("../images/loginLogo.png");
+}
+#popLogin input {
+	top: 0px;
+}
+#popLogin .p4 {
+	text-align: center;
+	margin-top: 50px;
+}
+#txtFeedback {
+	position: relative;
+	left: 10%;
+	top: 0px;
+	display: block;
+	border: none;
+	width: 75%;
+	height: 160px;
+	padding: 10px 2.5%;
+	margin-top: 20px;
+	text-align: center;
+	font-size: small;
+	font-family: "Microsoft Yahei Light","Microsoft Yahei",Helvetica,sans-serif,"等线";
+	color: rgba(0,0,0,0.8);
+	background-color: rgba(0,0,0,0.05);
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 50px;
+	border-radius: 10px;
+	resize: none;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	-ms-transition: all 0.5s;
 }
 #footerL {
 	text-align: left;
@@ -411,11 +905,20 @@ input[type=file]{
 }
 
 @media screen and (max-width:500px){  
+	.btnMain {font-size: small;}
 	#menuIcon {top: 20px;margin-left: -45px;}
 	.tick::before {top: 1px;}
 	.popUp {width: 80%;margin-left: -40%;}
 	#btnBack0 {left: 35px;}
 	#btnBack1 {top: 35px;left: 35px;}
-   	.footer {font-size: 11px;}
-   	#footerL {top: 0;margin-top: 20px;}
+	#btnBack2 {top: -10px;left: 30px;}
+	.btnClose {top: 30px;right: 30px;}
+	#btnClose0 {top: -10px;}
+	.p1 {font-size: 16px;}
+	.p3 {font-size: 12px;}
+	.input1 {left: 10%;width: 75%;}
+	.payPlans,#historyList,.line {width: 80%; left: 10%;}
+	.payItem {width: 70px;margin-right: 5px;}
+	.footer {font-size: 11px;}
+	#footerL {top: 0;margin-top: 20px;}
 }

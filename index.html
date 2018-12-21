@@ -3,8 +3,9 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
+		<meta name="description" content="随时随地跨设备传输文件。">
 		<title>AirPortal丨空投</title>
-		<link rel="shortcut icon" href="favicon.ico"/>
+		<link rel="shortcut icon" href="favicon.ico">
 		<style type="text/css">
 			@import "styles/airportal.css";
 		</style>
@@ -15,41 +16,140 @@
 			<button id="send" class="btnMain">发送</button><br/>
 			<button id="receive" class="btnMain">接收</button>
 		</div>
-		<span id="menuIcon" onclick="showMenu()"></span>
-		<div id="mask" onclick="hideMenu()"></div>
+		<span id="menuIcon"></span>
+		<div id="mask"></div>
 		<div id="menu">
-			<a class="menuItem" id="menuItemCnServer" onclick="menuItemCnServer()"><span class="tick" id="tickCnServer"></span>大陆服务器</a>
-			<a class="menuItem" id="menuItemUsServer" onclick="menuItemUsServer()"><span class="tick" id="tickUsServer"></span>北美服务器</a>
+			<a class="menuItem" id="menuItemLogin">登录</a>
+			<a class="menuItem" id="menuItemHistory">历史记录</a>
+			<a class="menuItem" id="menuItemFeedback">联系我们</a>
+			<span class="menuLine" id="menuLine0"></span>
+			<a class="menuItem server" id="menuItemAutoServer" value="https://rthsoftware.cn/backend/"><span class="tick" id="tickAutoServer"></span>自动选择服务器<div class="latencyStatus"> ●</div></a>
+			<a class="menuItem server" id="menuItemCnServer" value="https://www.rthsoftware.cn/backend/"><span class="tick" id="tickCnServer"></span>大陆服务器<div class="latencyStatus"> ●</div></a>
+			<a class="menuItem server" id="menuItemUsServer1" value="https://rthsoftware.net/backend/"><span class="tick" id="tickUsServer1"></span>北美服务器 Ⅰ<div class="latencyStatus"> ●</div></a>
+			<a class="menuItem server" id="menuItemUsServer2" value="https://server.rthsoftware.net/backend/"><span class="tick" id="tickUsServer2"></span>北美服务器 Ⅱ<div class="latencyStatus"> ●</div></a>
 		</div>
 		<div class="popUp" id="popSend">
 			<div id="sendBox0">
-				<p class="p1">上传中...</p>
+				<p class="p1" id="lblUploadP">上传中...</p>
+				<span class="progressBar" id="progressBarBg0"></span>
+				<span class="progressBar" id="progressBar0"></span>
 			</div>
 			<div id="sendBox1">
 				<p class="p1">文件已成功传送。</p>
 				<p>您的取件码为：</p>
 				<p id="recvCode">XXXX</p>
 				<p>接收文件时，请输入该四位数密码，<br/></p>
-				<p style="display: inline;">或</p><a class="link1" onclick="viewQRC()">直接扫描二维码下载</a><p style="display: inline;">。<br/></p>
+				<p style="display: inline;">或</p><a class="link1" id="viewQRC">直接扫描二维码下载</a><p style="display: inline;">。<br/></p>
 			</div>
 			<div id="sendBox2">
 				<div id="QRBox"></div>
-				<span class="btnBack" id="btnBack0" onclick="btnBack0()"></span>
+				<span class="btnBack" id="btnBack0"></span>
 			</div>
-			<button class="btn1" id="btnDone" onclick="btnDone()">完成</button>
+			<button class="btn1" id="btnDone0">完成</button>
 		</div>
+		<div id="popRecvCode"></div>
 		<div class="popUp" id="popRecv">
-			<p class="p1" style="padding-top: 40px;">请输入取件码</p>
-			<input type="tel" id="inputCode" maxlength="4" autocomplete="off" onkeydown="inputSub(event)"><br/>
-			<input type="submit" class="btn1" id="btnSub" onclick="btnSub()" value="确定">
-			<span class="btnBack" id="btnBack1" onclick="btnBack1()"></span>
+			<div id="recvBox0">
+				<p class="p1" style="padding-top: 40px;">请输入取件码</p>
+				<input type="tel" id="inputCode" maxlength="4" autocomplete="off"><br/>
+				<input type="submit" class="btn1" id="btnSub" value="确定">
+				<span class="btnBack" id="btnBack1"></span>
+			</div>
+			<div id="recvBox1">
+				<p class="p1" style="margin-top: -40px;">您接收到多个文件。</p>
+				<p style="margin-top: -10px;">单击列表中的项目来分别下载它们。</p>
+				<ul id="fileList"></ul>
+				<button class="btn1" id="btnDone1">关闭</button>
+			</div>
+		</div>
+		<div class="popUp" id="popDownl">
+			<p class="p1" style="padding-top: 20px;">正在从服务器预读取文件</p>
+			<p class="p3" id="lblDownloadP1" style="padding-top: 30px;">下载文件碎片中...</p>
+			<span class="progressBar" id="progressBarBg1"></span>
+			<span class="progressBar" id="progressBar1"></span>
+			<p class="p3" id="lblDownloadP2" style="padding-top: 30px;">总下载进度</p>
+			<span class="progressBar" id="progressBarBg2"></span>
+			<span class="progressBar" id="progressBar2"></span>
+			<div class="dlTipBox">
+				<p id="dlTip0">如无法下载，请使用Chrome或Firefox浏览器重试</p>
+				<p id="dlTip1">读取完成后，文件会立即保存到您的设备上</p>
+			</div>
+		</div>
+		<div class="popUp" id="popAccount">
+			<div id="accBox0">
+				<span class="btnClose" id="btnClose0"></span>
+				<p class="p1" id="lblUsername"></p>
+				<span class="line"></span>
+				<p class="p3" id="lblExpTime">高级账号 剩余 天</p>
+				<div class="payPlans">
+					<p class="p2">激活 / 续期高级账号</p>
+					<p class="p4">支付方案<span> 限时特惠！1月25日截止</span></p>
+					<span class="payItem plan" id="payItem1M"><p class="p2">¥6 <span class="pDel">¥10</span></p><p class="p4">一个月</p></span>
+					<span class="payItem plan" id="payItem3M"><p class="p2">¥18 <span class="pDel">¥30</span></p><p class="p4">三个月</p></span>
+					<span class="payItem plan" id="payItem1Y"><p class="p2">¥72 <span class="pDel">¥120</span></p><p class="p4">一年</p></span>
+					<p class="p4" style="margin-top: 0px;">支付方式</p>
+					<span class="payItem method" id="payItemAli"><p class="p5">支付宝</p></span>
+					<span class="payItem method" id="payItemWechat"><p class="p5">微信支付</p></span>
+				</div>
+				<button class="btn1" id="btnPay0">确认支付</button>
+			</div>
+			<div id="accBox1">
+				<p class="p3" id="lblPayTip">您正在为此用户激活 / 续期高级账号</p>
+				<div id="payQRC"></div>
+				<span class="btnBack" id="btnBack2"></span>
+				<button class="btn1" id="btnPay1">完成支付</button>
+			</div>
+			<div id="accBox2">
+				<p class="p1" id="lblPayState0" style="margin-top: 50px;">提交中</p>
+				<p class="p3" id="lblPayState1" style="margin-top: 50px;">我们正在处理您的支付订单<br/>请稍候<br/>如需帮助，请与我们联系。</p>
+				<button class="btn1" id="btnDone3">关闭</button>
+			</div>
+		</div>
+		<div class="popUp" id="popHistory">
+			<p class="p1">历史记录</p>
+			<span class="line"></span>
+			<p id="lblEmpty" style="color: rgba(0,0,0,0.3);">您尚未上传任何文件</p>
+			<div id="historyList"></div>
+			<button class="btn1" id="btnDone2">关闭</button>
+		</div>
+		<div class="popUp" id="popLogin">
+			<span class="btnClose" id="btnClose1"></span>
+			<div class="loginLogo"></div>
+			<p class="p4">使用RTH通行证来登录到AirPortal <a href="https://rthsoftware.cn/login?continue=https%3A%2F%2Fwww.rthsoftware.net%2Fairportal%2F&page=signup" class="link1" >注册</a></p>
+			<input type="email" name="email" class="input1" id="inputEmail" placeholder="邮箱">
+			<input type="password" name="password" class="input1" id="inputPsw" placeholder="密码">
+			<button class="btn1" id="btnLogin">登录</button>
+		</div>
+		<div class="popUp" id="popFeedback">
+			<span class="btnClose" id="btnClose3"></span>
+			<p class="p1">向我们发送反馈</p>
+			<span class="line"></span>
+			<textarea id="txtFeedback" placeholder="如果您没有登录，请务必留下您的RTH账号邮箱或联系方式"></textarea>
+			<button class="btn1" id="btnSendFeed">发送</button>
+		</div>
+		<div class="popUp" id="popSetPri">
+			<span class="btnClose" id="btnClose2"></span>
+			<p class="p1">设置高级账号</p>
+			<span class="line"></span>
+			<input type="email" class="input1" id="inputPriEmail" placeholder="邮箱">
+			<input type="date" class="input1" id="inputPriExpDate">
+			<button class="btn1" id="btnSetPri">生效</button>
+		</div>
+		<div class="popUp" id="popUpdate">
+			<p class="p1">真巧！</p>
+			<span class="line"></span>
+			<p style="margin-top: 50px;">我们正在对全新的AirPortal进行开放性测试</p>
+			<p>正式版本将于冬至夜上线</p>
+			<p>如果您在使用期间有任何意见或建议</p>
+			<p>都欢迎随时向我们提出~</p>
+			<button class="btn1" id="btnDone4">关闭</button>
 		</div>
 
-		<div class="footer" id="footerL"><span id="version">Version</span>丨<a href="https://rths.tk/privacy" target="_blank" class="link1">隐私政策</a></div>
-		<div class="footer" id="footerR">前端 by <a href="https://www.maorx.cn/" target="_blank" class="link1">毛若昕</a>，后端 by <a href="https://www.rthsoftware.cn/" target="_blank" class="link1">杨尚臻</a>。保留所有权利。</div>
-		<input id="file" type="file">
-		<script src="https://www.rthsoftware.cn/js/ajax.js"></script>
+		<div class="footer" id="footerL"><span id="txtVer">Version</span>丨<a href="https://www.rthe.cn/privacy" target="_blank" class="link1">隐私政策</a></div>
+		<div class="footer" id="footerR">由 <a href="https://www.maorx.cn/" target="_blank" class="link1">毛若昕</a> 和 <a href="https://rthsoftware.cn/" target="_blank" class="link1">杨尚臻</a> 联合开发。保留所有权利。</div>
+		<input id="file" type="file" multiple="multiple">
+		<script src="https://rthsoftware.cn/js/ajax.js"></script>
+		<script src="https://rthsoftware.cn/js/md5.min.js"></script>
 		<script src="js/airportal.js"></script>
-		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan style='display:none;' id='cnzz_stat_icon_1261177803'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1261177803' type='text/javascript'%3E%3C/script%3E"));</script>
 	</body>
 </html>
