@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51d4";
+var version="18w51e";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -399,6 +399,40 @@ addEventListener("message",function(e){
 		}
 	}catch(e){}
 });
+menuItemFeedback.onclick=function(){
+	mainBox.style.opacity="0";
+	popFeedback.style.display="block";
+	setTimeout(function(){
+		popFeedback.style.opacity="1";
+	},250);
+	hideMenu();
+}
+btnSendFeed.onclick=function(){
+	ajax({
+		"url":"https://rthsoftware.cn/backend/feedback",
+		"data":{
+			"appname":appName,
+			"email":login.email,
+			"lang":navigator.language,
+			"name":login.username,
+			"recipient":"405801769@qq.com",
+			"text":txtFeedback.value,
+			"ver":version
+		},
+		"method":"POST",
+		"success":function(){
+			alarm("发送成功！我们会尽快处理您的反馈，祝您有开心的一天 :D");
+			popFeedback.style.opacity="0";
+			mainBox.style.opacity="1";
+			setTimeout(function(){
+				popFeedback.style.display="none";
+			},250);
+		},
+		"error":function(e){
+			alarm("发送失败...请您再试一次，或通过微博私信反馈（@是毛布斯呀 @YSZ-RTH）");
+		}
+	});
+}
 menuItemAutoServer.onclick=
 menuItemCnServer.onclick=
 menuItemUsServer1.onclick=
@@ -508,6 +542,13 @@ btnClose2.onclick=function(){
 		popSetPri.style.display="none";
 	},250);
 }
+btnClose3.onclick=function(){
+	popFeedback.style.opacity="0";
+	mainBox.style.opacity="1";
+	setTimeout(function(){
+		popFeedback.style.display="none";
+	},250);
+}
 function btnPay0State(){
 	if(document.getElementsByClassName("selected").length==2){
 		btnPay0.style.pointerEvents="auto";
@@ -577,6 +618,7 @@ btnPay0.onclick=function(){
 	accBox0.style.left="-500px";
 	accBox1.style.left="0px";
 }
+var payState="success";
 btnPay1.onclick=function(){
 	ajax({
 		"url":"https://rthsoftware.cn/backend/feedback",
@@ -591,17 +633,21 @@ btnPay1.onclick=function(){
 		},
 		"method":"POST",
 		"success":function(){
+			payState="success";
+			btnDone3.innerText="关闭";
 			lblPayState0.innerText="提交成功";
 			lblPayState1.innerHTML="我们正在处理您的支付订单。<br/>您的高级账号剩余天数会在24小时内自动更新;<br/>否则请在确保您已支付后与我们联系。";
 			btnDone3.style.pointerEvents="auto";
 			btnDone3.style.opacity="1";
 		},
 		"error":function(e){
+			payState="error";
+			btnDone3.innerText="重试";
 			lblPayState0.innerText="Oops...出错了";
 			if(e.status==504){
-				lblPayState1.innerHTML="服务器无法及时响应<br/>请您再试一次（但无需再次扫码付款）<br/>如需更多帮助，请与我们联系。";
+				lblPayState1.innerHTML="服务器无法及时响应<br/>请重试（无需再次扫码付款）<br/>如需更多帮助，请与我们联系。";
 			}else{
-				lblPayState1.innerHTML="无法连接至服务器。<br/>请您再试一次（但无需再次扫码付款）<br/>如需更多帮助，请与我们联系。";
+				lblPayState1.innerHTML="无法连接至服务器。<br/>请重试（无需再次扫码付款）<br/>如需更多帮助，请与我们联系。";
 			}
 			btnDone3.style.pointerEvents="auto";
 			btnDone3.style.opacity="1";
@@ -611,18 +657,22 @@ btnPay1.onclick=function(){
 	accBox2.style.left="0px";
 }
 btnDone3.onclick=function(){
-	popAccount.style.opacity="0";
-	mainBox.style.opacity="1";
-	setTimeout(function(){
-		popAccount.style.display="none";
-		accBox0.style.left="0px";
-		accBox1.style.left="500px";
-		accBox2.style.left="1000px";
-		btnDone3.style.pointerEvents="none";
-		btnDone3.style.opacity="0.5";
-		lblPayState0.innerText="提交中";
-		lblPayState1.innerHTML="我们正在处理您的支付订单<br/>请稍候<br/>如需帮助，请与我们联系。";
-	},250);
+	if(payState=="success"){
+		popAccount.style.opacity="0";
+		mainBox.style.opacity="1";
+		setTimeout(function(){
+			popAccount.style.display="none";
+			accBox0.style.left="0px";
+			accBox1.style.left="500px";
+			accBox2.style.left="1000px";
+			btnDone3.style.pointerEvents="none";
+			btnDone3.style.opacity="0.5";
+			lblPayState0.innerText="提交中";
+			lblPayState1.innerHTML="我们正在处理您的支付订单<br/>请稍候<br/>如需帮助，请与我们联系。";
+		},250);
+	}else{
+		btnPay1.onclick();
+	}
 }
 file.onchange=function(input){
 	var files=[];

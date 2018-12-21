@@ -22,6 +22,7 @@
 		<div id="menu">
 			<a class="menuItem" id="menuItemLogin">登录</a>
 			<a class="menuItem" id="menuItemHistory">历史记录</a>
+			<a class="menuItem" id="menuItemFeedback">联系我们</a>
 			<span class="menuLine" id="menuLine0"></span>
 			<a class="menuItem server" id="menuItemAutoServer" value="https://rthsoftware.cn/backend/"><span class="tick" id="tickAutoServer" for="menuItemAutoServer"></span>自动选择服务器<div class="latencyStatus"> ●</div></a>
 			<a class="menuItem server" id="menuItemCnServer" value="https://www.rthsoftware.cn/backend/"><span class="tick" id="tickCnServer" for="menuItemCnServer"></span>大陆服务器<div class="latencyStatus"> ●</div></a>
@@ -83,7 +84,7 @@
 				<p class="p3" id="lblExpTime">高级账号 剩余 天</p>
 				<div class="payPlans">
 					<p class="p2">激活 / 续期高级账号</p>
-					<p class="p4">支付方案</p>
+					<p class="p4">支付方案<span> 限时特惠！1月25日截止</span></p>
 					<span class="payItem plan" id="payItem1M"><p class="p2">¥6 <span class="pDel">¥10</span></p><p class="p4">一个月</p></span>
 					<span class="payItem plan" id="payItem3M"><p class="p2">¥18 <span class="pDel">¥30</span></p><p class="p4">三个月</p></span>
 					<span class="payItem plan" id="payItem1Y"><p class="p2">¥72 <span class="pDel">¥120</span></p><p class="p4">一年</p></span>
@@ -119,6 +120,13 @@
 			<input type="email" name="email" class="input1" id="inputEmail" placeholder="邮箱">
 			<input type="password" name="password" class="input1" id="inputPsw" placeholder="密码">
 			<button class="btn1" id="btnLogin">登录</button>
+		</div>
+		<div class="popUp" id="popFeedback">
+			<span class="btnClose" id="btnClose3"></span>
+			<p class="p1">向我们发送反馈</p>
+			<span class="line"></span>
+			<textarea id="txtFeedback" placeholder="如果您没有登录，请务必留下您的RTH账号邮箱或联系方式"></textarea>
+			<button class="btn1" id="btnSendFeed">发送</button>
 		</div>
 		<div class="popUp" id="popSetPri">
 			<span class="btnClose" id="btnClose2"></span>

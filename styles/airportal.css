@@ -283,7 +283,7 @@ a,button {outline: none;}
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
 }
-#popSend,#popRecv,#popDownl,#popAccount,#popLogin,#popHistory,#popRecvCode,#popSetPri {
+#popSend,#popRecv,#popDownl,#popAccount,#popLogin,#popHistory,#popRecvCode,#popFeedback,#popSetPri {
 	display: none;
 	opacity: 0;
 }
@@ -344,7 +344,7 @@ a,button {outline: none;}
 #btnDone0 {
 	top: 260px;
 }
-#btnDone1,#btnDone2 {
+#btnDone1,#btnDone2,#btnSendFeed {
 	top: 10px;
 }
 #btnDone3 {
@@ -636,6 +636,9 @@ a,button {outline: none;}
 	text-align: left;
 	overflow-y: scroll;
 }
+.payPlans .p4 span {
+	color: #A5C220;
+}
 .payItem {
 	position: relative;
 	display: inline-block;
@@ -779,10 +782,10 @@ a,button {outline: none;}
 	-o-transition: all 0.5s;
 	-ms-transition: all 0.5s;
 }
-.input1:hover {
+.input1:hover,#txtFeedback:hover {
 	background-color: rgba(0,0,0,0.1);
 }
-.input1:focus {
+.input1:focus,#txtFeedback:focus {
 	background-color: rgba(0,0,0,0.15);
 }
 #inputPriExpDate {
@@ -861,6 +864,31 @@ a,button {outline: none;}
 	text-align: center;
 	margin-top: 50px;
 }
+#txtFeedback {
+	position: relative;
+	left: 10%;
+	top: 0px;
+	display: block;
+	border: none;
+	width: 75%;
+	height: 160px;
+	padding: 10px 2.5%;
+	margin-top: 20px;
+	text-align: center;
+	font-size: small;
+	font-family: "Microsoft Yahei Light","Microsoft Yahei",Helvetica,sans-serif,"等线";
+	color: rgba(0,0,0,0.8);
+	background-color: rgba(0,0,0,0.05);
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 50px;
+	border-radius: 10px;
+	resize: none;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	-ms-transition: all 0.5s;
+}
 #footerL {
 	text-align: left;
 	margin-left: 30px;
@@ -877,11 +905,20 @@ input[type=file]{
 }
 
 @media screen and (max-width:500px){  
+	.btnMain {font-size: small;}
 	#menuIcon {top: 20px;margin-left: -45px;}
 	.tick::before {top: 1px;}
 	.popUp {width: 80%;margin-left: -40%;}
 	#btnBack0 {left: 35px;}
 	#btnBack1 {top: 35px;left: 35px;}
+	#btnBack2 {top: -10px;left: 30px;}
+	.btnClose {top: 30px;right: 30px;}
+	#btnClose0 {top: -10px;}
+	.p1 {font-size: 16px;}
+	.p3 {font-size: 12px;}
+	.input1 {left: 10%;width: 75%;}
+	.payPlans,#historyList,.line {width: 80%; left: 10%;}
+	.payItem {width: 70px;margin-right: 5px;}
 	.footer {font-size: 11px;}
 	#footerL {top: 0;margin-top: 20px;}
 }
