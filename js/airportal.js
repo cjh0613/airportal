@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51f";
+var version="18w51f1";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -28,14 +28,18 @@ var login={
 	"password":localStorage.getItem("Password"),
 	"username":localStorage.getItem("Username")
 };
-var firstRun18w51=localStorage.getItem("firstRun18w51");
-if(firstRun18w51!="False"){
+var firstRun=JSON.parse(localStorage.getItem("firstRun"));
+if(!firstRun||!firstRun[version]){
+	firstRun={};
+}
+if(firstRun[version]!=false){
 	mainBox.style.opacity="0";
 	popUpdate.style.display="block";
 	setTimeout(function(){
 		popUpdate.style.opacity="1";
 	},250);
-	localStorage.setItem("firstRun18w51", "False");
+	firstRun[version]=false
+	localStorage.setItem("firstRun", JSON.stringify(firstRun));
 }
 function addHistory(filename,code){
 	var newHistory=document.createElement("span");
@@ -377,6 +381,7 @@ function hideMenu(){
 		menu.style.display="none";
 	},250);
 }
+mask.onclick=hideMenu
 menuItemLogin.onclick=function(){
 	if(!login.username){
 		mainBox.style.opacity="0";
@@ -430,15 +435,15 @@ btnSendFeed.onclick=function(){
 		},
 		"method":"POST",
 		"success":function(){
-			alarm("发送成功！我们会尽快处理您的反馈，祝您有开心的一天 :D");
+			alert("发送成功！我们会尽快处理您的反馈，祝您有开心的一天 :D");
 			popFeedback.style.opacity="0";
 			mainBox.style.opacity="1";
 			setTimeout(function(){
 				popFeedback.style.display="none";
 			},250);
 		},
-		"error":function(e){
-			alarm("发送失败...请您再试一次，或通过微博私信反馈（@是毛布斯呀 @YSZ-RTH）");
+		"error":function(){
+			alert("发送失败...请您再试一次，或通过微博私信反馈（@是毛布斯呀 @YSZ-RTH）");
 		}
 	});
 }
