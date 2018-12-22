@@ -344,7 +344,7 @@ a,button {outline: none;}
 #btnDone0 {
 	top: 260px;
 }
-#btnDone1,#btnDone2,#btnSendFeed {
+#btnDone1,#btnDone2,#btnSendFeed,#btnDone4 {
 	top: 10px;
 }
 #btnDone3 {
@@ -357,7 +357,7 @@ a,button {outline: none;}
 	opacity: 0.5;
 	pointer-events: none;
 }
-#btnLogin,#btnDone4 {
+#btnLogin {
 	top: 30px;
 }
 #btnSetPri {
@@ -888,6 +888,15 @@ a,button {outline: none;}
 	-moz-transition: all 0.5s;
 	-o-transition: all 0.5s;
 	-ms-transition: all 0.5s;
+}
+.contentBox {
+	position: relative;
+	width: 80%;
+	height: 190px;
+	left: 10%;
+	margin-top: 0px;
+	text-align: left;
+	overflow-y: scroll;
 }
 #footerL {
 	text-align: left;
