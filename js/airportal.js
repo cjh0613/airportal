@@ -909,7 +909,7 @@ if("fetch" in window){
 	const servers=document.getElementsByClassName("server");
 	const speedTest=function(index){
 		const start=performance.now();
-		fetch(servers[index].getAttribute("value")+"geo").then(function(){
+		fetch(servers[index].getAttribute("value")+"userdata/file/").then(function(){
 			const end=performance.now();
 			const time=Math.round(end-start);
 			let timeStr;
