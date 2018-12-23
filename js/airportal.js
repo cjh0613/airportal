@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51g";
+var version="18w51g1";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -38,7 +38,7 @@ if(firstRun[version]!=false){
 	setTimeout(function(){
 		popUpdate.style.opacity="1";
 	},250);
-	firstRun[version]=false
+	firstRun[version]=false;
 	localStorage.setItem("firstRun", JSON.stringify(firstRun));
 }
 function addHistory(filename,code){
@@ -52,7 +52,7 @@ function addHistory(filename,code){
 	lblEmpty.style.display="none";
 	historyList.style.marginTop="-10px";
 }
-function downloadFile(fileInfo,code,index){
+function downloadFile(fileInfo,code,index,path){
 	if(fileInfo.slice){
 		mainBox.style.opacity="0";
 		popDownl.style.display="block";
@@ -107,7 +107,7 @@ function downloadFile(fileInfo,code,index){
 					lblDownloadP2.innerText="总下载进度 "+progress+"/"+fileInfo.slice;
 				}
 			}
-			xhr.open("GET",fileBackend+"tmp/"+code+"-"+index+"-"+progress,true);
+			xhr.open("GET",path+code+"-"+index+"-"+progress,true);
 			xhr.send();
 		}
 		downloadSlice(1);
@@ -134,7 +134,7 @@ function getInfo(code){
 			"dataType":"json",
 			"success":function(e){
 				if(e.multifile.length==1){
-					downloadFile(e.multifile[0],code,1);
+					downloadFile(e.multifile[0],code,1,e.path);
 					popRecv.style.opacity="0";
 					mainBox.style.opacity="1";
 					setTimeout(function(){
@@ -152,7 +152,7 @@ function getInfo(code){
 						}
 						newLi.onclick=function(){
 							var index=this.getAttribute("index")-1;
-							downloadFile(e.multifile[index],code,index+1);
+							downloadFile(e.multifile[index],code,index+1,e.path);
 						}
 						fileList.appendChild(newLi);
 					}
@@ -275,7 +275,7 @@ function logOut(){
 	localStorage.removeItem("Password");
 	localStorage.removeItem("Username");
 	if(location.hostname=="rthsoftware.cn"){
-		location.reload()
+		location.reload();
 	}else{
 		var ssoIFrame=document.createElement("iframe");
 		ssoIFrame.style.display="none";
@@ -344,7 +344,7 @@ inputPsw.onkeydown=function(event){
 send.onclick=function(){
 	file.value="";
 	file.click();
-	progressBarBg0.style.background="rgba(0,0,0,0)"
+	progressBarBg0.style.background="rgba(0,0,0,0)";
 	progressBar0.style.width="0px";
 }
 receive.onclick=function(){
@@ -381,7 +381,7 @@ function hideMenu(){
 		menu.style.display="none";
 	},250);
 }
-mask.onclick=hideMenu
+mask.onclick=hideMenu;
 menuItemLogin.onclick=function(){
 	if(!login.username){
 		mainBox.style.opacity="0";
@@ -406,7 +406,7 @@ addEventListener("message",function(e){
 	try{
 		login=JSON.parse(atob(e.data));
 		if(login.username===null){
-			location.reload()
+			location.reload();
 		}else{
 			backend=login.backend;
 			loggedIn(true);
@@ -581,14 +581,14 @@ function btnPay0State(){
 }
 function payItemClick(element,className){
 	if(element.classList.contains("selected")){
-		element.classList.remove("selected")
+		element.classList.remove("selected");
 	}else{
-		var elements=document.getElementsByClassName(className)
+		var elements=document.getElementsByClassName(className);
 		for(var i=0;i<elements.length;i++){
 			if(elements[i]==element){
-				element.classList.add("selected")
+				element.classList.add("selected");
 			}else{
-				elements[i].classList.remove("selected")
+				elements[i].classList.remove("selected");
 			}
 		}
 	}
@@ -700,6 +700,8 @@ file.onchange=function(input){
 	for(var i=0;i<input.target.files.length;i++){
 		if(input.target.files[i].name.indexOf(".php")!=-1||input.target.files[i].type=="text/php"){
 			alert("不允许传输 PHP 文件。");
+		}else if(input.target.files[i].size>1073741824){
+			alert("不允许传输大于 1024MB 的文件。");
 		}else{
 			files.push({
 				"name":input.target.files[i].name,
@@ -709,160 +711,162 @@ file.onchange=function(input){
 			});
 		}
 	}
-	var showUploading=function(){
-		sendBox0.style.left="0px";
-		sendBox1.style.left="500px";
-		sendBox2.style.left="1000px";
-		mainBox.style.opacity="0";
-		popSend.style.display="block";
-		setTimeout(function(){
-			popSend.style.opacity="1";
-		},250);
-	}
-	var uploadSuccess=function(code){
-		QRBox.innerHTML="";
-		var qrcode=new Image(200,200);
-		qrcode.src=getQRCode("http://rthe.cn/"+code);
-		QRBox.appendChild(qrcode);
-		recvCode.innerHTML=code;
-		popRecvCode.innerHTML=code;
-		addHistory(input.target.files[0].name,code);
-		sendBox0.style.left="-500px";
-		sendBox1.style.left="0px";
-		sendBox2.style.left="500px";
-		lblUploadP.innerHTML="上传中...";
-	}
-	if(files.length<=1&&files[0].size<=10240000){
-		showUploading();
-		ajax({
-			"url":fileBackend+"upload",
-			"data":{
-				"file":input.target.files[0],
-				"username":login.username
-			},
-			"dataType":"json",
-			"method":"POST",
-			"processData":false,
-			"success":function(e){
-				if(e.error){
-					alert(e.error);
-				}else{
-					uploadSuccess(e.code);
-				}
-			},
-			"error":function(){
-				alert("无法连接至服务器。");
-			}
-		});
-	}else{
-		ajax({
-			"url":fileBackend+"getcode",
-			"data":{
-				"info":JSON.stringify(files),
-				"username":login.username
-			},
-			"dataType":"json",
-			"method":"POST",
-			"success":function(code){
-				var upload=function(fileIndex){
-					var thisFile=input.target.files[fileIndex];
-					var fileSlice=[];
-					var passedTime=0;
-					var progressCalc;
-					var sliceSize=10240000;
-					var time=0;
-					var timer;
-					var uploadProgress=0;
-					var uploadSlice=function(){
-						clearInterval(timer);
-						ajax({
-							"url":fileBackend+"uploadslice",
-							"data":{
-								"code":code,
-								"file":fileSlice[uploadProgress],
-								"index":fileIndex+1,
-								"progress":uploadProgress+1
-							},
-							"dataType":"json",
-							"method":"POST",
-							"processData":false,
-							"success":function(e){
-								clearInterval(progressCalc);
-								if(e.error){
-									alert(e.error);
-								}else if(e.success==uploadProgress+1){
-									if(uploadProgress==fileSlice.length-1){
-										if(fileIndex==input.target.files.length-1){
-											uploadSuccess(code);
-										}else{
-											setTimeout(function(){
-												upload(fileIndex+1);
-											},1000);
-										}
-									}else{
-										progressBarBg0.style.background="rgba(0,0,0,0.1)"
-										uploadProgress++;
-										var uploadPercentage=uploadProgress/(fileSlice.length-1)*100;
-										lblUploadP.innerHTML="上传中 "+Math.round(uploadPercentage)+"%";
-										progressBar0.style.width=Math.round(uploadPercentage)+"px";
-										setTimeout(function(){
-											uploadSlice();
-											passedTime=0;
-											progressCalc=setInterval(function(){
-												passedTime+=100;
-												var maxPercentage=(uploadProgress+1)/(fileSlice.length-1)*100;
-												var percentagePrediction=uploadPercentage*(1+passedTime/time);
-												if(maxPercentage>100){
-													maxPercentage=100;
-												}
-												if(percentagePrediction>maxPercentage){
-													percentagePrediction=maxPercentage;
-												}
-												lblUploadP.innerHTML="上传中 "+Math.round(percentagePrediction)+"%";
-												progressBar0.style.width=Math.round(percentagePrediction)+"px";
-											},100);
-										},1000);
-									}
-								}
-							},
-							"error":function(){
-								alert("无法连接至服务器。");
-							}
-						});
-					}
-					if(thisFile.size>10240000){
-						for(var i=0;i<thisFile.size/sliceSize;i++){
-							fileSlice.push(thisFile.slice(i*sliceSize,(i+1)*sliceSize));
-						}
-						timer=setInterval(function(){
-							time+=100;
-							var maxPercentage=1/(fileSlice.length-1)*100;
-							var percentagePrediction=maxPercentage*(time/10000);
-							if(percentagePrediction>maxPercentage){
-								percentagePrediction=maxPercentage;
-							}
-							lblUploadP.innerHTML = "上传中 "+Math.round(percentagePrediction)+"%";
-							progressBar0.style.width=Math.round(percentagePrediction)+"px";
-						},100);
+	if(files.length>0){
+		var showUploading=function(){
+			sendBox0.style.left="0px";
+			sendBox1.style.left="500px";
+			sendBox2.style.left="1000px";
+			mainBox.style.opacity="0";
+			popSend.style.display="block";
+			setTimeout(function(){
+				popSend.style.opacity="1";
+			},250);
+		}
+		var uploadSuccess=function(code){
+			QRBox.innerHTML="";
+			var qrcode=new Image(200,200);
+			qrcode.src=getQRCode("http://rthe.cn/"+code);
+			QRBox.appendChild(qrcode);
+			recvCode.innerHTML=code;
+			popRecvCode.innerHTML=code;
+			addHistory(input.target.files[0].name,code);
+			sendBox0.style.left="-500px";
+			sendBox1.style.left="0px";
+			sendBox2.style.left="500px";
+			lblUploadP.innerHTML="上传中...";
+		}
+		if(files.length<=1&&files[0].size<=10240000){
+			showUploading();
+			ajax({
+				"url":fileBackend+"upload",
+				"data":{
+					"file":input.target.files[0],
+					"username":login.username
+				},
+				"dataType":"json",
+				"method":"POST",
+				"processData":false,
+				"success":function(e){
+					if(e.error){
+						alert(e.error);
 					}else{
-						fileSlice.push(thisFile);
+						uploadSuccess(e.code);
 					}
-					uploadSlice();
-				}
-				showUploading();
-				upload(0);
-			},
-			"error":function(e){
-				if(e.status==402){
-					alert("批量上传和上传大文件需要付费。");
-					if(!login.username){
-						menuItemLogin.click();
-					}
-				}else{
+				},
+				"error":function(){
 					alert("无法连接至服务器。");
 				}
-			}
-		});
+			});
+		}else{
+			ajax({
+				"url":fileBackend+"getcode",
+				"data":{
+					"info":JSON.stringify(files),
+					"username":login.username
+				},
+				"dataType":"json",
+				"method":"POST",
+				"success":function(code){
+					var upload=function(fileIndex){
+						var thisFile=input.target.files[fileIndex];
+						var fileSlice=[];
+						var passedTime=0;
+						var progressCalc;
+						var sliceSize=10240000;
+						var time=0;
+						var timer;
+						var uploadProgress=0;
+						var uploadSlice=function(){
+							clearInterval(timer);
+							ajax({
+								"url":fileBackend+"uploadslice",
+								"data":{
+									"code":code,
+									"file":fileSlice[uploadProgress],
+									"index":fileIndex+1,
+									"progress":uploadProgress+1
+								},
+								"dataType":"json",
+								"method":"POST",
+								"processData":false,
+								"success":function(e){
+									clearInterval(progressCalc);
+									if(e.error){
+										alert(e.error);
+									}else if(e.success==uploadProgress+1){
+										if(uploadProgress==fileSlice.length-1){
+											if(fileIndex==input.target.files.length-1){
+												uploadSuccess(code);
+											}else{
+												setTimeout(function(){
+													upload(fileIndex+1);
+												},1000);
+											}
+										}else{
+											progressBarBg0.style.background="rgba(0,0,0,0.1)";
+											uploadProgress++;
+											var uploadPercentage=uploadProgress/(fileSlice.length-1)*100;
+											lblUploadP.innerHTML="上传中 "+Math.round(uploadPercentage)+"%";
+											progressBar0.style.width=Math.round(uploadPercentage)+"px";
+											setTimeout(function(){
+												uploadSlice();
+												passedTime=0;
+												progressCalc=setInterval(function(){
+													passedTime+=100;
+													var maxPercentage=(uploadProgress+1)/(fileSlice.length-1)*100;
+													var percentagePrediction=uploadPercentage*(1+passedTime/time);
+													if(maxPercentage>100){
+														maxPercentage=100;
+													}
+													if(percentagePrediction>maxPercentage){
+														percentagePrediction=maxPercentage;
+													}
+													lblUploadP.innerHTML="上传中 "+Math.round(percentagePrediction)+"%";
+													progressBar0.style.width=Math.round(percentagePrediction)+"px";
+												},100);
+											},1000);
+										}
+									}
+								},
+								"error":function(){
+									alert("无法连接至服务器。");
+								}
+							});
+						}
+						if(thisFile.size>10240000){
+							for(var i=0;i<thisFile.size/sliceSize;i++){
+								fileSlice.push(thisFile.slice(i*sliceSize,(i+1)*sliceSize));
+							}
+							timer=setInterval(function(){
+								time+=100;
+								var maxPercentage=1/(fileSlice.length-1)*100;
+								var percentagePrediction=maxPercentage*(time/10000);
+								if(percentagePrediction>maxPercentage){
+									percentagePrediction=maxPercentage;
+								}
+								lblUploadP.innerHTML = "上传中 "+Math.round(percentagePrediction)+"%";
+								progressBar0.style.width=Math.round(percentagePrediction)+"px";
+							},100);
+						}else{
+							fileSlice.push(thisFile);
+						}
+						uploadSlice();
+					}
+					showUploading();
+					upload(0);
+				},
+				"error":function(e){
+					if(e.status==402){
+						alert("批量上传和上传大文件需要付费。");
+						if(!login.username){
+							menuItemLogin.click();
+						}
+					}else{
+						alert("无法连接至服务器。");
+					}
+				}
+			});
+		}
 	}
 }
 window.onerror=function(msg,url,lineNo){
@@ -892,7 +896,7 @@ if(navigator.language.indexOf("zh")==-1){
 }
 if($_GET["code"]){
 	if(/(MicroMessenger|QQ)\//i.test(navigator.userAgent)){
-		alert("请在浏览器中打开此页面。")
+		alert("请在浏览器中打开此页面。");
 	}else{
 		getInfo($_GET["code"]);
 	}
