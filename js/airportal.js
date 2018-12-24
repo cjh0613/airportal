@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51g1";
+var version="18w51g2";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -33,11 +33,11 @@ if(!firstRun||firstRun[version]==undefined){
 	firstRun={};
 }
 if(firstRun[version]!=false){
-	mainBox.style.opacity="0";
+	/*mainBox.style.opacity="0";
 	popUpdate.style.display="block";
 	setTimeout(function(){
 		popUpdate.style.opacity="1";
-	},250);
+	},250);*/
 	firstRun[version]=false;
 	localStorage.setItem("firstRun", JSON.stringify(firstRun));
 }
@@ -156,9 +156,12 @@ function getInfo(code){
 						}
 						fileList.appendChild(newLi);
 					}
+					mainBox.style.opacity="0";
+					popRecv.style.display="block";
+					popRecv.style.opacity="1";
+					recvBox0.style.left="-500px";
+					recvBox1.style.left="0px";
 				}
-				recvBox0.style.left="-500px";
-				recvBox1.style.left="0px";
 			},
 			"error":function(e){
 				if(e.status==200){
@@ -290,6 +293,7 @@ btnSetPri.onclick=function(){
 			"appname":appName,
 			"email":inputPriEmail.value,
 			"password":login.password,
+			"recipient":"405801769@qq.com",
 			"time":new Date(inputPriExpDate.value).getTime()/1000,
 			"username":login.username
 		},
@@ -297,6 +301,13 @@ btnSetPri.onclick=function(){
 		"success":function(){
 			alert("设置成功。");
 			inputPriEmail.value="";
+		},
+		"error":function(e){
+			if(e.status==504){
+				alert("请再试一次。");
+			}else{
+				alert("无法连接至服务器。");
+			}
 		}
 	});
 }
@@ -745,7 +756,6 @@ file.onchange=function(input){
 				},
 				"dataType":"json",
 				"method":"POST",
-				"processData":false,
 				"success":function(e){
 					if(e.error){
 						alert(e.error);
@@ -770,14 +780,9 @@ file.onchange=function(input){
 					var upload=function(fileIndex){
 						var thisFile=input.target.files[fileIndex];
 						var fileSlice=[];
-						var passedTime=0;
-						var progressCalc;
 						var sliceSize=10240000;
-						var time=0;
-						var timer;
 						var uploadProgress=0;
 						var uploadSlice=function(){
-							clearInterval(timer);
 							ajax({
 								"url":fileBackend+"uploadslice",
 								"data":{
@@ -788,9 +793,7 @@ file.onchange=function(input){
 								},
 								"dataType":"json",
 								"method":"POST",
-								"processData":false,
 								"success":function(e){
-									clearInterval(progressCalc);
 									if(e.error){
 										alert(e.error);
 									}else if(e.success==uploadProgress+1){
@@ -805,26 +808,10 @@ file.onchange=function(input){
 										}else{
 											progressBarBg0.style.background="rgba(0,0,0,0.1)";
 											uploadProgress++;
-											var uploadPercentage=uploadProgress/(fileSlice.length-1)*100;
+											var uploadPercentage=uploadProgress/fileSlice.length*100;
 											lblUploadP.innerHTML="上传中 "+Math.round(uploadPercentage)+"%";
 											progressBar0.style.width=Math.round(uploadPercentage)+"px";
-											setTimeout(function(){
-												uploadSlice();
-												passedTime=0;
-												progressCalc=setInterval(function(){
-													passedTime+=100;
-													var maxPercentage=(uploadProgress+1)/(fileSlice.length-1)*100;
-													var percentagePrediction=uploadPercentage*(1+passedTime/time);
-													if(maxPercentage>100){
-														maxPercentage=100;
-													}
-													if(percentagePrediction>maxPercentage){
-														percentagePrediction=maxPercentage;
-													}
-													lblUploadP.innerHTML="上传中 "+Math.round(percentagePrediction)+"%";
-													progressBar0.style.width=Math.round(percentagePrediction)+"px";
-												},100);
-											},1000);
+											uploadSlice();
 										}
 									}
 								},
@@ -837,16 +824,6 @@ file.onchange=function(input){
 							for(var i=0;i<thisFile.size/sliceSize;i++){
 								fileSlice.push(thisFile.slice(i*sliceSize,(i+1)*sliceSize));
 							}
-							timer=setInterval(function(){
-								time+=100;
-								var maxPercentage=1/(fileSlice.length-1)*100;
-								var percentagePrediction=maxPercentage*(time/10000);
-								if(percentagePrediction>maxPercentage){
-									percentagePrediction=maxPercentage;
-								}
-								lblUploadP.innerHTML = "上传中 "+Math.round(percentagePrediction)+"%";
-								progressBar0.style.width=Math.round(percentagePrediction)+"px";
-							},100);
 						}else{
 							fileSlice.push(thisFile);
 						}
