@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w51g2";
+var version="18w52a";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -28,6 +28,7 @@ var login={
 	"password":localStorage.getItem("Password"),
 	"username":localStorage.getItem("Username")
 };
+var title=document.title;
 var firstRun=JSON.parse(localStorage.getItem("firstRun"));
 if(!firstRun||firstRun[version]==undefined){
 	firstRun={};
@@ -77,6 +78,7 @@ function downloadFile(fileInfo,code,index,path){
 					slice.push(xhr.response);
 					if(progress>=fileInfo.slice){
 						clearInterval(intervalId);
+						document.title=title;
 						var newA=document.createElement("a");
 						var url=URL.createObjectURL(new Blob(slice,{
 							"type":fileInfo.type
@@ -101,8 +103,10 @@ function downloadFile(fileInfo,code,index,path){
 			}
 			xhr.onprogress=function(e){
 				if(e.lengthComputable){
-					progressBar1.style.width=Math.round(e.loaded/e.total*100)+"px";
-					lblDownloadP1.innerText="下载文件碎片中 "+Math.round(e.loaded/e.total*100)+"%";
+					var percentage=Math.round(e.loaded/e.total*100);
+					document.title="["+progress+"/"+fileInfo.slice+": "+percentage+"%] "+title;
+					progressBar1.style.width=percentage+"px";
+					lblDownloadP1.innerText="下载文件碎片中 "+percentage+"%";
 					progressBar2.style.width=Math.round(progress/fileInfo.slice*100)+"px";
 					lblDownloadP2.innerText="总下载进度 "+progress+"/"+fileInfo.slice;
 				}
@@ -172,6 +176,18 @@ function getInfo(code){
 			}
 		});
 	}
+}
+function getPostData(data){
+	var formData=new FormData();
+	for(var key in data){
+		if(data[key]){
+			formData.append(key,data[key]);
+		}
+	}
+	return{
+		"method":"POST",
+		"body":formData
+	};
 }
 function getQRCode(content){
 	return "https://rthsoftware.cn/backend/get?"+encodeData({
@@ -479,6 +495,7 @@ viewQRC.onclick=function(){
 	sendBox2.style.left="0px";
 }
 btnDone0.onclick=function(){
+	document.title=title;
 	popSend.style.opacity="0";
 	mainBox.style.opacity="1";
 	popRecvCode.style.display="block";
@@ -724,6 +741,7 @@ file.onchange=function(input){
 	}
 	if(files.length>0){
 		var showUploading=function(){
+			document.title="[上传中] "+title;
 			sendBox0.style.left="0px";
 			sendBox1.style.left="500px";
 			sendBox2.style.left="1000px";
@@ -734,6 +752,7 @@ file.onchange=function(input){
 			},250);
 		}
 		var uploadSuccess=function(code){
+			document.title="[取件码 "+code+"] "+title;
 			QRBox.innerHTML="";
 			var qrcode=new Image(200,200);
 			qrcode.src=getQRCode("http://rthe.cn/"+code);
@@ -746,7 +765,7 @@ file.onchange=function(input){
 			sendBox2.style.left="500px";
 			lblUploadP.innerHTML="上传中...";
 		}
-		if(files.length<=1&&files[0].size<=10240000){
+		if(files.length<=1&&(files[0].size<=10240000||!"fetch" in window&&files[0].size<104857600)){
 			showUploading();
 			ajax({
 				"url":fileBackend+"upload",
@@ -767,82 +786,86 @@ file.onchange=function(input){
 					alert("无法连接至服务器。");
 				}
 			});
-		}else{
-			ajax({
-				"url":fileBackend+"getcode",
-				"data":{
-					"info":JSON.stringify(files),
-					"username":login.username
-				},
-				"dataType":"json",
-				"method":"POST",
-				"success":function(code){
-					var upload=function(fileIndex){
-						var thisFile=input.target.files[fileIndex];
-						var fileSlice=[];
-						var sliceSize=10240000;
-						var uploadProgress=0;
-						var uploadSlice=function(){
-							ajax({
-								"url":fileBackend+"uploadslice",
-								"data":{
-									"code":code,
-									"file":fileSlice[uploadProgress],
-									"index":fileIndex+1,
-									"progress":uploadProgress+1
-								},
-								"dataType":"json",
-								"method":"POST",
-								"success":function(e){
-									if(e.error){
-										alert(e.error);
-									}else if(e.success==uploadProgress+1){
-										if(uploadProgress==fileSlice.length-1){
-											if(fileIndex==input.target.files.length-1){
-												uploadSuccess(code);
-											}else{
-												setTimeout(function(){
-													upload(fileIndex+1);
-												},1000);
-											}
-										}else{
-											progressBarBg0.style.background="rgba(0,0,0,0.1)";
-											uploadProgress++;
-											var uploadPercentage=uploadProgress/fileSlice.length*100;
-											lblUploadP.innerHTML="上传中 "+Math.round(uploadPercentage)+"%";
-											progressBar0.style.width=Math.round(uploadPercentage)+"px";
-											uploadSlice();
-										}
-									}
-								},
-								"error":function(){
-									alert("无法连接至服务器。");
-								}
-							});
-						}
-						if(thisFile.size>10240000){
-							for(var i=0;i<thisFile.size/sliceSize;i++){
-								fileSlice.push(thisFile.slice(i*sliceSize,(i+1)*sliceSize));
-							}
-						}else{
-							fileSlice.push(thisFile);
-						}
-						uploadSlice();
+		}else if("fetch" in window){
+			fetch(fileBackend+"getcode",getPostData({
+				"info":JSON.stringify(files),
+				"username":login.username
+			})).then(function(response){
+				switch(response.status){
+					case 200:
+					return response.text();
+					case 402:
+					alert("批量上传和上传大文件需要付费。");
+					if(!login.username){
+						menuItemLogin.click();
 					}
-					showUploading();
-					upload(0);
-				},
-				"error":function(e){
-					if(e.status==402){
-						alert("批量上传和上传大文件需要付费。");
-						if(!login.username){
-							menuItemLogin.click();
+					break;
+					default:
+					alert("无法连接至服务器。");
+					break;
+				}
+			}).then(function(code){
+				const upload=function(fileIndex){
+					const thisFile=input.target.files[fileIndex];
+					let fileSlice=[];
+					const sliceSize=10240000;
+					const uploadSlice=function(uploadProgress){
+						fetch(fileBackend+"uploadslice",getPostData({
+							"code":code,
+							"file":fileSlice[uploadProgress],
+							"index":fileIndex+1,
+							"progress":uploadProgress+1
+						})).then(function(response){
+							if(response.ok){
+								return response.json();
+							}
+						}).then(function(data){
+							if(data.error){
+								alert(e.error);
+							}else if(data.success==uploadProgress+1){
+								if(uploadProgress==fileSlice.length-1){
+									if(fileIndex==input.target.files.length-1){
+										uploadSuccess(code);
+									}else{
+										setTimeout(function(){
+											upload(fileIndex+1);
+										},1000);
+									}
+								}else{
+									progressBarBg0.style.background="rgba(0,0,0,0.1)";
+									uploadProgress++;
+									const percentage=Math.round(uploadProgress/fileSlice.length*100);
+									document.title="["+percentage+"%] "+title;
+									lblUploadP.innerHTML="上传中 "+percentage+"%";
+									progressBar0.style.width=percentage+"px";
+									uploadSlice(uploadProgress);
+								}
+							}
+						}).catch(function(){
+							if(thisFile.size<104857600){
+								fileSlice=[thisFile];
+								uploadSlice(0);
+							}else{
+								alert("无法在此设备上发送大于 100 MB 的文件。");
+								mainBox.style.opacity="1";
+								popSend.style.display="none";
+							}
+						});
+					}
+					if(thisFile.size>10240000){
+						for(let i=0;i<thisFile.size/sliceSize;i++){
+							fileSlice.push(thisFile.slice(i*sliceSize,(i+1)*sliceSize));
 						}
 					}else{
-						alert("无法连接至服务器。");
+						fileSlice.push(thisFile);
 					}
+					uploadSlice(0);
 				}
+				showUploading();
+				upload(0);
 			});
+		}else{
+			alert("请升级您的网络浏览器。");
 		}
 	}
 }
