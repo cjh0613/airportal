@@ -1,4 +1,4 @@
-const currentCache="airportal-18w52b2-1",
+const currentCache="airportal-18w52b3-1",
 airportal="/airportal/"
 const airportalCSS=airportal+"styles/",
 airportalImg="images/",
@@ -13,6 +13,7 @@ self.addEventListener("install",e=>{
 			airportal+"manifest.json",
 			airportalCSS+"airportal.css",
 			airportalJS+"airportal.js",
+			airportalJS+"fetch.min.js",
 			airportalJS+"md5.min.js",
 			airportal+"favicon.ico",
 			airportalImg+"loginLogo.png",

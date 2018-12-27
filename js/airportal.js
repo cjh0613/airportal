@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w52b2";
+var version="18w52b3";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -41,49 +41,6 @@ if(firstRun[version]!=false){
 	},250);*/
 	firstRun[version]=false;
 	localStorage.setItem("firstRun",JSON.stringify(firstRun));
-}
-if(!"fetch" in window){
-	window.fetch=function(url,options){
-		if(!options){
-			options={
-				"method":"GET",
-				"body":null
-			}
-		}
-		var xhr=new XMLHttpRequest()
-		xhr.open(options["method"],url)
-		xhr.send(options["body"])
-		return{
-			"then":function(firstCallback){
-				if(firstCallback){
-					return{
-						"then":function(secondCallback){
-							xhr.onreadystatechange=function(){
-								if(xhr.readyState==4){
-									var data=firstCallback({
-										"json":function(){
-											return JSON.parse(xhr.responseText);
-										},
-										"ok":xhr.status==200,
-										"status":xhr.status,
-										"text":function(){
-											return xhr.responseText;
-										}
-									});
-									if(xhr.status==200&&secondCallback){
-										secondCallback(data);
-									}
-								}
-							}
-							return{
-								"catch":function(){}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
 }
 function addHistory(filename,code){
 	var newHistory=document.createElement("span");
@@ -503,17 +460,15 @@ btnSendFeed.onclick=function(){
 		"ver":version
 	})).then(function(response){
 		if(response.ok){
-			return response.json();
+			alert("发送成功！我们会尽快处理您的反馈，祝您有开心的一天 :D");
+			popFeedback.style.opacity="0";
+			mainBox.style.opacity="1";
+			setTimeout(function(){
+				popFeedback.style.display="none";
+			},250);
 		}else{
 			alert("发送失败...请您再试一次，或通过微博私信反馈（@是毛布斯呀 @YSZ-RTH）");
 		}
-	}).then(function(){
-		alert("发送成功！我们会尽快处理您的反馈，祝您有开心的一天 :D");
-		popFeedback.style.opacity="0";
-		mainBox.style.opacity="1";
-		setTimeout(function(){
-			popFeedback.style.display="none";
-		},250);
 	})
 }
 menuItemAutoServer.onclick=
@@ -721,7 +676,12 @@ btnPay1.onclick=function(){
 		"ver":version
 	})).then(function(response){
 		if(response.ok){
-			return response.json();
+			payState="success";
+			btnDone3.innerText="关闭";
+			lblPayState0.innerText="提交成功";
+			lblPayState1.innerText="我们正在处理您的支付订单。\n您的高级账号剩余天数会在24小时内自动更新;\n否则请在确保您已支付后与我们联系。";
+			btnDone3.style.pointerEvents="auto";
+			btnDone3.style.opacity="1";
 		}else{
 			payState="error";
 			btnDone3.innerText="重试";
@@ -735,13 +695,6 @@ btnPay1.onclick=function(){
 			btnDone3.style.pointerEvents="auto";
 			btnDone3.style.opacity="1";
 		}
-	}).then(function(){
-		payState="success";
-		btnDone3.innerText="关闭";
-		lblPayState0.innerText="提交成功";
-		lblPayState1.innerText="我们正在处理您的支付订单。\n您的高级账号剩余天数会在24小时内自动更新;\n否则请在确保您已支付后与我们联系。";
-		btnDone3.style.pointerEvents="auto";
-		btnDone3.style.opacity="1";
 	})
 	accBox1.style.left="-500px";
 	accBox2.style.left="0px";
@@ -941,39 +894,35 @@ if(login.username){
 	ssoIFrame.src="https://rthsoftware.cn/sso";
 	document.body.appendChild(ssoIFrame);
 }
-if("fetch" in window){
-	const servers=document.getElementsByClassName("server");
-	const speedTest=function(index){
-		const start=performance.now();
-		fetch(servers[index].getAttribute("value")+"userdata/file/").then(function(){
-			const end=performance.now();
-			const time=Math.round(end-start);
-			let timeStr;
-			if(time>1000){
-				timeStr=(time/1000).toFixed(2)+"s";
-			}else{
-				timeStr=time+"ms";
-			}
-			if(time<500){
-				console.log("%c%s %s",consoleGeneralStyle+"color:#A5C220;",servers[index].innerText,timeStr);
-				servers[index].lastElementChild.classList.add("good");
-			}else if(time<1000){
-				console.log("%c%s %s",consoleGeneralStyle+"color:#F5B641;",servers[index].innerText,timeStr);
-				servers[index].lastElementChild.classList.add("soso");
-			}else{
-				console.log("%c%s %s",consoleGeneralStyle+"color:#F7695A;",servers[index].innerText,timeStr);
-				servers[index].lastElementChild.classList.add("bad");
-			}
-			index++;
-			if(index<servers.length){
-				speedTest(index);
-			}
-		});
-	}
-	speedTest(0);
-}else{
-	alert("请升级您的网络浏览器。");
+const servers=document.getElementsByClassName("server");
+const speedTest=function(index){
+	const start=performance.now();
+	fetch(servers[index].getAttribute("value")+"userdata/file/").then(function(){
+		const end=performance.now();
+		const time=Math.round(end-start);
+		let timeStr;
+		if(time>1000){
+			timeStr=(time/1000).toFixed(2)+"s";
+		}else{
+			timeStr=time+"ms";
+		}
+		if(time<500){
+			console.log("%c%s %s",consoleGeneralStyle+"color:#A5C220;",servers[index].innerText,timeStr);
+			servers[index].lastElementChild.classList.add("good");
+		}else if(time<1000){
+			console.log("%c%s %s",consoleGeneralStyle+"color:#F5B641;",servers[index].innerText,timeStr);
+			servers[index].lastElementChild.classList.add("soso");
+		}else{
+			console.log("%c%s %s",consoleGeneralStyle+"color:#F7695A;",servers[index].innerText,timeStr);
+			servers[index].lastElementChild.classList.add("bad");
+		}
+		index++;
+		if(index<servers.length){
+			speedTest(index);
+		}
+	});
 }
+speedTest(0);
 if((location.hostname=="rthsoftware.cn"||location.hostname=="localhost")&&"serviceWorker" in navigator){
 	navigator.serviceWorker.register("sw.js")
 }
