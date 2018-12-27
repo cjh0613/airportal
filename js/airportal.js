@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w52b1";
+var version="18w52b2";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -40,7 +40,7 @@ if(firstRun[version]!=false){
 		popUpdate.style.opacity="1";
 	},250);*/
 	firstRun[version]=false;
-	localStorage.setItem("firstRun", JSON.stringify(firstRun));
+	localStorage.setItem("firstRun",JSON.stringify(firstRun));
 }
 if(!"fetch" in window){
 	window.fetch=function(url,options){
@@ -184,8 +184,8 @@ function getInfo(code){
 		}).then(function(data){
 			if(data){
 				data=JSON.parse(data);
-				if(e.multifile.length==1){
-					downloadFile(e.multifile[0],code,1,e.path);
+				if(data.multifile.length==1){
+					downloadFile(data.multifile[0],code,1,data.path);
 					popRecv.style.opacity="0";
 					mainBox.style.opacity="1";
 					setTimeout(function(){
@@ -193,17 +193,17 @@ function getInfo(code){
 						popRecv.style.display="none";
 					},250);
 				}else{
-					for(var file=0;file<e.multifile.length;file++){
+					for(var file=0;file<data.multifile.length;file++){
 						var newLi=document.createElement("li");
 						newLi.classList.add("menu");
-						newLi.innerText=e.multifile[file].name;
-						newLi.setAttribute("code",e.code);
-						if(e.multifile.length>1){
+						newLi.innerText=data.multifile[file].name;
+						newLi.setAttribute("code",data.code);
+						if(data.multifile.length>1){
 							newLi.setAttribute("index",file+1);
 						}
 						newLi.onclick=function(){
 							var index=this.getAttribute("index")-1;
-							downloadFile(e.multifile[index],code,index+1,e.path);
+							downloadFile(data.multifile[index],code,index+1,data.path);
 						}
 						fileList.appendChild(newLi);
 					}
@@ -726,7 +726,7 @@ btnPay1.onclick=function(){
 			payState="error";
 			btnDone3.innerText="重试";
 			lblPayState0.innerText="Oops...出错了";
-			if(e.status==504){
+			if(response.status==504){
 				lblPayState1.innerText="服务器无法及时响应。";
 			}else{
 				lblPayState1.innerText="无法连接至服务器。";
@@ -859,7 +859,7 @@ file.onchange=function(input){
 							}
 						}).then(function(data){
 							if(data.error){
-								alert(e.error);
+								alert(data.error);
 							}else if(data.success==uploadProgress+1){
 								if(uploadProgress==fileSlice.length-1){
 									if(fileIndex==input.target.files.length-1){
