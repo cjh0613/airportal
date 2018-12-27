@@ -1,11 +1,11 @@
 "use strict";
 var appName="AirPortal";
-var version="18w52a";
+var version="18w52b";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
 console.info("%c版本：%s",consoleInfoStyle,version);
-txtVer.innerHTML=version;
+txtVer.innerText=version;
 
 var $_GET=(function(){
 	var json={};
@@ -42,12 +42,55 @@ if(firstRun[version]!=false){
 	firstRun[version]=false;
 	localStorage.setItem("firstRun", JSON.stringify(firstRun));
 }
+if("fetch" in window){
+	window.fetch=function(url,options){
+		if(!options){
+			options={
+				"method":"GET",
+				"body":null
+			}
+		}
+		var xhr=new XMLHttpRequest()
+		xhr.open(options["method"],url)
+		xhr.send(options["body"])
+		return{
+			"then":function(firstCallback){
+				if(firstCallback){
+					return{
+						"then":function(secondCallback){
+							xhr.onreadystatechange=function(){
+								if(xhr.readyState==4){
+									var data=firstCallback({
+										"json":function(){
+											return JSON.parse(xhr.responseText);
+										},
+										"ok":xhr.status==200,
+										"status":xhr.status,
+										"text":function(){
+											return xhr.responseText;
+										}
+									});
+									if(xhr.status==200&&secondCallback){
+										secondCallback(data);
+									}
+								}
+							}
+							return{
+								"catch":function(){}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
 function addHistory(filename,code){
 	var newHistory=document.createElement("span");
 	var newP=document.createElement("p");
 	newHistory.className="historyItem";
-	newHistory.innerHTML=code;
-	newP.innerHTML=filename;
+	newHistory.innerText=code;
+	newP.innerText=filename;
 	newHistory.appendChild(newP);
 	historyList.insertBefore(newHistory,historyList.firstChild);
 	lblEmpty.style.display="none";
@@ -130,13 +173,17 @@ function encodeData(data){
 }
 function getInfo(code){
 	if(code){
-		ajax({
-			"url":fileBackend+"getinfo",
-			"data":{
-				"code":code
-			},
-			"dataType":"json",
-			"success":function(e){
+		fetch(fileBackend+"getinfo?"+encodeData({
+			"code":code
+		})).then(function(response){
+			if(response.ok){
+				return response.text();
+			}else{
+				alert("无法连接至服务器。");
+			}
+		}).then(function(data){
+			if(data){
+				data=JSON.parse(data);
 				if(e.multifile.length==1){
 					downloadFile(e.multifile[0],code,1,e.path);
 					popRecv.style.opacity="0";
@@ -166,15 +213,10 @@ function getInfo(code){
 					recvBox0.style.left="-500px";
 					recvBox1.style.left="0px";
 				}
-			},
-			"error":function(e){
-				if(e.status==200){
-					alert("文件不存在。");
-				}else{
-					alert("无法连接至服务器。");
-				}
+			}else{
+				alert("文件不存在。");
 			}
-		});
+		})
 	}
 }
 function getPostData(data){
@@ -195,6 +237,21 @@ function getQRCode(content){
 		"username":"admin"
 	});
 }
+function loadPrice(priceInfo){
+	window.priceInfo=priceInfo;
+	Object.keys(priceInfo).forEach(function(key){
+		var newP=document.createElement("p");
+		newP.classList.add("p2");
+		newP.innerText="¥"+priceInfo[key]["price"];
+		document.getElementById("price-"+key).appendChild(newP);
+		if(priceInfo[key]["discount"]<1){
+			var newSpan=document.createElement("span");
+			newSpan.classList.add("pDel");
+			newSpan.innerText="¥"+priceInfo[key]["price"]*priceInfo[key]["discount"];
+			newP.appendChild(newSpan);
+		}
+	})
+}
 function loggedIn(newLogin){
 	if(newLogin){
 		fileBackend=backend+"userdata/file/";
@@ -207,7 +264,7 @@ function loggedIn(newLogin){
 		mainBox.style.opacity="1";
 		popLogin.style.display="none";
 	}
-	menuItemLogin.innerHTML="退出登录";
+	menuItemLogin.innerText="退出登录";
 	var newItem=document.createElement("a");
 	newItem.className="menuItem";
 	newItem.onclick=function(){
@@ -220,36 +277,34 @@ function loggedIn(newLogin){
 	}
 	newItem.style.fontSize="small";
 	lblUsername.innerText=login.email;
-	ajax({
-		"url":backend+"get",
-		"data":{
-			"url":"userdata/privilege",
-			"username":"admin"
-		},
-		"dataType":"json",
-		"success":function(e){
-			var expTime=Math.round((e.airportal[login.username]-new Date().getTime()/1000)/86400);
-			newItem.innerText=login.email;
-			var newP=document.createElement("p");
-			if(expTime>0){
-				newP.innerText=lblExpTime.innerText="高级账号 剩余"+expTime+"天";
-			}else{
-				newP.innerText=lblExpTime.innerText="高级账号 未激活";
-			}
-			newItem.appendChild(newP);
-			menu.insertBefore(newItem,menu.firstChild);
+	fetch(backend+"get?"+encodeData({
+		"url":"userdata/privilege",
+		"username":"admin"
+	})).then(function(response){
+		if(response.ok){
+			return response.json();
 		}
+	}).then(function(data){
+		var expTime=Math.round((data.airportal[login.username]-new Date().getTime()/1000)/86400);
+		newItem.innerText=login.email;
+		var newP=document.createElement("p");
+		if(expTime>0){
+			newP.innerText=lblExpTime.innerText="高级账号 剩余"+expTime+"天";
+		}else{
+			newP.innerText=lblExpTime.innerText="高级账号 未激活";
+		}
+		newItem.appendChild(newP);
+		menu.insertBefore(newItem,menu.firstChild);
 	});
-	ajax({
-		"url":fileBackend+"get",
-		"data":{
-			"username":login.username
-		},
-		"dataType":"json",
-		"success":function(e){
-			for(var i=0;i<e.length;i++){
-				addHistory(e[i].multifile[0].name,e[i].code);
-			}
+	fetch(fileBackend+"get?"+encodeData({
+		"username":login.username
+	})).then(function(response){
+		if(response.ok){
+			return response.json();
+		}
+	}).then(function(data){
+		for(var i=0;i<data.length;i++){
+			addHistory(data[i].multifile[0].name,data[i].code);
 		}
 	});
 	if(login.username=="admin"){
@@ -267,23 +322,21 @@ function loggedIn(newLogin){
 		menu.insertBefore(newItem0,menuLine0);
 	}
 	if(!newLogin&&login.password){
-		ajax({
-			"url":"https://rthsoftware.cn/backend/userdata/verify",
-			"data":{
-				"email":login.email,
-				"password":login.password
-			},
-			"dataType":"json",
-			"showLoading":true,
-			"success":function(e){
-				if(e.pass){
-					backend=e.backend;
-					localStorage.setItem("Backend",backend);
-					fileBackend=backend+"userdata/file/";
-				}else{
-					alert("密码错误。");
-					logOut();
-				}
+		fetch("https://rthsoftware.cn/backend/userdata/verify?"+encodeData({
+			"email":login.email,
+			"password":login.password
+		})).then(function(response){
+			if(response.ok){
+				return response.json();
+			}
+		}).then(function(data){
+			if(data.pass){
+				backend=data.backend;
+				localStorage.setItem("Backend",backend);
+				fileBackend=backend+"userdata/file/";
+			}else{
+				alert("密码错误。");
+				logOut();
 			}
 		});
 	}
@@ -303,27 +356,21 @@ function logOut(){
 	}
 }
 btnSetPri.onclick=function(){
-	ajax({
-		"url":backend+"userdata/renew",
-		"data":{
-			"appname":appName,
-			"email":inputPriEmail.value,
-			"password":login.password,
-			"recipient":"405801769@qq.com",
-			"time":new Date(inputPriExpDate.value).getTime()/1000,
-			"username":login.username
-		},
-		"method":"POST",
-		"success":function(){
+	fetch(backend+"userdata/renew",getPostData({
+		"appname":appName,
+		"email":inputPriEmail.value,
+		"password":login.password,
+		"recipient":"405801769@qq.com",
+		"time":new Date(inputPriExpDate.value).getTime()/1000,
+		"username":login.username
+	})).then(function(response){
+		if(response.ok){
 			alert("设置成功。");
 			inputPriEmail.value="";
-		},
-		"error":function(e){
-			if(e.status==504){
-				alert("请再试一次。");
-			}else{
-				alert("无法连接至服务器。");
-			}
+		}else if(response.status==504){
+			alert("请再试一次。");
+		}else{
+			alert("无法连接至服务器。");
 		}
 	});
 }
@@ -331,34 +378,31 @@ btnLogin.onclick=function(){
 	if(inputEmail.value&&inputPsw.value){
 		var email=inputEmail.value.toLowerCase();
 		var password=MD5(inputPsw.value);
-		ajax({
-			"url":"https://rthsoftware.cn/backend/userdata/verify",
-			"data":{
-				"email":email,
-				"password":password
-			},
-			"dataType":"json",
-			"showLoading":true,
-			"success":function(e){
-				if(e.index){
-					if(e.pass){
-						backend=e.backend;
-						login.email=email;
-						login.password=password;
-						login.username=e.username;
-						loggedIn(true);
-					}else if(confirm("密码错误。您想重置密码吗？")){
-						location.href="https://rthsoftware.cn/login?"+encodeData({
-							"email":email,
-							"page":"resetpassword"
-						});
-					}
-				}else{
-					alert("此用户不存在。");
-				}
-			},
-			"error":function(){
+		fetch("https://rthsoftware.cn/backend/userdata/verify?"+encodeData({
+			"email":email,
+			"password":password
+		})).then(function(response){
+			if(response.ok){
+				return response.json();
+			}else{
 				alert("无法连接至服务器。");
+			}
+		}).then(function(data){
+			if(data.index){
+				if(data.pass){
+					backend=data.backend;
+					login.email=email;
+					login.password=password;
+					login.username=data.username;
+					loggedIn(true);
+				}else if(confirm("密码错误。您想重置密码吗？")){
+					location.href="https://rthsoftware.cn/login?"+encodeData({
+						"email":email,
+						"page":"resetpassword"
+					});
+				}
+			}else{
+				alert("此用户不存在。");
 			}
 		});
 	}
@@ -449,30 +493,28 @@ menuItemFeedback.onclick=function(){
 	hideMenu();
 }
 btnSendFeed.onclick=function(){
-	ajax({
-		"url":"https://rthsoftware.cn/backend/feedback",
-		"data":{
-			"appname":appName,
-			"email":login.email,
-			"lang":navigator.language,
-			"name":login.username,
-			"recipient":"405801769@qq.com",
-			"text":txtFeedback.value,
-			"ver":version
-		},
-		"method":"POST",
-		"success":function(){
-			alert("发送成功！我们会尽快处理您的反馈，祝您有开心的一天 :D");
-			popFeedback.style.opacity="0";
-			mainBox.style.opacity="1";
-			setTimeout(function(){
-				popFeedback.style.display="none";
-			},250);
-		},
-		"error":function(){
+	fetch("https://rthsoftware.cn/backend/feedback",getPostData({
+		"appname":appName,
+		"email":login.email,
+		"lang":navigator.language,
+		"name":login.username,
+		"recipient":"405801769@qq.com",
+		"text":txtFeedback.value,
+		"ver":version
+	})).then(function(response){
+		if(response.ok){
+			return response.json();
+		}else{
 			alert("发送失败...请您再试一次，或通过微博私信反馈（@是毛布斯呀 @YSZ-RTH）");
 		}
-	});
+	}).then(function(){
+		alert("发送成功！我们会尽快处理您的反馈，祝您有开心的一天 :D");
+		popFeedback.style.opacity="0";
+		mainBox.style.opacity="1";
+		setTimeout(function(){
+			popFeedback.style.display="none";
+		},250);
+	})
 }
 menuItemAutoServer.onclick=
 menuItemCnServer.onclick=
@@ -640,68 +682,67 @@ btnPay0.onclick=function(){
 	if(pubPayMethod=="支付宝"){
 		switch(pubPayPlan){
 			case "一个月":
-			qrcode.src=getQRCode("https://qr.alipay.com/fkx02092n7a5cnoyefdqq2b");
+			qrcode.src=getQRCode(priceInfo.one.alipay);
 			break;
 			case "三个月":
-			qrcode.src=getQRCode("https://qr.alipay.com/fkx00124uvonhtlsxnt2xa2");
+			qrcode.src=getQRCode(priceInfo.three.alipay);
 			break;
 			case "一年":
-			qrcode.src=getQRCode("https://qr.alipay.com/fkx072186uvrmcy58xmln84");
+			qrcode.src=getQRCode(priceInfo.twelve.alipay);
 			break;
 		}
 	}else{
 		switch(pubPayPlan){
 			case "一个月":
-			qrcode.src=getQRCode("wxp://f2f1jNiIrDW81otqZ3R6_RxG2RbEzdHKpSRM");
+			qrcode.src=getQRCode(priceInfo.one.wechatpay);
 			break;
 			case "三个月":
-			qrcode.src=getQRCode("wxp://f2f182i6p_EnYZxEZBPpOEynDVlxt2W7SRjt");
+			qrcode.src=getQRCode(priceInfo.three.wechatpay);
 			break;
 			case "一年":
-			qrcode.src=getQRCode("wxp://f2f1IYH_otxR9kny_9OpxExI7-_B6xL_f6FW");
+			qrcode.src=getQRCode(priceInfo.twelve.wechatpay);
 			break;
 		}
 	}
 	payQRC.appendChild(qrcode);
-	lblPayTip.innerHTML="使用 "+pubPayMethod+" 为 "+login.email+"<br/>激活 / 续期"+pubPayPlan+"的高级账号";
+	lblPayTip.innerText="使用 "+pubPayMethod+" 为 "+login.email+"\n激活 / 续期"+pubPayPlan+"的高级账号";
 	accBox0.style.left="-500px";
 	accBox1.style.left="0px";
 }
 var payState="success";
 btnPay1.onclick=function(){
-	ajax({
-		"url":"https://rthsoftware.cn/backend/feedback",
-		"data":{
-			"appname":appName,
-			"email":login.email,
-			"lang":navigator.language,
-			"name":login.username,
-			"recipient":"405801769@qq.com",
-			"text":"用户通过 "+pubPayMethod+" 激活 / 续期了 "+pubPayPlan+" 的高级账号。",
-			"ver":version
-		},
-		"method":"POST",
-		"success":function(){
-			payState="success";
-			btnDone3.innerText="关闭";
-			lblPayState0.innerText="提交成功";
-			lblPayState1.innerHTML="我们正在处理您的支付订单。<br/>您的高级账号剩余天数会在24小时内自动更新;<br/>否则请在确保您已支付后与我们联系。";
-			btnDone3.style.pointerEvents="auto";
-			btnDone3.style.opacity="1";
-		},
-		"error":function(e){
+	fetch("https://rthsoftware.cn/backend/feedback",getPostData({
+		"appname":appName,
+		"email":login.email,
+		"lang":navigator.language,
+		"name":login.username,
+		"recipient":"405801769@qq.com",
+		"text":"用户通过 "+pubPayMethod+" 激活 / 续期了 "+pubPayPlan+" 的高级账号。",
+		"ver":version
+	})).then(function(response){
+		if(response.ok){
+			return response.json();
+		}else{
 			payState="error";
 			btnDone3.innerText="重试";
 			lblPayState0.innerText="Oops...出错了";
 			if(e.status==504){
-				lblPayState1.innerHTML="服务器无法及时响应<br/>请重试（无需再次扫码付款）<br/>如需更多帮助，请与我们联系。";
+				lblPayState1.innerText="服务器无法及时响应。";
 			}else{
-				lblPayState1.innerHTML="无法连接至服务器。<br/>请重试（无需再次扫码付款）<br/>如需更多帮助，请与我们联系。";
+				lblPayState1.innerText="无法连接至服务器。";
 			}
+			lblPayState1.innerText+="\n请重试（无需再次扫码付款）\n如需更多帮助，请与我们联系。";
 			btnDone3.style.pointerEvents="auto";
 			btnDone3.style.opacity="1";
 		}
-	});
+	}).then(function(){
+		payState="success";
+		btnDone3.innerText="关闭";
+		lblPayState0.innerText="提交成功";
+		lblPayState1.innerText="我们正在处理您的支付订单。\n您的高级账号剩余天数会在24小时内自动更新;\n否则请在确保您已支付后与我们联系。";
+		btnDone3.style.pointerEvents="auto";
+		btnDone3.style.opacity="1";
+	})
 	accBox1.style.left="-500px";
 	accBox2.style.left="0px";
 }
@@ -717,7 +758,7 @@ btnDone3.onclick=function(){
 			btnDone3.style.pointerEvents="none";
 			btnDone3.style.opacity="0.5";
 			lblPayState0.innerText="提交中";
-			lblPayState1.innerHTML="我们正在处理您的支付订单<br/>请稍候<br/>如需帮助，请与我们联系。";
+			lblPayState1.innerText="我们正在处理您的支付订单\n请稍候\n如需帮助，请与我们联系。";
 		},250);
 	}else{
 		btnPay1.onclick();
@@ -757,36 +798,33 @@ file.onchange=function(input){
 			var qrcode=new Image(200,200);
 			qrcode.src=getQRCode("http://rthe.cn/"+code);
 			QRBox.appendChild(qrcode);
-			recvCode.innerHTML=code;
-			popRecvCode.innerHTML=code;
+			recvCode.innerText=code;
+			popRecvCode.innerText=code;
 			addHistory(input.target.files[0].name,code);
 			sendBox0.style.left="-500px";
 			sendBox1.style.left="0px";
 			sendBox2.style.left="500px";
-			lblUploadP.innerHTML="上传中...";
+			lblUploadP.innerText="上传中...";
 		}
-		if(files.length<=1&&(files[0].size<=10240000||!"fetch" in window&&files[0].size<104857600)){
+		if(files.length<=1&&files[0].size<=10240000){
 			showUploading();
-			ajax({
-				"url":fileBackend+"upload",
-				"data":{
-					"file":input.target.files[0],
-					"username":login.username
-				},
-				"dataType":"json",
-				"method":"POST",
-				"success":function(e){
-					if(e.error){
-						alert(e.error);
-					}else{
-						uploadSuccess(e.code);
-					}
-				},
-				"error":function(){
+			fetch(fileBackend+"upload",getPostData({
+				"file":input.target.files[0],
+				"username":login.username
+			})).then(function(response){
+				if(response.ok){
+					return response.json();
+				}else{
 					alert("无法连接至服务器。");
 				}
+			}).then(function(data){
+				if(data.error){
+					alert(data.error);
+				}else{
+					uploadSuccess(data.code);
+				}
 			});
-		}else if("fetch" in window){
+		}else{
 			fetch(fileBackend+"getcode",getPostData({
 				"info":JSON.stringify(files),
 				"username":login.username
@@ -805,11 +843,11 @@ file.onchange=function(input){
 					break;
 				}
 			}).then(function(code){
-				const upload=function(fileIndex){
-					const thisFile=input.target.files[fileIndex];
-					let fileSlice=[];
-					const sliceSize=10240000;
-					const uploadSlice=function(uploadProgress){
+				var upload=function(fileIndex){
+					var thisFile=input.target.files[fileIndex];
+					var fileSlice=[];
+					var sliceSize=10240000;
+					var uploadSlice=function(uploadProgress){
 						fetch(fileBackend+"uploadslice",getPostData({
 							"code":code,
 							"file":fileSlice[uploadProgress],
@@ -834,9 +872,9 @@ file.onchange=function(input){
 								}else{
 									progressBarBg0.style.background="rgba(0,0,0,0.1)";
 									uploadProgress++;
-									const percentage=Math.round(uploadProgress/fileSlice.length*100);
+									var percentage=Math.round(uploadProgress/fileSlice.length*100);
 									document.title="["+percentage+"%] "+title;
-									lblUploadP.innerHTML="上传中 "+percentage+"%";
+									lblUploadP.innerText="上传中 "+percentage+"%";
 									progressBar0.style.width=percentage+"px";
 									uploadSlice(uploadProgress);
 								}
@@ -864,8 +902,6 @@ file.onchange=function(input){
 				showUploading();
 				upload(0);
 			});
-		}else{
-			alert("请升级您的网络浏览器。");
 		}
 	}
 }
@@ -874,19 +910,15 @@ window.onerror=function(msg,url,lineNo){
 		var text=msg+" at "+url+" : "+lineNo;
 		window.onerror=null;
 		if(confirm(msg)){
-			ajax({
-				"url":"https://rthsoftware.cn/backend/feedback",
-				"data":{
-					"appname":appName,
-					"email":login.email,
-					"lang":navigator.language,
-					"name":login.username,
-					"recipient":"405801769@qq.com",
-					"text":text,
-					"ver":version
-				},
-				"method":"POST"
-			});
+			fetch("https://rthsoftware.cn/backend/feedback",getPostData({
+				"appname":appName,
+				"email":login.email,
+				"lang":navigator.language,
+				"name":login.username,
+				"recipient":"405801769@qq.com",
+				"text":text,
+				"ver":version
+			}));
 		}
 	}
 }
@@ -941,6 +973,9 @@ if("fetch" in window){
 	speedTest(0);
 }else{
 	alert("请升级您的网络浏览器。");
+}
+if((location.hostname=="rthsoftware.cn"||location.hostname=="localhost")&&"serviceWorker" in navigator){
+	navigator.serviceWorker.register("sw.js")
 }
 var newScript=document.createElement("script");
 newScript.async=true;

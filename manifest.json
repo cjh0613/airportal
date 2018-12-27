@@ -1,6 +1,15 @@
 {
 	"name":"AirPortal",
 	"short_name":"AirPortal",
+	"icons":[{
+		"src":"images/PWA_Icon_192x.png",
+		"type":"image/png",
+		"sizes":"192x192"
+	},{
+		"src":"images/PWA_Icon_512x.png",
+		"type":"image/png",
+		"sizes":"512x512"
+	}],
 	"start_url":"/airportal/",
 	"display":"standalone",
 	"theme_color":"#4191f5"

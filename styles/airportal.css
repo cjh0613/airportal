@@ -719,6 +719,7 @@ a,button {outline: none;}
 .pDel {
 	font-size: 10px;
 	color: rgba(0,0,0,0.35);
+	margin-left: 5px;
 	text-decoration: line-through;
 	transition: all 0.5s;
 	-webkit-transition: all 0.5s;

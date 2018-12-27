@@ -15,7 +15,7 @@
 	<body>
 		<div class="logoBox"></div>
 		<div class="mainBox" id="mainBox">
-			<button id="send" class="btnMain">发送</button><br/>
+			<button id="send" class="btnMain">发送</button><br>
 			<button id="receive" class="btnMain">接收</button>
 		</div>
 		<span id="menuIcon"></span>
@@ -40,8 +40,8 @@
 				<p class="p1">文件已成功传送。</p>
 				<p>您的取件码为：</p>
 				<p id="recvCode">XXXX</p>
-				<p>接收文件时，请输入该四位数密码，<br/></p>
-				<p style="display: inline;">或</p><a class="link1" id="viewQRC">直接扫描二维码下载</a><p style="display: inline;">。<br/></p>
+				<p>接收文件时，请输入该四位数密码，<br></p>
+				<p style="display: inline;">或</p><a class="link1" id="viewQRC">直接扫描二维码下载</a><p style="display: inline;">。<br></p>
 			</div>
 			<div id="sendBox2">
 				<div id="QRBox"></div>
@@ -53,7 +53,7 @@
 		<div class="popUp" id="popRecv">
 			<div id="recvBox0">
 				<p class="p1" style="padding-top: 40px;">请输入取件码</p>
-				<input type="tel" id="inputCode" maxlength="4" autocomplete="off"><br/>
+				<input type="tel" id="inputCode" maxlength="4" autocomplete="off"><br>
 				<input type="submit" class="btn1" id="btnSub" value="确定">
 				<span class="btnBack" id="btnBack1"></span>
 			</div>
@@ -85,10 +85,18 @@
 				<p class="p3" id="lblExpTime">高级账号 剩余 天</p>
 				<div class="payPlans">
 					<p class="p2">激活 / 续期高级账号</p>
-					<p class="p4">支付方案<span> 限时特惠！1月25日截止</span></p>
-					<span class="payItem plan" id="payItem1M"><p class="p2">¥6 <span class="pDel">¥10</span></p><p class="p4">一个月</p></span>
-					<span class="payItem plan" id="payItem3M"><p class="p2">¥18 <span class="pDel">¥30</span></p><p class="p4">三个月</p></span>
-					<span class="payItem plan" id="payItem1Y"><p class="p2">¥72 <span class="pDel">¥120</span></p><p class="p4">一年</p></span>
+					<p class="p4">支付方案 <span id="promotionText"></span></p>
+					<span class="payItem plan" id="payItem1M">
+						<span id="price-one"></span>
+						<p class="p4">一个月</p>
+					</span>
+					<span class="payItem plan" id="payItem3M">
+						<span id="price-three"></span>
+						<p class="p4">三个月</p>
+					</span>
+					<span class="payItem plan" id="payItem1Y">
+						<span id="price-twelve"></span>
+						<p class="p4">一年</p></span>
 					<p class="p4" style="margin-top: 0px;">支付方式</p>
 					<span class="payItem method" id="payItemAli"><p class="p5">支付宝</p></span>
 					<span class="payItem method" id="payItemWechat"><p class="p5">微信支付</p></span>
@@ -103,7 +111,7 @@
 			</div>
 			<div id="accBox2">
 				<p class="p1" id="lblPayState0" style="margin-top: 50px;">提交中</p>
-				<p class="p3" id="lblPayState1" style="margin-top: 50px;">我们正在处理您的支付订单<br/>请稍候<br/>如需帮助，请与我们联系。</p>
+				<p class="p3" id="lblPayState1" style="margin-top: 50px;">我们正在处理您的支付订单<br>请稍候<br>如需帮助，请与我们联系。</p>
 				<button class="btn1" id="btnDone3">关闭</button>
 			</div>
 		</div>
@@ -147,8 +155,7 @@
 		<div class="footer" id="footerL"><span id="txtVer">Version</span>丨<a href="https://www.rthe.cn/privacy" target="_blank" class="link1">隐私政策</a></div>
 		<div class="footer" id="footerR">由 <a href="https://www.maorx.cn/" target="_blank" class="link1">毛若昕</a> 和 <a href="https://rthsoftware.cn/" target="_blank" class="link1">杨尚臻</a> 联合开发。保留所有权利。</div>
 		<input id="file" type="file" multiple="multiple">
-		<script src="https://rthsoftware.cn/js/ajax.js"></script>
-		<script src="https://rthsoftware.cn/js/md5.min.js"></script>
+		<script src="js/md5.min.js"></script>
 		<script src="js/airportal.js"></script>
 	</body>
 </html>
