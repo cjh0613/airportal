@@ -1,4 +1,4 @@
-const currentCache="airportal-18w52b4-1",
+const currentCache="airportal-18w52b5-1",
 airportal="/airportal/"
 const airportalCSS=airportal+"styles/",
 airportalImg="images/",
@@ -16,11 +16,8 @@ self.addEventListener("install",e=>{
 			airportalJS+"bluebird.min.js",
 			airportalJS+"fetch.min.js",
 			airportalJS+"md5.min.js",
-			airportal+"favicon.ico",
 			airportalImg+"loginLogo.png",
-			airportalImg+"mainLogo.png",
-			airportalImg+"PWA_Icon_192x.png",
-			airportalImg+"PWA_Icon_512x.png"
+			airportalImg+"mainLogo.png"
 		])
 	}))
 })

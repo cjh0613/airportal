@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w52b4";
+var version="18w52b5";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -137,9 +137,12 @@ function getInfo(code){
 				return response.text();
 			}else{
 				alert("无法连接至服务器。");
+				return false
 			}
 		}).then(function(data){
-			if(data){
+			if(data==null){
+				alert("文件不存在。");
+			}else if(data){
 				data=JSON.parse(data);
 				if(data.multifile.length==1){
 					downloadFile(data.multifile[0],code,1,data.path);
@@ -170,8 +173,6 @@ function getInfo(code){
 					recvBox0.style.left="-500px";
 					recvBox1.style.left="0px";
 				}
-			}else{
-				alert("文件不存在。");
 			}
 		})
 	}
@@ -242,16 +243,18 @@ function loggedIn(newLogin){
 			return response.json();
 		}
 	}).then(function(data){
-		var expTime=Math.round((data.airportal[login.username]-new Date().getTime()/1000)/86400);
-		newItem.innerText=login.email;
-		var newP=document.createElement("p");
-		if(expTime>0){
-			newP.innerText=lblExpTime.innerText="高级账号 剩余"+expTime+"天";
-		}else{
-			newP.innerText=lblExpTime.innerText="高级账号 未激活";
+		if(data){
+			var expTime=Math.round((data.airportal[login.username]-new Date().getTime()/1000)/86400);
+			newItem.innerText=login.email;
+			var newP=document.createElement("p");
+			if(expTime>0){
+				newP.innerText=lblExpTime.innerText="高级账号 剩余"+expTime+"天";
+			}else{
+				newP.innerText=lblExpTime.innerText="高级账号 未激活";
+			}
+			newItem.appendChild(newP);
+			menu.insertBefore(newItem,menu.firstChild);
 		}
-		newItem.appendChild(newP);
-		menu.insertBefore(newItem,menu.firstChild);
 	});
 	fetch(fileBackend+"get?"+encodeData({
 		"username":login.username
@@ -260,8 +263,10 @@ function loggedIn(newLogin){
 			return response.json();
 		}
 	}).then(function(data){
-		for(var i=0;i<data.length;i++){
-			addHistory(data[i].multifile[0].name,data[i].code);
+		if(data){
+			for(var i=0;i<data.length;i++){
+				addHistory(data[i].multifile[0].name,data[i].code);
+			}
 		}
 	});
 	if(login.username=="admin"){
@@ -287,13 +292,15 @@ function loggedIn(newLogin){
 				return response.json();
 			}
 		}).then(function(data){
-			if(data.pass){
-				backend=data.backend;
-				localStorage.setItem("Backend",backend);
-				fileBackend=backend+"userdata/file/";
-			}else{
-				alert("密码错误。");
-				logOut();
+			if(data){
+				if(data.pass){
+					backend=data.backend;
+					localStorage.setItem("Backend",backend);
+					fileBackend=backend+"userdata/file/";
+				}else{
+					alert("密码错误。");
+					logOut();
+				}
 			}
 		});
 	}
@@ -345,21 +352,23 @@ btnLogin.onclick=function(){
 				alert("无法连接至服务器。");
 			}
 		}).then(function(data){
-			if(data.index){
-				if(data.pass){
-					backend=data.backend;
-					login.email=email;
-					login.password=password;
-					login.username=data.username;
-					loggedIn(true);
-				}else if(confirm("密码错误。您想重置密码吗？")){
-					location.href="https://rthsoftware.cn/login?"+encodeData({
-						"email":email,
-						"page":"resetpassword"
-					});
+			if(data){
+				if(data.index){
+					if(data.pass){
+						backend=data.backend;
+						login.email=email;
+						login.password=password;
+						login.username=data.username;
+						loggedIn(true);
+					}else if(confirm("密码错误。您想重置密码吗？")){
+						location.href="https://rthsoftware.cn/login?"+encodeData({
+							"email":email,
+							"page":"resetpassword"
+						});
+					}
+				}else{
+					alert("此用户不存在。");
 				}
-			}else{
-				alert("此用户不存在。");
 			}
 		});
 	}
@@ -771,10 +780,12 @@ file.onchange=function(input){
 					alert("无法连接至服务器。");
 				}
 			}).then(function(data){
-				if(data.error){
-					alert(data.error);
-				}else{
-					uploadSuccess(data.code);
+				if(data){
+					if(data.error){
+						alert(data.error);
+					}else{
+						uploadSuccess(data.code);
+					}
 				}
 			});
 		}else{
@@ -796,64 +807,68 @@ file.onchange=function(input){
 					break;
 				}
 			}).then(function(code){
-				var upload=function(fileIndex){
-					var thisFile=input.target.files[fileIndex];
-					var fileSlice=[];
-					var sliceSize=10240000;
-					var uploadSlice=function(uploadProgress){
-						fetch(fileBackend+"uploadslice",getPostData({
-							"code":code,
-							"file":fileSlice[uploadProgress],
-							"index":fileIndex+1,
-							"progress":uploadProgress+1
-						})).then(function(response){
-							if(response.ok){
-								return response.json();
-							}
-						}).then(function(data){
-							if(data.error){
-								alert(data.error);
-							}else if(data.success==uploadProgress+1){
-								if(uploadProgress==fileSlice.length-1){
-									if(fileIndex==input.target.files.length-1){
-										uploadSuccess(code);
-									}else{
-										setTimeout(function(){
-											upload(fileIndex+1);
-										},1000);
-									}
-								}else{
-									progressBarBg0.style.background="rgba(0,0,0,0.1)";
-									uploadProgress++;
-									var percentage=Math.round(uploadProgress/fileSlice.length*100);
-									document.title="["+percentage+"%] "+title;
-									lblUploadP.innerText="上传中 "+percentage+"%";
-									progressBar0.style.width=percentage+"px";
-									uploadSlice(uploadProgress);
+				if(code){
+					var upload=function(fileIndex){
+						var thisFile=input.target.files[fileIndex];
+						var fileSlice=[];
+						var sliceSize=10240000;
+						var uploadSlice=function(uploadProgress){
+							fetch(fileBackend+"uploadslice",getPostData({
+								"code":code,
+								"file":fileSlice[uploadProgress],
+								"index":fileIndex+1,
+								"progress":uploadProgress+1
+							})).then(function(response){
+								if(response.ok){
+									return response.json();
 								}
-							}
-						}).catch(function(){
-							if(thisFile.size<104857600){
-								fileSlice=[thisFile];
-								uploadSlice(0);
-							}else{
-								alert("无法在此设备上发送大于 100 MB 的文件。");
-								mainBox.style.opacity="1";
-								popSend.style.display="none";
-							}
-						});
-					}
-					if(thisFile.size>10240000){
-						for(let i=0;i<thisFile.size/sliceSize;i++){
-							fileSlice.push(thisFile.slice(i*sliceSize,(i+1)*sliceSize));
+							}).then(function(data){
+								if(data){
+									if(data.error){
+										alert(data.error);
+									}else if(data.success==uploadProgress+1){
+										if(uploadProgress==fileSlice.length-1){
+											if(fileIndex==input.target.files.length-1){
+												uploadSuccess(code);
+											}else{
+												setTimeout(function(){
+													upload(fileIndex+1);
+												},1000);
+											}
+										}else{
+											progressBarBg0.style.background="rgba(0,0,0,0.1)";
+											uploadProgress++;
+											var percentage=Math.round(uploadProgress/fileSlice.length*100);
+											document.title="["+percentage+"%] "+title;
+											lblUploadP.innerText="上传中 "+percentage+"%";
+											progressBar0.style.width=percentage+"px";
+											uploadSlice(uploadProgress);
+										}
+									}
+								}
+							}).catch(function(){
+								if(thisFile.size<104857600){
+									fileSlice=[thisFile];
+									uploadSlice(0);
+								}else{
+									alert("无法在此设备上发送大于 100 MB 的文件。");
+									mainBox.style.opacity="1";
+									popSend.style.display="none";
+								}
+							});
 						}
-					}else{
-						fileSlice.push(thisFile);
+						if(thisFile.size>10240000){
+							for(let i=0;i<thisFile.size/sliceSize;i++){
+								fileSlice.push(thisFile.slice(i*sliceSize,(i+1)*sliceSize));
+							}
+						}else{
+							fileSlice.push(thisFile);
+						}
+						uploadSlice(0);
 					}
-					uploadSlice(0);
+					showUploading();
+					upload(0);
 				}
-				showUploading();
-				upload(0);
 			});
 		}
 	}
