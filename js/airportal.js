@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w52b6";
+var version="18w52b7";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -140,7 +140,7 @@ function getInfo(code){
 				return false;
 			}
 		}).then(function(data){
-			if(data==null){
+			if(data==""){
 				alert("文件不存在。");
 			}else if(data){
 				data=JSON.parse(data);
@@ -862,7 +862,7 @@ file.onchange=function(input){
 							});
 						}
 						if(thisFile.size>10240000){
-							for(let i=0;i<thisFile.size/sliceSize;i++){
+							for(var i=0;i<thisFile.size/sliceSize;i++){
 								fileSlice.push(thisFile.slice(i*sliceSize,(i+1)*sliceSize));
 							}
 						}else{
@@ -915,11 +915,11 @@ if(login.username){
 }
 var servers=document.getElementsByClassName("server");
 var speedTest=function(index){
-	const start=performance.now();
+	var start=performance.now();
 	fetch(servers[index].getAttribute("value")+"userdata/file/").then(function(){
-		const end=performance.now();
-		const time=Math.round(end-start);
-		let timeStr;
+		var end=performance.now();
+		var time=Math.round(end-start);
+		var timeStr;
 		if(time>1000){
 			timeStr=(time/1000).toFixed(2)+"s";
 		}else{
