@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w52b7";
+var version="18w52b8";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -137,10 +137,9 @@ function getInfo(code){
 				return response.text();
 			}else{
 				alert("无法连接至服务器。");
-				return false;
 			}
 		}).then(function(data){
-			if(data==""){
+			if(data===""){
 				alert("文件不存在。");
 			}else if(data){
 				data=JSON.parse(data);
@@ -916,28 +915,30 @@ if(login.username){
 var servers=document.getElementsByClassName("server");
 var speedTest=function(index){
 	var start=performance.now();
-	fetch(servers[index].getAttribute("value")+"userdata/file/").then(function(){
-		var end=performance.now();
-		var time=Math.round(end-start);
-		var timeStr;
-		if(time>1000){
-			timeStr=(time/1000).toFixed(2)+"s";
-		}else{
-			timeStr=time+"ms";
-		}
-		if(time<500){
-			console.log("%c%s %s",consoleGeneralStyle+"color:#A5C220;",servers[index].innerText,timeStr);
-			servers[index].lastElementChild.classList.add("good");
-		}else if(time<1000){
-			console.log("%c%s %s",consoleGeneralStyle+"color:#F5B641;",servers[index].innerText,timeStr);
-			servers[index].lastElementChild.classList.add("soso");
-		}else{
-			console.log("%c%s %s",consoleGeneralStyle+"color:#F7695A;",servers[index].innerText,timeStr);
-			servers[index].lastElementChild.classList.add("bad");
-		}
-		index++;
-		if(index<servers.length){
-			speedTest(index);
+	fetch(servers[index].getAttribute("value")+"userdata/file/").then(function(response){
+		if(response.ok){
+			var end=performance.now();
+			var time=Math.round(end-start);
+			var timeStr;
+			if(time>1000){
+				timeStr=(time/1000).toFixed(2)+"s";
+			}else{
+				timeStr=time+"ms";
+			}
+			if(time<500){
+				console.log("%c%s %s",consoleGeneralStyle+"color:#A5C220;",servers[index].innerText,timeStr);
+				servers[index].lastElementChild.classList.add("good");
+			}else if(time<1000){
+				console.log("%c%s %s",consoleGeneralStyle+"color:#F5B641;",servers[index].innerText,timeStr);
+				servers[index].lastElementChild.classList.add("soso");
+			}else{
+				console.log("%c%s %s",consoleGeneralStyle+"color:#F7695A;",servers[index].innerText,timeStr);
+				servers[index].lastElementChild.classList.add("bad");
+			}
+			index++;
+			if(index<servers.length){
+				speedTest(index);
+			}
 		}
 	});
 }
