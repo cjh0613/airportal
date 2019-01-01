@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="18w52b8";
+var version="19w1a";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -84,7 +84,7 @@ function downloadFile(fileInfo,code,index,path){
 							"type":fileInfo.type
 						}));
 						newA.href=url;
-						newA.download=fileInfo.name;
+						newA.download=decodeURIComponent(fileInfo.name);
 						newA.style.display="none";
 						document.body.appendChild(newA);
 						newA.click();
@@ -155,7 +155,7 @@ function getInfo(code){
 					for(var file=0;file<data.multifile.length;file++){
 						var newLi=document.createElement("li");
 						newLi.classList.add("menu");
-						newLi.innerText=data.multifile[file].name;
+						newLi.innerText=decodeURIComponent(data.multifile[file].name);
 						newLi.setAttribute("code",data.code);
 						if(data.multifile.length>1){
 							newLi.setAttribute("index",file+1);
@@ -235,15 +235,16 @@ function loggedIn(newLogin){
 	newItem.style.fontSize="small";
 	lblUsername.innerText=login.email;
 	fetch(backend+"get?"+encodeData({
+		"appname":appName,
 		"url":"userdata/privilege",
-		"username":"admin"
+		"username":login.username
 	})).then(function(response){
 		if(response.ok){
-			return response.json();
+			return response.text();
 		}
 	}).then(function(data){
 		if(data){
-			var expTime=Math.round((data.airportal[login.username]-new Date().getTime()/1000)/86400);
+			var expTime=Math.round((data-new Date().getTime()/1000)/86400);
 			newItem.innerText=login.email;
 			var newP=document.createElement("p");
 			if(expTime>0){
@@ -264,7 +265,7 @@ function loggedIn(newLogin){
 	}).then(function(data){
 		if(data){
 			for(var i=0;i<data.length;i++){
-				addHistory(data[i].multifile[0].name,data[i].code);
+				addHistory(decodeURIComponent(data[i].multifile[0].name),data[i].code);
 			}
 		}
 	});
