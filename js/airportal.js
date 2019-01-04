@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w1a";
+var version="19w1a1";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -199,14 +199,16 @@ function loadPrice(priceInfo){
 	Object.keys(priceInfo).forEach(function(key){
 		var newP=document.createElement("p");
 		newP.classList.add("p2");
-		newP.innerText="¥"+priceInfo[key]["price"];
-		document.getElementById("price-"+key).appendChild(newP);
 		if(priceInfo[key]["discount"]<1){
 			var newSpan=document.createElement("span");
 			newSpan.classList.add("pDel");
-			newSpan.innerText="¥"+priceInfo[key]["price"]*priceInfo[key]["discount"];
+			newP.innerText="¥"+priceInfo[key]["price"]*priceInfo[key]["discount"];
+			newSpan.innerText="¥"+priceInfo[key]["price"];
 			newP.appendChild(newSpan);
+		}else{
+			newP.innerText="¥"+priceInfo[key]["price"];
 		}
+		document.getElementById("price-"+key).appendChild(newP);
 	})
 }
 function loggedIn(newLogin){

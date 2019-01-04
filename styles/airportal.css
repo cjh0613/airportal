@@ -678,7 +678,7 @@ a,button {outline: none;}
 .payItem:active > .p2,.payItem:active > .p4,.payItem:active > .p5,.selected > .p2,.selected > .p4,.selected > .p5 {
 	color: white;
 }
-.payItem:active > .p2 > .pDel,.selected > .p2 > .pDel {
+.p2.selected,.selected .pDel {
 	color: rgba(255,255,255,0.5);
 }
 .payItem .p2,.payItem .p4,.payItem .p5 {
