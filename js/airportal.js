@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w1a1";
+var version="19w3a";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -45,10 +45,28 @@ if(firstRun[version]!=false){
 function addHistory(filename,code){
 	var newHistory=document.createElement("span");
 	var newP=document.createElement("p");
+	var newDelBtn=document.createElement("button");
 	newHistory.className="historyItem";
 	newHistory.innerText=code;
 	newP.innerText=filename;
+	newDelBtn.innerText="删除";
+	newDelBtn.onclick=function(){
+		if(confirm("您想删除 "+filename+" 吗？")){
+			fetch(fileBackend+"del",getPostData({
+				"code":code,
+				"username":login.username
+			})).then(function(response){
+				if(response.ok){
+					alert("删除成功。");
+					historyList.removeChild(newHistory);
+				}else{
+					alert("无法连接至服务器。");
+				}
+			});
+		}
+	}
 	newHistory.appendChild(newP);
+	newHistory.appendChild(newDelBtn);
 	historyList.insertBefore(newHistory,historyList.firstChild);
 	lblEmpty.style.display="none";
 	historyList.style.marginTop="-10px";
@@ -236,6 +254,8 @@ function loggedIn(newLogin){
 	}
 	newItem.style.fontSize="small";
 	lblUsername.innerText=login.email;
+	newItem.innerText=login.email;
+	menu.insertBefore(newItem,menu.firstChild);
 	fetch(backend+"get?"+encodeData({
 		"appname":appName,
 		"url":"userdata/privilege",
@@ -245,18 +265,18 @@ function loggedIn(newLogin){
 			return response.text();
 		}
 	}).then(function(data){
+		var newP=document.createElement("p");
 		if(data){
 			var expTime=Math.round((data-new Date().getTime()/1000)/86400);
-			newItem.innerText=login.email;
-			var newP=document.createElement("p");
 			if(expTime>0){
 				newP.innerText=lblExpTime.innerText="高级账号 剩余"+expTime+"天";
 			}else{
 				newP.innerText=lblExpTime.innerText="高级账号 未激活";
 			}
-			newItem.appendChild(newP);
-			menu.insertBefore(newItem,menu.firstChild);
+		}else{
+			newP.innerText=lblExpTime.innerText="高级账号 未激活";
 		}
+		newItem.appendChild(newP);
 	});
 	fetch(fileBackend+"get?"+encodeData({
 		"username":login.username

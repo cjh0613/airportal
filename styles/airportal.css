@@ -596,6 +596,22 @@ a,button {outline: none;}
 	font-weight: normal;
 	color: rgba(0,0,0,0.5);
 }
+.historyItem button{
+	background-color: white;
+	border: 1px solid rgba(0,0,0,0.1);
+	height: 30px;
+	margin-left: 230px;
+	margin-top: -12%;
+	position: absolute;
+	transition: all 0.25s;
+	width: 60px;
+}
+.historyItem button:hover{
+	background-color: rgba(0,0,0,0.1);
+}
+.historyItem button:active{
+	background-color: rgba(0,0,0,0.2);
+}
 #popRecvCode {
 	position: absolute;
 	z-index: 102;
