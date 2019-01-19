@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w3a1";
+var version="19w03b";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -45,13 +45,14 @@ if(firstRun[version]!=false){
 function addHistory(filename,code){
 	var newHistory=document.createElement("span");
 	var newP=document.createElement("p");
-	var newDelBtn=document.createElement("button");
+	var newDelBtn=document.createElement("span");
 	newHistory.className="historyItem";
 	newHistory.innerText=code;
 	newP.innerText=filename;
-	newDelBtn.innerText="删除";
+	newDelBtn.className="btnDel";
+	newDelBtn.title="删除";
 	newDelBtn.onclick=function(){
-		if(confirm("您想删除 "+filename+" 吗？")){
+		if(confirm("确定要删除存储在服务器上的 "+filename+" 吗？")){
 			fetch(fileBackend+"del",getPostData({
 				"code":code,
 				"username":login.username

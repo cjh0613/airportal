@@ -577,6 +577,7 @@ a,button {outline: none;}
 	left: 20%;
 	margin-top: -40px;
 	overflow-y: scroll;
+	overflow-x: hidden;
 }
 .historyItem {
 	position: relative;
@@ -596,21 +597,49 @@ a,button {outline: none;}
 	font-weight: normal;
 	color: rgba(0,0,0,0.5);
 }
-.historyItem button{
-	background-color: white;
-	border: 1px solid rgba(0,0,0,0.1);
-	height: 30px;
-	margin-left: 230px;
-	margin-top: -12%;
+.btnDel {
 	position: absolute;
+	width: 12px;
+	height: 12px;
+	top: 50%;
+	right: 12px;
+	margin-top: -5px;
+	cursor: pointer;
+}
+.btnDel::before, .btnDel::after {
+	content: '';
+	position: absolute;
+	height: 1px;
+	width: 100%;
+	top: 50%;
+	left: 0;
+	margin-top: -1px;
+	background-color: rgb(200,200,200);;
 	transition: all 0.25s;
-	width: 60px;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
 }
-.historyItem button:hover{
-	background-color: rgba(0,0,0,0.1);
+.btnDel::before {
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
 }
-.historyItem button:active{
-	background-color: rgba(0,0,0,0.2);
+.btnDel::after {
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+.btnDel:hover::before,.btnDel:hover::after {
+	background-color: rgb(65,145,245);
+}
+.btnDel:active::before,.btnDel:active::after {
+	background-color: rgba(65,145,245,0.5);
 }
 #popRecvCode {
 	position: absolute;
@@ -691,10 +720,10 @@ a,button {outline: none;}
 	border-color:rgb(65,145,245);
 	color: white;
 }
-.payItem:active > .p2,.payItem:active > .p4,.payItem:active > .p5,.selected > .p2,.selected > .p4,.selected > .p5 {
+.payItem:active .p2,.payItem:active > .p4,.payItem:active > .p5,.selected > .p2,.selected > .p4,.selected > .p5 {
 	color: white;
 }
-.p2.selected,.selected .pDel {
+.p2.selected,.selected .pDel,.payItem:active .pDel {
 	color: rgba(255,255,255,0.5);
 }
 .payItem .p2,.payItem .p4,.payItem .p5 {
@@ -945,7 +974,6 @@ input[type=file]{
 	.input1 {left: 10%;width: 75%;}
 	.payPlans,#historyList,.line {width: 80%;left: 10%;}
 	.payItem {width: 70px;margin-right: 5px;}
-	.historyItem button {margin-left: 170px;margin-top: -15%;}
 	.footer {font-size: 11px;}
 	#footerL {top: 0;margin-top: 20px;}
 }
