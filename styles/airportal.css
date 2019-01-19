@@ -943,8 +943,9 @@ input[type=file]{
 	.p1 {font-size: 16px;}
 	.p3 {font-size: 12px;}
 	.input1 {left: 10%;width: 75%;}
-	.payPlans,#historyList,.line {width: 80%; left: 10%;}
+	.payPlans,#historyList,.line {width: 80%;left: 10%;}
 	.payItem {width: 70px;margin-right: 5px;}
+	.historyItem button {margin-left: 170px;margin-top: -15%;}
 	.footer {font-size: 11px;}
 	#footerL {top: 0;margin-top: 20px;}
 }
