@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w03b";
+var version="19w04a";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -522,6 +522,16 @@ menuItemUsServer2.onclick=function(){
 viewQRC.onclick=function(){
 	sendBox1.style.left="-500px";
 	sendBox2.style.left="0px";
+}
+copyLink.onclick=function(){
+	var url="https://rthe.cn/"+recvCode.innerText;
+	if("clipboard" in navigator){
+		navigator.clipboard.writeText(url).then(function(){
+			alert("下载链接已复制到剪贴板。");
+		});
+	}else{
+		prompt("您的浏览器不支持剪贴板功能，请手动复制。",url);
+	}
 }
 btnDone0.onclick=function(){
 	document.title=title;
