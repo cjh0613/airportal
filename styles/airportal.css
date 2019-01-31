@@ -283,7 +283,7 @@ a,button {outline: none;}
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
 }
-#popSend,#popRecv,#popDownl,#popAccount,#popLogin,#popHistory,#popRecvCode,#popFeedback,#popSetPri,#popUpdate {
+#popSend,#popRecv,#popDownl,#popAccount,#popLogin,#popHistory,#popRecvCode,#popSettings,#popFeedback,#popSetPri,#popUpdate {
 	display: none;
 	opacity: 0;
 }
@@ -354,6 +354,9 @@ a,button {outline: none;}
 	top: 40px;
 	opacity: 0.5;
 	pointer-events: none;
+}
+#btnDone5 {
+	top: 180px;
 }
 #btnPay0 {
 	top: 20px;
@@ -962,6 +965,22 @@ a,button {outline: none;}
 	margin-top: 0px;
 	text-align: left;
 	overflow-y: scroll;
+}
+.cbox {
+	-webkit-appearance: none; 
+	width: 16px !important; 
+	height: 16px !important; 
+	margin-right: 5px !important; 
+	cursor: pointer; 
+	vertical-align: middle; 
+	background: url(../images/cboxOutline.png) no-repeat;
+	background-size: contain;
+}
+.cbox:hover {
+	background-image: url(../images/cboxOutlineH.png);
+}
+.cbox:checked {
+	background-image: url(../images/cboxChecked.png);
 }
 #footerL {
 	text-align: left;
