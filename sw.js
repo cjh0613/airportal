@@ -1,4 +1,4 @@
-const currentCache="airportal-19w04a-1",
+const currentCache="airportal-19w05c-1",
 airportal="/airportal/"
 const airportalCSS=airportal+"styles/",
 airportalImg="images/",

@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w05b1";
+var version="19w05c";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -116,6 +116,8 @@ function downloadFile(fileInfo,code,index,path){
 						progress++;
 						downloadSlice(progress);
 					}
+				}else if(xhr.status==404){
+					alert("文件损坏，请重新上传。")
 				}else{
 					alert("无法连接至服务器。");
 				}
@@ -150,7 +152,14 @@ function encodeData(data){
 function getInfo(code){
 	if(code){
 		fetch(fileBackend+"getinfo?"+encodeData({
-			"code":code
+			"code":code,
+			"username":function(){
+				if(login.username){
+					return login.username
+				}else{
+					return "null"
+				}
+			}()
 		})).then(function(response){
 			if(response.ok){
 				return response.text();
@@ -162,7 +171,14 @@ function getInfo(code){
 				alert("文件不存在。");
 			}else if(data){
 				data=JSON.parse(data);
-				if(data.multifile.length==1){
+				if(data.download===false){
+					if(login.username){
+						alert("您没有下载此文件的权限。");
+					}else{
+						alert("需要登录才能下载此文件。");
+						menuItemLogin.click();
+					}
+				}else if(data.multifile.length==1){
 					downloadFile(data.multifile[0],code,1,data.path);
 					popRecv.style.opacity="0";
 					mainBox.style.opacity="1";
@@ -292,6 +308,18 @@ function loggedIn(newLogin){
 			}
 		}
 	});
+	fetch(fileBackend+"set?"+encodeData({
+		"key":"loginRequired",
+		"username":login.username
+	})).then(function(response){
+		if(response.ok){
+			return response.json();
+		}
+	}).then(function(data){
+		if(data===true){
+			settingsNeedLogin.checked=true;
+		}
+	})
 	if(login.username=="admin"){
 		var newItem0=document.createElement("a");
 		newItem0.className="menuItem";
@@ -473,14 +501,14 @@ addEventListener("message",function(e){
 		}
 	}catch(e){}
 });
-/*menuItemSettings.onclick=function(){
+menuItemSettings.onclick=function(){
 	mainBox.style.opacity="0";
 	popSettings.style.display="block";
 	setTimeout(function(){
 		popSettings.style.opacity="1";
 	},250);
 	hideMenu();
-}*/
+}
 menuItemFeedback.onclick=function(){
 	mainBox.style.opacity="0";
 	popFeedback.style.display="block";
@@ -782,6 +810,19 @@ btnDone3.onclick=function(){
 		btnPay1.onclick();
 	}
 }
+settingsNeedLogin.onchange=function(){
+	fetch(fileBackend+"set",getPostData({
+		"key":"loginRequired",
+		"username":login.username,
+		"value":this.checked.toString()
+	})).then(function(response){
+		if(response.ok){
+			alert("设置已保存。");
+		}else{
+			alert("无法连接至服务器。");
+		}
+	})
+}
 file.onchange=function(input){
 	var files=[];
 	for(var i=0;i<input.target.files.length;i++){
@@ -934,7 +975,7 @@ file.onchange=function(input){
 	}
 }
 window.onerror=function(msg,url,lineNo){
-	if(msg&&url&&lineNo&&msg!="Script error."&&lineNo!=1){
+	if(msg&&msg!="Script error."&&url&&url.indexOf("extension://")==-1&&lineNo&&lineNo!=1){
 		var text=msg+" at "+url+" : "+lineNo;
 		window.onerror=null;
 		if(confirm(msg)){
