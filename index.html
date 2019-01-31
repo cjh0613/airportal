@@ -23,6 +23,7 @@
 		<div id="menu">
 			<a class="menuItem" id="menuItemLogin">登录</a>
 			<a class="menuItem" id="menuItemHistory">历史记录</a>
+			<!--<a class="menuItem" id="menuItemSettings">设置</a>-->
 			<a class="menuItem" id="menuItemFeedback">联系我们</a>
 			<span class="menuLine" id="menuLine0"></span>
 			<a class="menuItem server" id="menuItemAutoServer" value="https://rthsoftware.cn/backend/"><span class="tick" id="tickAutoServer"></span>自动选择服务器<div class="latencyStatus"> ●</div></a>
@@ -41,7 +42,7 @@
 				<p>您的取件码为：</p>
 				<p id="recvCode">XXXX</p>
 				<p>接收文件时，请输入该四位数密码。</p>
-				<p>您也可以<a class="link1" id="viewQRC">直接扫描二维码下载</a>或<a class="link1" id="copyLink">复制下载链接</a>。</p>
+				<p>您也可以<a class="link1" id="copyLink">复制下载链接</a>或<a class="link1" id="viewQRC">直接扫描二维码下载</a>。</p>
 			</div>
 			<div id="sendBox2">
 				<div id="QRBox"></div>
@@ -78,13 +79,19 @@
 			</div>
 		</div>
 		<div class="popUp" id="popAccount">
+			<div id="accBox_1">
+				<span class="btnBack" id="btnBack3"></span>
+				<p class="p1">高级账号特权</p>
+				<span class="line"></span>
+				<p class="p3" style="margin-top: 100px;">1. 批量上传文件；<br>2. 上传大于100Mb的文件</p>
+			</div>
 			<div id="accBox0">
 				<span class="btnClose" id="btnClose0"></span>
 				<p class="p1" id="lblUsername"></p>
 				<span class="line"></span>
 				<p class="p3" id="lblExpTime">高级账号 剩余 天</p>
 				<div class="payPlans">
-					<p class="p2">激活 / 续期高级账号</p>
+					<p class="p2">激活 / 续期高级账号 <a class="link1" id="showPrivilege">高级账号有哪些特权？</a></p>
 					<p class="p4">支付方案 <span id="promotionText"></span></p>
 					<span class="payItem plan" id="payItem1M">
 						<span id="price-one"></span>
