@@ -1,16 +1,4 @@
-const currentCache="airportal-19w05c2-1",
-airportal="/airportal/"
-const airportalCSS=airportal+"styles/",
-airportalImg="images/",
-airportalJS=airportal+"js/"
-self.addEventListener("install",e=>{
-	if(location.hostname=="localhost"){
-		self.skipWaiting()
-	}
-	e.waitUntil(caches.open(currentCache).then(cache=>{
-		return cache.addAll([])
-	}))
-})
+const currentCache="airportal-19w05c2-2"
 self.addEventListener("fetch",e=>{
 	e.respondWith(caches.match(e.request).then(response=>{
 		if(response){
@@ -32,7 +20,7 @@ self.addEventListener("fetch",e=>{
 self.addEventListener("activate",e=>{
 	e.waitUntil(caches.keys().then(cacheNames=>{
 		return Promise.all(cacheNames.map(cacheName=>{
-			if(cacheName.indexOf("airportal")!=-1&&cacheName!=currentCache){
+			if(cacheName.indexOf("airportal")!=-1){
 				return caches.delete(cacheName)
 			}
 		}))
