@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w05d2";
+var version="19w05d3";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -34,6 +34,7 @@ if(!backend){
 	backend="https://rthsoftware.cn/backend/";
 }
 var fileBackend=backend+"userdata/file/";
+var invalidAttempt=0;
 var login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -180,6 +181,7 @@ function getInfo(code){
 		}).then(function(data){
 			if(data===""){
 				alert("文件不存在。");
+				invalidAttempt++;
 			}else if(data){
 				data=JSON.parse(data);
 				if(data.download===false){
@@ -239,6 +241,13 @@ function getQRCode(content){
 		"url":"http://qr.topscan.com/api.php?text="+content,
 		"username":"admin"
 	});
+}
+function getRandomCharacter(length){
+	var str="";
+	for(var i=0;i<length;i++){
+		str+=unescape("%u"+(Math.round(Math.random()*20901)+19968).toString(16));
+	}
+	return str;
 }
 function loadPrice(priceInfo){
 	window.priceInfo=priceInfo;
@@ -459,7 +468,17 @@ receive.onclick=function(){
 	inputCode.focus();
 }
 btnSub.onclick=function(){
-	getInfo(inputCode.value);
+	if(invalidAttempt>2){
+		var code=getRandomCharacter(3);
+		var enteredCode=prompt("您已经多次输入了无效取件码。请输入验证码以继续："+code);
+		if(enteredCode==code){
+			getInfo(inputCode.value);
+		}else if(enteredCode!==null){
+			alert("验证码错误。");
+		}
+	}else{
+		getInfo(inputCode.value);
+	}
 }
 inputCode.onkeydown=function(event){
 	if(event.keyCode==13){
