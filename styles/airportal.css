@@ -355,8 +355,18 @@ a,button {outline: none;}
 	opacity: 0.5;
 	pointer-events: none;
 }
+#lblSettingsTip {
+	position: relative;
+	top: 130px;
+	opacity: 0;
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
 #btnDone5 {
-	top: 180px;
+	top: 130px;
 }
 #btnPay0 {
 	top: 20px;
@@ -992,9 +1002,7 @@ a,button {outline: none;}
 .cbox {
 	-webkit-appearance: none; 
 	width: 16px !important; 
-	height: 16px !important; 
-	margin-right: 5px !important; 
-	cursor: pointer; 
+	height: 16px !important;  
 	vertical-align: middle; 
 	background: url(../images/cboxOutline.png) no-repeat;
 	background-size: contain;
