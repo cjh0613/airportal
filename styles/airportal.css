@@ -431,15 +431,21 @@ a,button {outline: none;}
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
 }
-#sendBox1 {
+#sendBox1,#sendBox_1 {
 	position: absolute;
 	width: 100%;
-	left: 500px;
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
+}
+#sendBox1 {
+	left: 500px;
+}
+#sendBox_1 {
+	z-index: 100;
+	left: -500px;
 }
 #sendBox2 {
 	position: absolute;
@@ -965,6 +971,23 @@ a,button {outline: none;}
 	margin-top: 0px;
 	text-align: left;
 	overflow-y: scroll;
+}
+.contentBox1 {
+	position: relative;
+	width: 60%;
+	left: 20%;
+	margin-top: 70px;
+}
+.txtRed {
+	color: red;
+}
+.btnBox {
+	position: relative;
+	width: 100%;
+	top: 70px;
+}
+#cancelUpl {
+	margin-left: 10px;
 }
 .cbox {
 	-webkit-appearance: none; 
