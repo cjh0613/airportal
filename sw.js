@@ -1,4 +1,4 @@
-const currentCache="airportal-19w05c1-1",
+const currentCache="airportal-19w05c2-1",
 airportal="/airportal/"
 const airportalCSS=airportal+"styles/",
 airportalImg="images/",
@@ -8,17 +8,7 @@ self.addEventListener("install",e=>{
 		self.skipWaiting()
 	}
 	e.waitUntil(caches.open(currentCache).then(cache=>{
-		return cache.addAll([
-			airportal,
-			airportal+"manifest.json",
-			airportalCSS+"airportal.css",
-			airportalJS+"airportal.js",
-			airportalJS+"bluebird.min.js",
-			airportalJS+"fetch.min.js",
-			airportalJS+"md5.min.js",
-			airportalImg+"loginLogo.png",
-			airportalImg+"mainLogo.png"
-		])
+		return cache.addAll([])
 	}))
 })
 self.addEventListener("fetch",e=>{

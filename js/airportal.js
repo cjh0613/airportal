@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w05c1";
+var version="19w05c2";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -979,23 +979,6 @@ file.onchange=function(input){
 		}
 	}
 }
-window.onerror=function(msg,url,lineNo){
-	if(msg&&msg!="Script error."&&url&&url.indexOf("extension://")==-1&&lineNo&&lineNo!=1){
-		var text=msg+" at "+url+" : "+lineNo;
-		window.onerror=null;
-		if(confirm(msg)){
-			fetch("https://rthsoftware.cn/backend/feedback",getPostData({
-				"appname":appName,
-				"email":login.email,
-				"lang":navigator.language,
-				"name":login.username,
-				"recipient":"405801769@qq.com",
-				"text":text,
-				"ver":version
-			}));
-		}
-	}
-}
 if(navigator.language.indexOf("zh")==-1){
 	send.innerText="Send";
 	receive.innerText="Receive";
@@ -1046,8 +1029,12 @@ var speedTest=function(index){
 	});
 }
 speedTest(0);
-if((location.hostname=="rthsoftware.cn"||location.hostname=="localhost")&&"serviceWorker" in navigator){
-	navigator.serviceWorker.register("sw.js")
+if("serviceWorker" in navigator){
+	navigator.serviceWorker.getRegistrations().then(function(registrations){
+		for(var i=0;i<registrations.length;i++){
+			registrations[i].unregister();
+		}
+	})
 }
 var newScript=document.createElement("script");
 newScript.async=true;
