@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w05d4";
+var version="19w05d5";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -29,7 +29,7 @@ var $_GET=(function(){
 	}
 	return json;
 })();
-var agree;
+var agree=!!localStorage.getItem("firstUpload");
 var backend=localStorage.getItem("Backend");
 if(!backend){
 	backend="https://rthsoftware.cn/backend/";
@@ -391,11 +391,156 @@ function logOut(){
 		document.body.appendChild(ssoIFrame);
 	}
 }
-function openDialog(){
-	file.value="";
-	file.click();
-	progressBarBg0.style.background="rgba(0,0,0,0)";
-	progressBar0.style.width="0px";
+function upload(input){
+	var files=[];
+	for(var i=0;i<input.target.files.length;i++){
+		if(input.target.files[i].name.indexOf(".php")!=-1||input.target.files[i].type=="text/php"){
+			alert("不允许传输 PHP 文件。");
+		}else if(input.target.files[i].size>1073741824){
+			alert("不允许传输大于 1024MB 的文件。");
+		}else{
+			files.push({
+				"name":input.target.files[i].name,
+				"progress":0,
+				"type":input.target.files[i].type,
+				"size":input.target.files[i].size
+			});
+		}
+	}
+	if(files.length>0){
+		var showUploading=function(){
+			document.title="[上传中] "+title;
+			sendBox0.style.left="0px";
+			sendBox1.style.left="500px";
+			sendBox2.style.left="1000px";
+			mainBox.style.opacity="0";
+			popSend.style.display="block";
+			setTimeout(function(){
+				popSend.style.opacity="1";
+			},250);
+		}
+		var uploadSuccess=function(code){
+			document.title="[取件码 "+code+"] "+title;
+			QRBox.innerHTML="";
+			var qrcode=new Image(200,200);
+			qrcode.src=getQRCode("http://rthe.cn/"+code);
+			QRBox.appendChild(qrcode);
+			recvCode.innerText=code;
+			popRecvCode.innerText=code;
+			addHistory(input.target.files[0].name,code);
+			sendBox0.style.left="-500px";
+			sendBox1.style.left="0px";
+			sendBox2.style.left="500px";
+			lblUploadP.innerText="上传中...";
+		}
+		if(files.length<=1&&files[0].size<=10240000){
+			showUploading();
+			fetch(fileBackend+"upload",getPostData({
+				"file":input.target.files[0],
+				"username":login.username
+			})).then(function(response){
+				if(response.ok){
+					return response.json();
+				}else{
+					alert("无法连接至服务器。");
+					document.title=title;
+					mainBox.style.opacity="1";
+					popSend.style.display="none";
+				}
+			}).then(function(data){
+				if(data){
+					if(data.error){
+						alert(data.error);
+					}else{
+						uploadSuccess(data.code);
+					}
+				}
+			});
+		}else{
+			fetch(fileBackend+"getcode",getPostData({
+				"info":JSON.stringify(files),
+				"username":login.username
+			})).then(function(response){
+				switch(response.status){
+					case 200:
+					return response.text();
+					case 402:
+					alert("批量上传和上传大文件需要付费。");
+					if(!login.username){
+						menuItemLogin.click();
+					}
+					break;
+					default:
+					alert("无法连接至服务器。");
+					break;
+				}
+			}).then(function(code){
+				if(code){
+					var upload=function(fileIndex){
+						var thisFile=input.target.files[fileIndex];
+						var fileSlice=[];
+						var sliceSize=10240000;
+						var uploadSlice=function(uploadProgress){
+							fetch(fileBackend+"uploadslice",getPostData({
+								"code":code,
+								"file":fileSlice[uploadProgress],
+								"index":fileIndex+1,
+								"progress":uploadProgress+1
+							})).then(function(response){
+								if(response.ok){
+									return response.json();
+								}
+							}).then(function(data){
+								if(data){
+									if(data.error){
+										alert(data.error);
+									}else if(data.success==uploadProgress+1){
+										if(uploadProgress==fileSlice.length-1){
+											if(fileIndex==input.target.files.length-1){
+												uploadSuccess(code);
+											}else{
+												setTimeout(function(){
+													upload(fileIndex+1);
+												},1000);
+											}
+										}else{
+											progressBarBg0.style.background="rgba(0,0,0,0.1)";
+											uploadProgress++;
+											var percentage=Math.round(uploadProgress/fileSlice.length*100);
+											document.title="["+percentage+"%] "+title;
+											lblUploadP.innerText="上传中 "+percentage+"%";
+											progressBar0.style.width=percentage+"px";
+											uploadSlice(uploadProgress);
+										}
+									}
+								}
+							}).catch(function(){
+								if(thisFile.size<104857600){
+									fileSlice=[thisFile];
+									uploadSlice(0);
+								}else{
+									alert("无法在此设备上发送大于 100 MB 的文件。");
+									document.title=title;
+									mainBox.style.opacity="1";
+									popSend.style.display="none";
+								}
+							});
+						}
+						if(thisFile.size>10240000){
+							for(var i=0;i<thisFile.size/sliceSize;i++){
+								fileSlice.push(thisFile.slice(i*sliceSize,(i+1)*sliceSize));
+							}
+						}else{
+							fileSlice.push(thisFile);
+						}
+						uploadSlice(0);
+					}
+					showUploading();
+					upload(0);
+				}
+			});
+		}
+	}
 }
 btnSetPri.onclick=function(){
 	fetch(backend+"userdata/renew",getPostData({
@@ -457,26 +602,10 @@ inputPsw.onkeydown=function(event){
 	}
 }
 send.onclick=function(){
-	if(agree){
-		openDialog();
-	}else{
-		var closeWarning=function(){
-			popWarning.style.opacity=
-			mainBox.style.opacity=
-			popWarning.style.display="";
-		}
-		btnContinue.onclick=function(){
-			agree=true;
-			closeWarning();
-			openDialog();
-		};
-		cancelUpl.onclick=closeWarning;
-		mainBox.style.opacity="0";
-		popWarning.style.display="block";
-		setTimeout(function(){
-			popWarning.style.opacity="1";
-		},250);
-	}
+	file.value="";
+	file.click();
+	progressBarBg0.style.background="rgba(0,0,0,0)";
+	progressBar0.style.width="0px";
 }
 receive.onclick=function(){
 	recvBox1.style.left="500px";
@@ -885,154 +1014,26 @@ settingsNeedLogin.onchange=function(){
 	}
 }
 file.onchange=function(input){
-	var files=[];
-	for(var i=0;i<input.target.files.length;i++){
-		if(input.target.files[i].name.indexOf(".php")!=-1||input.target.files[i].type=="text/php"){
-			alert("不允许传输 PHP 文件。");
-		}else if(input.target.files[i].size>1073741824){
-			alert("不允许传输大于 1024MB 的文件。");
-		}else{
-			files.push({
-				"name":input.target.files[i].name,
-				"progress":0,
-				"type":input.target.files[i].type,
-				"size":input.target.files[i].size
-			});
+	if(agree){
+		upload(input);
+	}else{
+		var closeWarning=function(){
+			popWarning.style.opacity=
+			mainBox.style.opacity=
+			popWarning.style.display="";
 		}
-	}
-	if(files.length>0){
-		var showUploading=function(){
-			document.title="[上传中] "+title;
-			sendBox0.style.left="0px";
-			sendBox1.style.left="500px";
-			sendBox2.style.left="1000px";
-			mainBox.style.opacity="0";
-			popSend.style.display="block";
-			setTimeout(function(){
-				popSend.style.opacity="1";
-			},250);
-		}
-		var uploadSuccess=function(code){
-			document.title="[取件码 "+code+"] "+title;
-			QRBox.innerHTML="";
-			var qrcode=new Image(200,200);
-			qrcode.src=getQRCode("http://rthe.cn/"+code);
-			QRBox.appendChild(qrcode);
-			recvCode.innerText=code;
-			popRecvCode.innerText=code;
-			addHistory(input.target.files[0].name,code);
-			sendBox0.style.left="-500px";
-			sendBox1.style.left="0px";
-			sendBox2.style.left="500px";
-			lblUploadP.innerText="上传中...";
-		}
-		if(files.length<=1&&files[0].size<=10240000){
-			showUploading();
-			fetch(fileBackend+"upload",getPostData({
-				"file":input.target.files[0],
-				"username":login.username
-			})).then(function(response){
-				if(response.ok){
-					return response.json();
-				}else{
-					alert("无法连接至服务器。");
-					document.title=title;
-					mainBox.style.opacity="1";
-					popSend.style.display="none";
-				}
-			}).then(function(data){
-				if(data){
-					if(data.error){
-						alert(data.error);
-					}else{
-						uploadSuccess(data.code);
-					}
-				}
-			});
-		}else{
-			fetch(fileBackend+"getcode",getPostData({
-				"info":JSON.stringify(files),
-				"username":login.username
-			})).then(function(response){
-				switch(response.status){
-					case 200:
-					return response.text();
-					case 402:
-					alert("批量上传和上传大文件需要付费。");
-					if(!login.username){
-						menuItemLogin.click();
-					}
-					break;
-					default:
-					alert("无法连接至服务器。");
-					break;
-				}
-			}).then(function(code){
-				if(code){
-					var upload=function(fileIndex){
-						var thisFile=input.target.files[fileIndex];
-						var fileSlice=[];
-						var sliceSize=10240000;
-						var uploadSlice=function(uploadProgress){
-							fetch(fileBackend+"uploadslice",getPostData({
-								"code":code,
-								"file":fileSlice[uploadProgress],
-								"index":fileIndex+1,
-								"progress":uploadProgress+1
-							})).then(function(response){
-								if(response.ok){
-									return response.json();
-								}
-							}).then(function(data){
-								if(data){
-									if(data.error){
-										alert(data.error);
-									}else if(data.success==uploadProgress+1){
-										if(uploadProgress==fileSlice.length-1){
-											if(fileIndex==input.target.files.length-1){
-												uploadSuccess(code);
-											}else{
-												setTimeout(function(){
-													upload(fileIndex+1);
-												},1000);
-											}
-										}else{
-											progressBarBg0.style.background="rgba(0,0,0,0.1)";
-											uploadProgress++;
-											var percentage=Math.round(uploadProgress/fileSlice.length*100);
-											document.title="["+percentage+"%] "+title;
-											lblUploadP.innerText="上传中 "+percentage+"%";
-											progressBar0.style.width=percentage+"px";
-											uploadSlice(uploadProgress);
-										}
-									}
-								}
-							}).catch(function(){
-								if(thisFile.size<104857600){
-									fileSlice=[thisFile];
-									uploadSlice(0);
-								}else{
-									alert("无法在此设备上发送大于 100 MB 的文件。");
-									document.title=title;
-									mainBox.style.opacity="1";
-									popSend.style.display="none";
-								}
-							});
-						}
-						if(thisFile.size>10240000){
-							for(var i=0;i<thisFile.size/sliceSize;i++){
-								fileSlice.push(thisFile.slice(i*sliceSize,(i+1)*sliceSize));
-							}
-						}else{
-							fileSlice.push(thisFile);
-						}
-						uploadSlice(0);
-					}
-					showUploading();
-					upload(0);
-				}
-			});
-		}
+		btnContinue.onclick=function(){
+			agree=true;
+			localStorage.setItem("firstUpload",false);
+			closeWarning();
+			upload(input);
+		};
+		cancelUpl.onclick=closeWarning;
+		mainBox.style.opacity="0";
+		popWarning.style.display="block";
+		setTimeout(function(){
+			popWarning.style.opacity="1";
+		},250);
 	}
 }
 if(navigator.language.indexOf("zh")==-1){
