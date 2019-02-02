@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w05d6";
+var version="19w05d7";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -164,6 +164,7 @@ function encodeData(data){
 }
 function getInfo(code){
 	if(code){
+		btnSub.disabled=true;
 		invalidAttempt++;
 		fetch(fileBackend+"getinfo?"+encodeData({
 			"code":code,
@@ -175,9 +176,11 @@ function getInfo(code){
 				}
 			}()
 		})).then(function(response){
+			btnSub.disabled=false;
 			if(response.ok){
 				return response.text();
 			}else{
+				invalidAttempt--;
 				alert("无法连接至服务器。");
 			}
 		}).then(function(data){
