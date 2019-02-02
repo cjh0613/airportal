@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w05d3";
+var version="19w05d4";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -29,6 +29,7 @@ var $_GET=(function(){
 	}
 	return json;
 })();
+var agree;
 var backend=localStorage.getItem("Backend");
 if(!backend){
 	backend="https://rthsoftware.cn/backend/";
@@ -390,6 +391,12 @@ function logOut(){
 		document.body.appendChild(ssoIFrame);
 	}
 }
+function openDialog(){
+	file.value="";
+	file.click();
+	progressBarBg0.style.background="rgba(0,0,0,0)";
+	progressBar0.style.width="0px";
+}
 btnSetPri.onclick=function(){
 	fetch(backend+"userdata/renew",getPostData({
 		"appname":appName,
@@ -450,10 +457,26 @@ inputPsw.onkeydown=function(event){
 	}
 }
 send.onclick=function(){
-	file.value="";
-	file.click();
-	progressBarBg0.style.background="rgba(0,0,0,0)";
-	progressBar0.style.width="0px";
+	if(agree){
+		openDialog();
+	}else{
+		var closeWarning=function(){
+			popWarning.style.opacity=
+			mainBox.style.opacity=
+			popWarning.style.display="";
+		}
+		btnContinue.onclick=function(){
+			agree=true;
+			closeWarning();
+			openDialog();
+		};
+		cancelUpl.onclick=closeWarning;
+		mainBox.style.opacity="0";
+		popWarning.style.display="block";
+		setTimeout(function(){
+			popWarning.style.opacity="1";
+		},250);
+	}
 }
 receive.onclick=function(){
 	recvBox1.style.left="500px";
@@ -1062,7 +1085,7 @@ var speedTest=function(index){
 	});
 }
 speedTest(0);
-if("serviceWorker" in navigator){
+if(location.hostname&&"serviceWorker" in navigator){
 	navigator.serviceWorker.getRegistrations().then(function(registrations){
 		for(var i=0;i<registrations.length;i++){
 			registrations[i].unregister();
