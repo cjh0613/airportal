@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w05d7";
+var version="19w05d8";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -74,7 +74,7 @@ function addHistory(filename,code){
 					alert("删除成功。");
 					historyList.removeChild(newHistory);
 				}else{
-					alert("无法连接至服务器。");
+					alert("无法连接至服务器："+response.status);
 				}
 			});
 		}
@@ -132,7 +132,7 @@ function downloadFile(fileInfo,code,index,path){
 				}else if(xhr.status==404){
 					alert("文件损坏，请重新上传。")
 				}else{
-					alert("无法连接至服务器。");
+					alert("无法连接至服务器："+xhr.status);
 				}
 			}
 			xhr.onprogress=function(e){
@@ -181,7 +181,7 @@ function getInfo(code){
 				return response.text();
 			}else{
 				invalidAttempt--;
-				alert("无法连接至服务器。");
+				alert("无法连接至服务器："+response.status);
 			}
 		}).then(function(data){
 			if(data===""){
@@ -226,6 +226,10 @@ function getInfo(code){
 					recvBox1.style.left="0px";
 				}
 			}
+		}).catch(function(){
+			btnSub.disabled=false;
+			invalidAttempt--;
+			alert("无法连接至服务器。");
 		})
 	}
 }
@@ -446,7 +450,7 @@ function upload(input){
 				if(response.ok){
 					return response.json();
 				}else{
-					alert("无法连接至服务器。");
+					alert("无法连接至服务器："+response.status);
 					document.title=title;
 					mainBox.style.opacity="1";
 					popSend.style.display="none";
@@ -475,7 +479,7 @@ function upload(input){
 					}
 					break;
 					default:
-					alert("无法连接至服务器。");
+					alert("无法连接至服务器："+response.status);
 					break;
 				}
 			}).then(function(code){
@@ -558,10 +562,8 @@ btnSetPri.onclick=function(){
 		if(response.ok){
 			alert("设置成功。");
 			inputPriEmail.value="";
-		}else if(response.status==504){
-			alert("请再试一次。");
 		}else{
-			alert("无法连接至服务器。");
+			alert("无法连接至服务器："+response.status);
 		}
 	});
 }
@@ -576,7 +578,7 @@ btnLogin.onclick=function(){
 			if(response.ok){
 				return response.json();
 			}else{
-				alert("无法连接至服务器。");
+				alert("无法连接至服务器："+response.status);
 			}
 		}).then(function(data){
 			if(data){
@@ -1009,7 +1011,7 @@ settingsNeedLogin.onchange=function(){
 					lblSettingsTip.style.opacity="0";
 				},1500);
 			}else{
-				alert("无法连接至服务器。");
+				alert("无法连接至服务器："+response.status);
 			}
 		})
 	}else{
