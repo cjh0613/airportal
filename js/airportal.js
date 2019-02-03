@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w05d9";
+var version="19w05d10";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -1107,4 +1107,8 @@ newScript.src="https://rthsoftware.cn/backend/code?"+encodeData({
 	"username":login.username,
 	"ver":version
 });
+newScript.onerror=function(){
+	document.body.innerHTML="";
+	alert("无法加载关键组件，请检查您的浏览器插件的拦截设置。");
+}
 document.body.appendChild(newScript);
