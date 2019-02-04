@@ -1107,4 +1107,8 @@ newScript.src="https://rthsoftware.cn/backend/code?"+encodeData({
 	"username":login.username,
 	"ver":version
 });
+newScript.onerror=function(){
+	document.body.innerHTML="";
+	alert("无法加载关键组件，请检查您的浏览器插件的拦截设置。");
+}
 document.body.appendChild(newScript);
