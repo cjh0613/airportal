@@ -1,4 +1,3 @@
-const currentCache="airportal-19w05c2-2"
 self.addEventListener("fetch",e=>{
 	e.respondWith(caches.match(e.request).then(response=>{
 		if(response){
