@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w06a8";
+var version="19w06a9";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -34,6 +34,7 @@ var backend=localStorage.getItem("Backend");
 if(!backend){
 	backend="https://rthsoftware.cn/backend/";
 }
+var currentExpTime;
 var fileBackend=backend+"userdata/file/";
 var invalidAttempt=0;
 var login={
@@ -313,6 +314,7 @@ function loggedIn(newLogin){
 		if(data){
 			var expTime=Math.round((data-new Date().getTime()/1000)/86400);
 			if(expTime>0){
+				currentExpTime=data;
 				newP.innerText=lblExpTime.innerText="高级账号 剩余"+expTime+"天";
 			}else{
 				newP.innerText=lblExpTime.innerText="高级账号 未激活";
@@ -541,22 +543,6 @@ function upload(input){
 			});
 		}
 	}
-}
-btnSetPri.onclick=function(){
-	fetch(backend+"userdata/renew",getPostData({
-		"appname":appName,
-		"email":inputPriEmail.value,
-		"time":new Date(inputPriExpDate.value).getTime()/1000,
-		"token":login.token,
-		"username":login.username
-	})).then(function(response){
-		if(response.ok){
-			alert("设置成功。");
-			inputPriEmail.value="";
-		}else{
-			alert("无法连接至服务器："+response.status);
-		}
-	});
 }
 btnLogin.onclick=function(){
 	if(inputEmail.value&&inputPsw.value){
@@ -943,13 +929,30 @@ btnPay0.onclick=function(){
 }
 var payState="success";
 btnPay1.onclick=function(){
+	var action="续期";
+	var expTime=currentExpTime;
+	if(!expTime){
+		action="激活";
+		expTime=Math.round(new Date().getTime()/1000);
+	}
+	switch(pubPayPlan){
+		case "一个月":
+		expTime=expTime*1+60*60*24*30*1;
+		break;
+		case "三个月":
+		expTime=expTime*1+60*60*24*30*3;
+		break;
+		case "一年":
+		expTime=expTime*1+60*60*24*30*12;
+		break;
+	}
 	fetch("https://rthsoftware.cn/backend/feedback",getPostData({
 		"appname":appName,
 		"email":login.email,
 		"lang":navigator.language,
 		"name":login.username,
 		"recipient":"405801769@qq.com",
-		"text":"用户通过 "+pubPayMethod+" 激活 / 续期了 "+pubPayPlan+" 的高级账号。",
+		"text":"用户通过 "+pubPayMethod+" "+action+"了 "+pubPayPlan+" 的高级账号，将于 "+expTime+" 到期。",
 		"ver":version
 	})).then(function(response){
 		if(response.ok){
