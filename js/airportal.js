@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w06a3";
+var version="19w06a4";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -38,7 +38,7 @@ var fileBackend=backend+"userdata/file/";
 var invalidAttempt=0;
 var login={
 	"email":localStorage.getItem("Email"),
-	"password":localStorage.getItem("Password"),
+	"token":localStorage.getItem("Token"),
 	"username":localStorage.getItem("Username")
 };
 var title=document.title;
@@ -280,10 +280,8 @@ function loggedIn(newLogin){
 		fileBackend=backend+"userdata/file/";
 		localStorage.setItem("Backend",backend);
 		localStorage.setItem("Email",login.email);
+		localStorage.setItem("Token",login.token);
 		localStorage.setItem("Username",login.username);
-		if(login.password){
-			localStorage.setItem("Password",login.password);
-		}
 		mainBox.style.opacity="1";
 		popLogin.style.display="none";
 	}
@@ -363,22 +361,22 @@ function loggedIn(newLogin){
 		}
 		menu.insertBefore(newItem0,menuLine0);
 	}
-	if(!newLogin&&login.password){
+	if(!newLogin){
 		fetch("https://rthsoftware.cn/backend/userdata/verify?"+encodeData({
-			"email":login.email,
-			"password":login.password
+			"token":login.token,
+			"username":login.username
 		})).then(function(response){
 			if(response.ok){
 				return response.json();
 			}
 		}).then(function(data){
 			if(data){
-				if(data.pass){
+				if(data.token){
 					backend=data.backend;
 					localStorage.setItem("Backend",backend);
 					fileBackend=backend+"userdata/file/";
 				}else{
-					alert("密码错误。");
+					alert("登录会话已过期。");
 					logOut();
 				}
 			}
@@ -386,18 +384,10 @@ function loggedIn(newLogin){
 	}
 }
 function logOut(){
-	localStorage.removeItem("Backend");
-	localStorage.removeItem("Email");
-	localStorage.removeItem("Password");
-	localStorage.removeItem("Username");
-	if(location.hostname=="rthsoftware.cn"){
-		location.reload();
-	}else{
-		var ssoIFrame=document.createElement("iframe");
-		ssoIFrame.style.display="none";
-		ssoIFrame.src="https://rthsoftware.cn/sso?action=logout";
-		document.body.appendChild(ssoIFrame);
-	}
+	var ssoIFrame=document.createElement("iframe");
+	ssoIFrame.style.display="none";
+	ssoIFrame.src="https://rthsoftware.cn/sso?action=logout";
+	document.body.appendChild(ssoIFrame);
 }
 function upload(input){
 	var files=[];
@@ -573,7 +563,8 @@ btnLogin.onclick=function(){
 		var password=MD5(inputPsw.value);
 		fetch("https://rthsoftware.cn/backend/userdata/verify?"+encodeData({
 			"email":email,
-			"password":password
+			"password":password,
+			"token":true
 		})).then(function(response){
 			if(response.ok){
 				return response.json();
@@ -583,10 +574,10 @@ btnLogin.onclick=function(){
 		}).then(function(data){
 			if(data){
 				if(data.index){
-					if(data.pass){
+					if(data.token){
 						backend=data.backend;
-						login.email=email;
-						login.password=password;
+						login.email=data.email;
+						login.token=data.token;
 						login.username=data.username;
 						loggedIn(true);
 					}else if(confirm("密码错误。您想重置密码吗？")){
@@ -682,6 +673,10 @@ addEventListener("message",function(e){
 	try{
 		login=JSON.parse(atob(e.data));
 		if(login.username===null){
+			localStorage.removeItem("Backend")
+			localStorage.removeItem("Email")
+			localStorage.removeItem("Token")
+			localStorage.removeItem("Username")
 			location.reload();
 		}else{
 			backend=login.backend;
