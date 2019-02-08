@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w06a7";
+var version="19w06a8";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -546,9 +546,8 @@ btnSetPri.onclick=function(){
 	fetch(backend+"userdata/renew",getPostData({
 		"appname":appName,
 		"email":inputPriEmail.value,
-		"password":login.password,
-		"recipient":"405801769@qq.com",
 		"time":new Date(inputPriExpDate.value).getTime()/1000,
+		"token":login.token,
 		"username":login.username
 	})).then(function(response){
 		if(response.ok){
