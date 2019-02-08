@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w06a9";
+var version="19w06a10";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -349,20 +349,6 @@ function loggedIn(newLogin){
 			settingsNeedLogin.checked=true;
 		}
 	})
-	if(login.username=="admin-CN"||login.username=="admin-US"){
-		var newItem0=document.createElement("a");
-		newItem0.className="menuItem";
-		newItem0.innerText="设置高级账号";
-		newItem0.onclick=function(){
-			mainBox.style.opacity="0";
-			popSetPri.style.display="block";
-			setTimeout(function(){
-				popSetPri.style.opacity="1";
-			},250);
-			hideMenu();
-		}
-		menu.insertBefore(newItem0,menuLine0);
-	}
 	if(!newLogin){
 		fetch("https://rthsoftware.cn/backend/userdata/verify?"+encodeData({
 			"token":login.token,
