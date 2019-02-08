@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w06a6";
+var version="19w06a7";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -347,7 +347,7 @@ function loggedIn(newLogin){
 			settingsNeedLogin.checked=true;
 		}
 	})
-	if(login.username=="admin"){
+	if(login.username=="admin-CN"||login.username=="admin-US"){
 		var newItem0=document.createElement("a");
 		newItem0.className="menuItem";
 		newItem0.innerText="设置高级账号";
