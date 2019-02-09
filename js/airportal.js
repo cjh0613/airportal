@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w06a14";
+var version="19w06a15";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -339,7 +339,8 @@ function loggedIn(newLogin){
 			}
 		}
 	});
-	fetch(fileBackend+"set?"+encodeData({
+	fetch(backend+"userdata/set?"+encodeData({
+		"appname":appName,
 		"key":"loginRequired",
 		"username":login.username
 	})).then(function(response){
@@ -347,7 +348,7 @@ function loggedIn(newLogin){
 			return response.text();
 		}
 	}).then(function(data){
-		if(data=="true"){
+		if(data=="1"){
 			settingsNeedLogin.checked=true;
 		}
 	})
@@ -987,7 +988,8 @@ btnDone3.onclick=function(){
 }
 settingsNeedLogin.onchange=function(){
 	if(login.username){
-		fetch(fileBackend+"set",getPostData({
+		fetch(backend+"userdata/set",getPostData({
+			"appname":appName,
 			"key":"loginRequired",
 			"username":login.username,
 			"value":this.checked.toString()
