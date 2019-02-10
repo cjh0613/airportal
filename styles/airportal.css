@@ -355,16 +355,6 @@ a,button {outline: none;}
 	opacity: 0.5;
 	pointer-events: none;
 }
-#lblSettingsTip {
-	position: relative;
-	top: 130px;
-	opacity: 0;
-	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
-}
 #btnDone5 {
 	top: 130px;
 }
@@ -1012,6 +1002,23 @@ a,button {outline: none;}
 }
 .cbox:checked {
 	background-image: url(../images/cboxChecked.png);
+}
+#notificationBar {
+	z-index: 999;
+	position: fixed;
+	bottom: -50px;
+	width: 100%;
+	height: 26px;
+	color: rgba(255,255,255,0.8);
+	background-color: rgb(65,145,245);
+	text-align: center;
+	font-size: small;
+	padding-top: 8px;
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
 }
 #footerL {
 	text-align: left;

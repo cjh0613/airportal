@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w06a16";
+var version="19w06b";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -72,10 +72,10 @@ function addHistory(filename,code){
 				"username":login.username
 			})).then(function(response){
 				if(response.ok){
-					alert("删除成功。");
+					notify("删除成功。");
 					historyList.removeChild(newHistory);
 				}else{
-					alert("无法连接至服务器："+response.status);
+					notify("无法连接至服务器："+response.status);
 				}
 			});
 		}
@@ -133,7 +133,7 @@ function downloadFile(fileInfo,code,index,path){
 				}else if(xhr.status==404){
 					alert("文件损坏，请重新上传。")
 				}else{
-					alert("无法连接至服务器："+xhr.status);
+					notify("无法连接至服务器："+xhr.status);
 				}
 			}
 			xhr.onprogress=function(e){
@@ -182,19 +182,19 @@ function getInfo(code){
 				return response.text();
 			}else{
 				invalidAttempt--;
-				alert("无法连接至服务器："+response.status);
+				notify("无法连接至服务器："+response.status);
 			}
 		}).then(function(data){
 			if(data===""){
-				alert("文件不存在。");
+				notify("文件不存在。");
 			}else if(data){
 				invalidAttempt--;
 				data=JSON.parse(data);
 				if(data.download===false){
 					if(login.username){
-						alert("您没有下载此文件的权限。");
+						notify("您没有下载此文件的权限。");
 					}else{
-						alert("需要登录才能下载此文件。");
+						notify("需要登录才能下载此文件。");
 						menuItemLogin.click();
 					}
 				}else if(data.multifile.length==1){
@@ -230,7 +230,7 @@ function getInfo(code){
 		}).catch(function(){
 			btnSub.disabled=false;
 			invalidAttempt--;
-			alert("无法连接至服务器。");
+			notify("无法连接至服务器。");
 		})
 	}
 }
@@ -368,7 +368,7 @@ function loggedIn(newLogin){
 					localStorage.setItem("Backend",backend);
 					fileBackend=backend+"userdata/file/";
 				}else{
-					alert("登录会话已过期。");
+					notify("登录会话已过期。");
 					logOut();
 				}
 			}
@@ -387,9 +387,9 @@ function upload(input){
 	var files=[];
 	for(var i=0;i<input.target.files.length;i++){
 		if(input.target.files[i].name.indexOf(".php")!=-1||input.target.files[i].type=="text/php"){
-			alert("不允许传输 PHP 文件。");
+			notify("不允许传输 PHP 文件。");
 		}else if(input.target.files[i].size>1073741824){
-			alert("不允许传输大于 1024MB 的文件。");
+			notify("不允许传输大于 1024MB 的文件。");
 		}else{
 			files.push({
 				"name":input.target.files[i].name,
@@ -434,7 +434,7 @@ function upload(input){
 				if(response.ok){
 					return response.json();
 				}else{
-					alert("无法连接至服务器："+response.status);
+					notify("无法连接至服务器："+response.status);
 					document.title=title;
 					mainBox.style.opacity="1";
 					popSend.style.display="none";
@@ -463,7 +463,7 @@ function upload(input){
 					}
 					break;
 					default:
-					alert("无法连接至服务器："+response.status);
+					notify("无法连接至服务器："+response.status);
 					break;
 				}
 			}).then(function(code){
@@ -546,7 +546,7 @@ btnLogin.onclick=function(){
 			if(response.ok){
 				return response.json();
 			}else{
-				alert("无法连接至服务器："+response.status);
+				notify("无法连接至服务器："+response.status);
 			}
 		}).then(function(data){
 			if(data){
@@ -564,7 +564,7 @@ btnLogin.onclick=function(){
 						});
 					}
 				}else{
-					alert("此用户不存在。");
+					notify("此用户不存在。");
 				}
 			}
 		});
@@ -723,7 +723,7 @@ copyLink.onclick=function(){
 	var url="https://rthe.cn/"+recvCode.innerText;
 	if("clipboard" in navigator){
 		navigator.clipboard.writeText(url).then(function(){
-			alert("下载链接已复制到剪贴板。");
+			notify("下载链接已复制到剪贴板。");
 		});
 	}else{
 		prompt("您的浏览器不支持剪贴板功能，请手动复制。",url);
@@ -997,12 +997,9 @@ settingsNeedLogin.onchange=function(){
 			"value":this.checked.toString()
 		})).then(function(response){
 			if(response.ok){
-				lblSettingsTip.style.opacity="1";
-				setTimeout(function(){
-					lblSettingsTip.style.opacity="0";
-				},1500);
+				notify("设置已保存",1500);
 			}else{
-				alert("无法连接至服务器："+response.status);
+				notify("无法连接至服务器："+response.status);
 			}
 		})
 	}else{
@@ -1105,3 +1102,13 @@ newScript.onerror=function(){
 	alert("无法加载关键组件，请检查您的浏览器插件的拦截设置。");
 }
 document.body.appendChild(newScript);
+function notify(content,duration){
+	if(duration==undefined){
+		duration=3000;
+	}
+	notificationBar.innerText=content;
+	notificationBar.style.bottom="0px";
+	setTimeout(function(){
+		notificationBar.style.bottom="-50px";
+	},duration);
+}
