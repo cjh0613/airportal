@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w06b";
+var version="19w06b2";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -32,7 +32,7 @@ var $_GET=(function(){
 var agree=!!localStorage.getItem("firstUpload");
 var backend=localStorage.getItem("Backend");
 if(!backend){
-	backend="https://rthsoftware.cn/backend/";
+	backend="https://cdn.rthsoftware.cn/backend/";
 }
 var currentExpTime;
 var fileBackend=backend+"userdata/file/";
@@ -247,7 +247,7 @@ function getPostData(data){
 	};
 }
 function getQRCode(content){
-	return "https://rthsoftware.cn/backend/get?"+encodeData({
+	return "https://cdn.rthsoftware.cn/backend/get?"+encodeData({
 		"url":"http://qr.topscan.com/api.php?text="+content,
 		"username":"admin"
 	});
@@ -354,7 +354,7 @@ function loggedIn(newLogin){
 		}
 	})
 	if(!newLogin){
-		fetch("https://rthsoftware.cn/backend/userdata/verify?"+encodeData({
+		fetch("https://cdn.rthsoftware.cn/backend/userdata/verify?"+encodeData({
 			"token":login.token,
 			"username":login.username
 		})).then(function(response){
@@ -538,7 +538,7 @@ btnLogin.onclick=function(){
 	if(inputEmail.value&&inputPsw.value){
 		var email=inputEmail.value.toLowerCase();
 		var password=MD5(inputPsw.value);
-		fetch("https://rthsoftware.cn/backend/userdata/verify?"+encodeData({
+		fetch("https://cdn.rthsoftware.cn/backend/userdata/verify?"+encodeData({
 			"email":email,
 			"password":password,
 			"token":true
@@ -678,7 +678,7 @@ menuItemFeedback.onclick=function(){
 	hideMenu();
 }
 btnSendFeed.onclick=function(){
-	fetch("https://rthsoftware.cn/backend/feedback",getPostData({
+	fetch("https://cdn.rthsoftware.cn/backend/feedback",getPostData({
 		"appname":appName,
 		"email":login.email,
 		"lang":navigator.language,
@@ -936,7 +936,7 @@ btnPay1.onclick=function(){
 		expTime=expTime+60*60*24*30*12;
 		break;
 	}
-	fetch("https://rthsoftware.cn/backend/feedback",getPostData({
+	fetch("https://cdn.rthsoftware.cn/backend/feedback",getPostData({
 		"appname":appName,
 		"email":login.email,
 		"lang":navigator.language,
@@ -1091,7 +1091,7 @@ if(location.hostname&&"serviceWorker" in navigator){
 }
 var newScript=document.createElement("script");
 newScript.async=true;
-newScript.src="https://rthsoftware.cn/backend/code?"+encodeData({
+newScript.src="https://cdn.rthsoftware.cn/backend/code?"+encodeData({
 	"appname":appName,
 	"lang":navigator.language,
 	"username":login.username,
@@ -1099,7 +1099,9 @@ newScript.src="https://rthsoftware.cn/backend/code?"+encodeData({
 });
 newScript.onerror=function(){
 	document.body.innerHTML="";
-	alert("无法加载关键组件，请检查您的浏览器插件的拦截设置。");
+	if(!$_GET["code"]){
+		alert("无法加载关键组件，请检查您的浏览器插件的拦截设置。");
+	}
 }
 document.body.appendChild(newScript);
 function notify(content,duration){
