@@ -10,5 +10,5 @@ var $_GET=(function(){
 	return json;
 })();
 if($_GET["reason"]){
-    pReason.innerText=$_GET["reason"];
+	pReason.innerText=$_GET["reason"];
 }
