@@ -1,20 +1,5 @@
 self.addEventListener("fetch",e=>{
-	e.respondWith(caches.match(e.request).then(response=>{
-		if(response){
-			return response
-		}else{
-			return fetch(e.request).catch(()=>{})
-		}
-	}).then(data=>{
-		if(data){
-			return data
-		}else{
-			return new Response(null,{
-				"status":502,
-				"statusText":"Bad Gateway"
-			})
-		}
-	}))
+	e.respondWith(fetch(e.request))
 })
 self.addEventListener("activate",e=>{
 	e.waitUntil(caches.keys().then(cacheNames=>{
