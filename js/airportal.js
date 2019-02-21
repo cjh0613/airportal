@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w08a";
+var version="19w08b1";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -698,8 +698,7 @@ btnSendFeed.onclick=function(){
 }
 menuItemAutoServer.onclick=
 menuItemCnServer.onclick=
-menuItemUsServer1.onclick=
-menuItemUsServer2.onclick=function(){
+menuItemUsServer.onclick=function(){
 	backend=this.getAttribute("value");
 	fileBackend=backend+"userdata/file/";
 	var tick=document.getElementsByClassName("tick");
