@@ -45,11 +45,11 @@ if(!firstRun||firstRun[version]==undefined){
 	firstRun={};
 }
 if(firstRun[version]!=false){
-	/*mainBox.style.opacity="0";
+	mainBox.style.opacity="0";
 	popUpdate.style.display="block";
 	setTimeout(function(){
 		popUpdate.style.opacity="1";
-	},250);*/
+	},250);
 	firstRun[version]=false;
 	localStorage.setItem("firstRun",JSON.stringify(firstRun));
 }
