@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w08c";
+var version="19w09a";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -261,10 +261,10 @@ function loadPrice(priceInfo){
 	Object.keys(priceInfo).forEach(function(key){
 		var newP=document.createElement("p");
 		newP.classList.add("p2");
-		if(priceInfo[key]["discount"]<1){
+		if(priceInfo[key]["discount"]===true||priceInfo[key]["discount"]<1){
 			var newSpan=document.createElement("span");
 			newSpan.classList.add("pDel");
-			newP.innerText="¥"+priceInfo[key]["price"]*priceInfo[key]["discount"];
+			newP.innerText="¥"+priceInfo[key]["specialPrice"];
 			newSpan.innerText="¥"+priceInfo[key]["price"];
 			newP.appendChild(newSpan);
 		}else{
@@ -322,20 +322,6 @@ function loggedIn(newLogin){
 		}
 		newItem.appendChild(newP);
 	});
-	fetch(fileBackend+"get?"+encodeData({
-		"token":login.token,
-		"username":login.username
-	})).then(function(response){
-		if(response.ok){
-			return response.json();
-		}
-	}).then(function(data){
-		if(data){
-			for(var i=0;i<data.length;i++){
-				addHistory(decodeURIComponent(data[i].multifile[0].name),data[i].code);
-			}
-		}
-	});
 	fetch(backend+"userdata/set?"+encodeData({
 		"appname":appName,
 		"key":"loginRequired",
@@ -379,6 +365,16 @@ function logOut(){
 		"action":"logout"
 	});
 	document.body.appendChild(ssoIFrame);
+}
+function notify(content,duration){
+	if(duration==undefined){
+		duration=3000;
+	}
+	notificationBar.innerText=content;
+	notificationBar.style.bottom="0px";
+	setTimeout(function(){
+		notificationBar.style.bottom="-50px";
+	},duration);
 }
 function upload(input){
 	var files=[];
@@ -579,16 +575,20 @@ send.onclick=function(){
 	progressBar0.style.width="0px";
 }
 receive.onclick=function(){
-	recvBox1.style.left="500px";
-	recvBox0.style.left="0px";
-	fileList.innerHTML="";
-	inputCode.value="";
-	mainBox.style.opacity="0";
-	popRecv.style.display="block";
-	setTimeout(function(){
-		popRecv.style.opacity="1";
-	},250);
-	inputCode.focus();
+	if(/(MicroMessenger|QQ)\//i.test(navigator.userAgent)){
+		alert("请在浏览器中打开此页面。");
+	}else{
+		recvBox1.style.left="500px";
+		recvBox0.style.left="0px";
+		fileList.innerHTML="";
+		inputCode.value="";
+		mainBox.style.opacity="0";
+		popRecv.style.display="block";
+		setTimeout(function(){
+			popRecv.style.opacity="1";
+		},250);
+		inputCode.focus();
+	}
 }
 btnSub.onclick=function(){
 	if(invalidAttempt>2){
@@ -1031,12 +1031,36 @@ if(navigator.language.indexOf("zh")==-1){
 	receive.innerText="Receive";
 }
 if($_GET["code"]){
-	if(/(MicroMessenger|QQ)\//i.test(navigator.userAgent)){
-		alert("请在浏览器中打开此页面。");
-	}else{
-		getInfo($_GET["code"]);
+	receive.click();
+	if(popRecv.style.display){
+		var animationProgress=0;
+		var codeSplit=$_GET["code"].split("");
+		inputCode.value="";
+		var intervalId=setInterval(function(){
+			if(animationProgress<4){
+				inputCode.value+=codeSplit[animationProgress];
+				animationProgress++;
+			}else{
+				clearInterval(intervalId);
+				btnSub.click();
+			}
+		},400);
 	}
 }
+fetch(fileBackend+"get?"+encodeData({
+	"token":login.token,
+	"username":login.username
+})).then(function(response){
+	if(response.ok){
+		return response.json();
+	}
+}).then(function(data){
+	if(data){
+		for(var i=0;i<data.length;i++){
+			addHistory(decodeURIComponent(data[i].multifile[0].name),data[i].code);
+		}
+	}
+});
 if(login.username){
 	loggedIn();
 }else if(location.hostname!="rthsoftware.cn"){
@@ -1100,13 +1124,3 @@ newScript.onerror=function(){
 	}
 }
 document.body.appendChild(newScript);
-function notify(content,duration){
-	if(duration==undefined){
-		duration=3000;
-	}
-	notificationBar.innerText=content;
-	notificationBar.style.bottom="0px";
-	setTimeout(function(){
-		notificationBar.style.bottom="-50px";
-	},duration);
-}
