@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w09a1";
+var version="19w09a2";
 var consoleGeneralStyle="font-family:'Microsoft Yahei';";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -128,7 +128,9 @@ function downloadFile(fileInfo,code,index,path){
 						downloadSlice(progress);
 					}
 				}else if(xhr.status==404){
-					alert("文件损坏，请重新上传。")
+					notify("文件损坏，请重新上传。");
+					popDownl.style.opacity="0";
+					popDownl.style.display="none";
 				}else{
 					notify("无法连接至服务器："+xhr.status);
 				}
@@ -444,12 +446,17 @@ function upload(input){
 					notify("无法连接至服务器："+response.status);
 					document.title=title;
 					mainBox.style.opacity="1";
+					popSend.style.opacity="0";
 					popSend.style.display="none";
 				}
 			}).then(function(data){
 				if(data){
 					if(data.error){
 						alert(data.error);
+						document.title=title;
+						mainBox.style.opacity="1";
+						popSend.style.opacity="0";
+						popSend.style.display="none";
 					}else{
 						uploadSuccess(data.code);
 					}
@@ -493,6 +500,10 @@ function upload(input){
 								if(data){
 									if(data.error){
 										alert(data.error);
+										document.title=title;
+										mainBox.style.opacity="1";
+										popSend.style.opacity="0";
+										popSend.style.display="none";
 									}else if(data.success==uploadProgress+1){
 										if(uploadProgress==fileSlice.length-1){
 											if(fileIndex==input.target.files.length-1){
@@ -521,6 +532,7 @@ function upload(input){
 									alert("无法在此设备上发送大于 100 MB 的文件。");
 									document.title=title;
 									mainBox.style.opacity="1";
+									popSend.style.opacity="0";
 									popSend.style.display="none";
 								}
 							});
