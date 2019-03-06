@@ -1,7 +1,7 @@
 "use strict";
 var appName="AirPortal";
-var version="19w09a3";
-var consoleGeneralStyle="font-family:'Microsoft Yahei';";
+var version="19w10a";
+var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
 console.info("%c版本：%s",consoleInfoStyle,version);
@@ -397,8 +397,8 @@ function upload(input){
 	for(var i=0;i<input.target.files.length;i++){
 		if(input.target.files[i].name.indexOf(".php")!=-1||input.target.files[i].type=="text/php"){
 			notify("不允许传输 PHP 文件。");
-		}else if(input.target.files[i].size>1073741824){
-			notify("不允许传输大于 1024MB 的文件。");
+		}else if(input.target.files[i].size>4294967296){
+			notify("不允许传输大于 4GB 的文件。");
 		}else{
 			files.push({
 				"name":input.target.files[i].name,
