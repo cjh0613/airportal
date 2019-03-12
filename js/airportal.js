@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w10a1";
+var version="19w11a";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -61,18 +61,34 @@ function addHistory(filename,code){
 	newHistory.innerText=code;
 	newP.innerText=filename;
 	newDelBtn.className="btnDel";
-	newDelBtn.title="删除";
+	newDelBtn.title=multilang({
+		"en-US":"Delete",
+		"zh-CN":"删除",
+		"zh-TW":"刪除"
+	});
 	newDelBtn.onclick=function(){
-		if(confirm("确定要删除存储在服务器上的 "+filename+" 吗？")){
+		if(confirm(multilang({
+			"en-US":"Are you sure that you want to delete "+filename+" from the server?",
+			"zh-CN":"确定要删除存储在服务器上的 "+filename+" 吗？",
+			"zh-TW":"確定要刪除存儲在伺服器上的 "+filename+" 嗎？"
+		}))){
 			fetch(fileBackend+"del",getPostData({
 				"code":code,
 				"username":login.username
 			})).then(function(response){
 				if(response.ok){
-					notify("删除成功。");
+					notify(multilang({
+						"en-US":"Deleted successfully.",
+						"zh-CN":"删除成功。",
+						"zh-TW":"刪除成功。"
+					}));
 					historyList.removeChild(newHistory);
 				}else{
-					notify("无法连接至服务器："+response.status);
+					notify(multilang({
+						"en-US":"Unable to connect to the server: ",
+						"zh-CN":"无法连接至服务器：",
+						"zh-TW":"無法連接至伺服器："
+					})+response.status);
 				}
 			});
 		}
@@ -82,6 +98,15 @@ function addHistory(filename,code){
 	historyList.insertBefore(newHistory,historyList.firstChild);
 	lblEmpty.style.display="none";
 	historyList.style.marginTop="-10px";
+}
+function btnPay0State(){
+	if(document.getElementsByClassName("selected").length==2){
+		btnPay0.style.pointerEvents="auto";
+		btnPay0.style.opacity="1";
+	}else{
+		btnPay0.style.pointerEvents="none";
+		btnPay0.style.opacity="0.5";
+	}
 }
 function downloadFile(fileInfo,code,index,path){
 	if(fileInfo.slice){
@@ -128,11 +153,19 @@ function downloadFile(fileInfo,code,index,path){
 						downloadSlice(progress);
 					}
 				}else if(xhr.status==404){
-					notify("文件损坏，请重新上传。");
+					notify(multilang({
+						"en-US":"The file is incomplete. Please upload it again.",
+						"zh-CN":"文件损坏。请重新上传。",
+						"zh-TW":"檔案損壞。請重新上傳。"
+					}));
 					popDownl.style.opacity="0";
 					popDownl.style.display="none";
 				}else{
-					notify("无法连接至服务器："+xhr.status);
+					notify(multilang({
+						"en-US":"Unable to connect to the server: ",
+						"zh-CN":"无法连接至服务器：",
+						"zh-TW":"無法連接至伺服器："
+					})+xhr.status);
 				}
 			}
 			xhr.onprogress=function(e){
@@ -181,19 +214,35 @@ function getInfo(code){
 				return response.text();
 			}else{
 				invalidAttempt--;
-				notify("无法连接至服务器："+response.status);
+				notify(multilang({
+					"en-US":"Unable to connect to the server: ",
+					"zh-CN":"无法连接至服务器：",
+					"zh-TW":"無法連接至伺服器："
+				})+response.status);
 			}
 		}).then(function(data){
 			if(data===""){
-				notify("文件不存在。");
+				notify(multilang({
+					"en-US":"The file does not exist.",
+					"zh-CN":"文件不存在。",
+					"zh-TW":"檔案不存在。"
+				}));
 			}else if(data){
 				invalidAttempt--;
 				data=JSON.parse(data);
 				if(data.download===false){
 					if(login.username){
-						notify("您没有下载此文件的权限。");
+						notify(multilang({
+							"en-US":"You do not have permission to download this file.",
+							"zh-CN":"您没有下载此文件的权限。",
+							"zh-TW":"您沒有下載此檔案的權限。"
+						}));
 					}else{
-						notify("需要登录才能下载此文件。");
+						notify(multilang({
+							"en-US":"Login is required for downloading this file.",
+							"zh-CN":"需要登录才能下载此文件。",
+							"zh-TW":"需要登入才能下載此檔案。"
+						}));
 						menuItemLogin.click();
 					}
 				}else if(data.multifile.length==1){
@@ -229,7 +278,11 @@ function getInfo(code){
 		}).catch(function(){
 			btnSub.disabled=false;
 			invalidAttempt--;
-			notify("无法连接至服务器。");
+			notify(multilang({
+				"en-US":"Unable to connect to the server.",
+				"zh-CN":"无法连接至服务器。",
+				"zh-TW":"無法連接至伺服器。"
+			}));
 		})
 	}
 }
@@ -299,7 +352,11 @@ function loggedIn(newLogin){
 			}
 		});
 	}
-	menuItemLogin.innerText="退出登录";
+	menuItemLogin.innerText=multilang({
+		"en-US":"Log Out",
+		"zh-CN":"退出登录",
+		"zh-TW":"登出"
+	});
 	var newItem=document.createElement("a");
 	newItem.className="menuItem";
 	newItem.onclick=function(){
@@ -329,12 +386,24 @@ function loggedIn(newLogin){
 			var expTime=Math.round((data-new Date().getTime()/1000)/86400);
 			if(expTime>0){
 				currentExpTime=data*1;
-				newP.innerText=lblExpTime.innerText="高级账号 剩余"+expTime+"天";
+				newP.innerText=lblExpTime.innerText=multilang({
+					"en-US":"Premium Plan "+expTime+" Days Remaining",
+					"zh-CN":"高级账号 剩余"+expTime+"天",
+					"zh-TW":"高級賬號 剩餘"+expTime+"天"
+				});
 			}else{
-				newP.innerText=lblExpTime.innerText="高级账号 未激活";
+				newP.innerText=lblExpTime.innerText=multilang({
+					"en-US":"Premium Plan Not Activated",
+					"zh-CN":"高级账号 未激活",
+					"zh-TW":"高級賬號 未激活"
+				});
 			}
 		}else{
-			newP.innerText=lblExpTime.innerText="高级账号 未激活";
+			newP.innerText=lblExpTime.innerText=multilang({
+				"en-US":"Premium Plan Not Activated",
+				"zh-CN":"高级账号 未激活",
+				"zh-TW":"高級賬號 未激活"
+			});
 		}
 		newItem.appendChild(newP);
 	});
@@ -367,7 +436,11 @@ function loggedIn(newLogin){
 					localStorage.setItem("Backend",backend);
 					fileBackend=backend+"userdata/file/";
 				}else{
-					notify("登录会话已过期。");
+					notify(multilang({
+						"en-US":"Login session is expired.",
+						"zh-CN":"登录会话已过期。",
+						"zh-TW":"登入對談已過期。"
+					}));
 					logOut();
 				}
 			}
@@ -382,6 +455,15 @@ function logOut(){
 	});
 	document.body.appendChild(ssoIFrame);
 }
+function multilang(json){
+	if(navigator.language.toLowerCase()=="zh-cn"){
+		return json["zh-CN"];
+	}else if(navigator.language.indexOf("zh")!=-1){
+		return json["zh-TW"];
+	}else{
+		return json["en-US"];
+	}
+}
 function notify(content,duration){
 	if(duration==undefined){
 		duration=3000;
@@ -392,13 +474,36 @@ function notify(content,duration){
 		notificationBar.style.bottom="-50px";
 	},duration);
 }
+function payItemClick(element,className){
+	if(element.classList.contains("selected")){
+		element.classList.remove("selected");
+	}else{
+		var elements=document.getElementsByClassName(className);
+		for(var i=0;i<elements.length;i++){
+			if(elements[i]==element){
+				element.classList.add("selected");
+			}else{
+				elements[i].classList.remove("selected");
+			}
+		}
+	}
+	btnPay0State();
+}
 function upload(input){
 	var files=[];
 	for(var i=0;i<input.target.files.length;i++){
 		if(input.target.files[i].name.indexOf(".php")!=-1||input.target.files[i].type=="text/php"){
-			notify("不允许传输 PHP 文件。");
+			notify(multilang({
+				"en-US":"Transferring PHP files is not allowed.",
+				"zh-CN":"不允许传输 PHP 文件。",
+				"zh-TW":"不允許傳輸 PHP 檔案。"
+			}));
 		}else if(input.target.files[i].size>4294967296){
-			notify("不允许传输大于 4GB 的文件。");
+			notify(multilang({
+				"en-US":"Transferring files larger than 4 GB is not allowed.",
+				"zh-CN":"不允许传输大于 4 GB 的文件。",
+				"zh-TW":"不允許傳輸大於 4 GB 的檔案。"
+			}));
 		}else{
 			files.push({
 				"name":input.target.files[i].name,
@@ -443,7 +548,11 @@ function upload(input){
 				if(response.ok){
 					return response.json();
 				}else{
-					notify("无法连接至服务器："+response.status);
+					notify(multilang({
+						"en-US":"Unable to connect to the server: ",
+						"zh-CN":"无法连接至服务器：",
+						"zh-TW":"無法連接至伺服器："
+					})+response.status);
 					document.title=title;
 					mainBox.style.opacity="1";
 					popSend.style.opacity="0";
@@ -471,13 +580,21 @@ function upload(input){
 					case 200:
 					return response.text();
 					case 402:
-					alert("批量上传和上传大文件需要付费。");
+					alert(multilang({
+						"en-US":"Payment is required for uploading multiple files or large files.",
+						"zh-CN":"批量上传和上传大文件需要付费。",
+						"zh-TW":"批量上傳和上傳大檔案需要付費。"
+					}));
 					if(!login.username){
 						menuItemLogin.click();
 					}
 					break;
 					default:
-					notify("无法连接至服务器："+response.status);
+					notify(multilang({
+						"en-US":"Unable to connect to the server: ",
+						"zh-CN":"无法连接至服务器：",
+						"zh-TW":"無法連接至伺服器："
+					})+response.status);
 					break;
 				}
 			}).then(function(code){
@@ -529,7 +646,11 @@ function upload(input){
 									fileSlice=[thisFile];
 									uploadSlice(0);
 								}else{
-									alert("无法在此设备上发送大于 100 MB 的文件。");
+									alert(multilang({
+										"en-US":"Unable to send files larger than 100 MB on this device.",
+										"zh-CN":"无法在此设备上发送大于 100 MB 的文件。",
+										"zh-TW":"無法在此裝置上發送大於 100 MB 的檔案。"
+									}));
 									document.title=title;
 									mainBox.style.opacity="1";
 									popSend.style.opacity="0";
@@ -553,6 +674,89 @@ function upload(input){
 		}
 	}
 }
+if(navigator.language.indexOf("zh")==-1){
+	document.getElementsByTagName("html")[0].lang="en-US"
+	send.innerText=btnSendFeed.innerText="Send";
+	receive.innerText="Receive";
+	privacyPolicy.innerText="Privacy Policy";
+	footerR.innerHTML="Developed by <a href=\"https://maorx.cn/\" target=\"_blank\" class=\"link1\">Ruoxin Mao</a> and <a href=\"https://rthsoftware.cn/\" target=\"_blank\" class=\"link1\">Shangzhen Yang</a>. All rights reserved.";
+	menuItemLogin.innerText="Login";
+	menuItemHistory.innerText="History";
+	menuItemSettings.innerText="Settings";
+	menuItemFeedback.innerText="Contact Us";
+	nameAutoServer.innerText="Auto-Select Server";
+	nameCnServer.innerText="CN Server";
+	nameUsServer.innerText="US Server";
+	enterCode.innerText="Please enter the code";
+	btnSub.value="OK";
+	loginTip.innerText="Log in to AirPortal with Your RTH Account";
+	signUp.innerText="Sign Up";
+	inputEmail.placeholder="Email";
+	inputPsw.placeholder="Password";
+	btnLogin.innerText="Login";
+	sentSuccessfully.innerText="File is sent successfully.";
+	yourCode.innerText="Your Code (Expires in 1 Day):";
+	whenReceving.innerText="When receving files, please enter this code.";
+	otherWays.innerHTML="You can also <a class=\"link1\" id=\"copyLink\">copy the download link</a> or <a class=\"link1\" id=\"viewQRC\">scan the QR code to download</a>.";
+	btnDone0.innerText=btnDone5.innerText="Done";
+	titleHistory.innerText="History";
+	lblEmpty.innerText="You have not uploaded any files yet";
+	btnDone1.innerText=btnDone2.innerText="Close";
+	titleSettings.innerText="Settings";
+	labelNeedLogin.innerText="Require my password when receiving my files";
+	titleFeedback.innerText="Send us a message";
+	txtFeedback.placeholder="If you are not logged in, please leave your email address or other contact information";
+	showPrivilege.innerText="Why Premium Plan?";
+	titlePrivileges.innerText="Privileges of Premium Plan";
+	txtPrivileges.innerText="1. Batch upload;\n2. Upload files larger than 100 MB.";
+	titleWarning.innerText="Warning";
+	txtWarning.innerHTML="Uploading illegal files (including but not limited to: pornography, vulgarity, political sensitivity, VPN software, violence, malware, fraud, plug-ins) <span class=\"txtRed\">will result in your account or IP address being permanently banned.</span>";
+	btnContinue.innerText="Agree & Continue";
+	cancelUpl.innerText="Cancel Upload";
+	multiFilesReceived.innerText="Multiple files received.";
+	multiFilesTip.innerText="Click on the items in the list to download them separately.";
+}else if(navigator.language.toLowerCase()!="zh-cn"){
+	document.getElementsByTagName("html")[0].lang="zh-TW"
+	send.innerText=btnSendFeed.innerText="發送";
+	receive.innerText="接收";
+	privacyPolicy.innerText="隱私政策";
+	footerR.innerHTML="由 <a href=\"https://maorx.cn/\" target=\"_blank\" class=\"link1\">毛若昕</a> 和 <a href=\"https://rthsoftware.cn/\" target=\"_blank\" class=\"link1\">楊尚臻</a> 聯合開發。保留所有權利。";
+	menuItemLogin.innerText="登入";
+	menuItemHistory.innerText="歷史記錄";
+	menuItemSettings.innerText="設定";
+	menuItemFeedback.innerText="聯繫我們";
+	nameAutoServer.innerText="自動選擇伺服器";
+	nameCnServer.innerText="大陸伺服器";
+	nameUsServer.innerText="北美伺服器";
+	enterCode.innerText="請輸入取件碼";
+	btnSub.value="確定";
+	loginTip.innerText="使用熱鐵盒賬號來登入到 AirPortal";
+	signUp.innerText="註冊";
+	inputEmail.placeholder="郵箱";
+	inputPsw.placeholder="密碼";
+	btnLogin.innerText="登入";
+	sentSuccessfully.innerText="檔案已成功傳送。";
+	yourCode.innerText="您的取件碼（1天內有效）：";
+	whenReceving.innerText="接收檔案時，請輸入該四位數密碼。";
+	otherWays.innerHTML="您也可以<a class=\"link1\" id=\"copyLink\">複製下載連結</a>或<a class=\"link1\" id=\"viewQRC\">直接掃描 QR 碼下載</a>。";
+	titleHistory.innerText="歷史記錄";
+	lblEmpty.innerText="您尚未上傳任何檔案";
+	btnDone1.innerText=btnDone2.innerText="關閉";
+	titleSettings.innerText="設定";
+	labelNeedLogin.innerText="接收我的檔案時需要登入我的賬號";
+	titleFeedback.innerText="向我們發送訊息";
+	txtFeedback.placeholder="如果您沒有登入，請留下您的電子郵箱地址或其它聯繫方式";
+	showPrivilege.innerText="高級賬號有哪些特權？";
+	titlePrivileges.innerText="高級賬號特權";
+	txtPrivileges.innerText="1. 批量上傳檔案；\n2. 上傳大於 100 MB 的檔案；\n3. 用最實在的方式表達對我們的愛 _(:з)∠)_";
+	txtWarning.innerHTML="上傳違法違規檔案（包括但不限於：內容涉及色情、低俗、政治敏感、翻墻、暴力、惡意軟體、詐騙、外掛的檔案）<span class=\"txtRed\">將導致您的賬號或 IP 位址被永久封禁。</span>";
+	btnContinue.innerText="同意并繼續";
+	cancelUpl.innerText="放棄上傳";
+	multiFilesReceived.innerText="您接收到多個檔案。";
+	multiFilesTip.innerText="單擊列表中的項目來分別下載它們。";
+}else{
+	txtWarning.innerHTML="上传违法违规文件（包括但不限于：内容涉及色情、低俗、政治敏感、翻墙、暴力、恶意软件、诈骗、外挂的文件）<span class=\"txtRed\">将导致您的账号或 IP 地址被永久封禁。</span>";
+}
 btnLogin.onclick=function(){
 	if(inputEmail.value&&inputPsw.value){
 		var email=inputEmail.value.toLowerCase();
@@ -565,7 +769,11 @@ btnLogin.onclick=function(){
 			if(response.ok){
 				return response.json();
 			}else{
-				notify("无法连接至服务器："+response.status);
+				notify(multilang({
+					"en-US":"Unable to connect to the server: ",
+					"zh-CN":"无法连接至服务器：",
+					"zh-TW":"無法連接至伺服器："
+				})+response.status);
 			}
 		}).then(function(data){
 			if(data){
@@ -576,14 +784,22 @@ btnLogin.onclick=function(){
 						login.token=data.token;
 						login.username=data.username;
 						loggedIn(true);
-					}else if(confirm("密码错误。您想重置密码吗？")){
+					}else if(confirm(multilang({
+						"en-US":"Incorrect password. Do you want to reset the password?",
+						"zh-CN":"密码错误。您想重置密码吗？",
+						"zh-TW":"密碼錯誤。您想重設密碼嗎？"
+					}))){
 						location.href="https://rthsoftware.cn/login?"+encodeData({
 							"email":email,
 							"page":"resetpassword"
 						});
 					}
 				}else{
-					notify("此用户不存在。");
+					notify(multilang({
+						"en-US":"This user does not exist.",
+						"zh-CN":"此用户不存在。",
+						"zh-TW":"此用戶不存在。"
+					}));
 				}
 			}
 		});
@@ -619,11 +835,19 @@ receive.onclick=function(){
 btnSub.onclick=function(){
 	if(invalidAttempt>2){
 		var code=getRandomCharacter(3);
-		var enteredCode=prompt("您已经多次输入了无效取件码。请输入验证码以继续："+code);
+		var enteredCode=prompt(multilang({
+			"en-US":"You have entered invalid codes many times. Please enter the verification code to continue: ",
+			"zh-CN":"您已经多次输入了无效取件码。请输入验证码以继续：",
+			"zh-TW":"您已經多次輸入了無效取件碼。請輸入驗證碼以繼續："
+		})+code);
 		if(enteredCode==code){
 			getInfo(inputCode.value);
 		}else if(enteredCode!==null){
-			alert("验证码错误。");
+			alert(multilang({
+				"en-US":"Incorrect verification code.",
+				"zh-CN":"验证码错误。",
+				"zh-TW":"驗證碼錯誤。"
+			}));
 		}
 	}else{
 		getInfo(inputCode.value);
@@ -701,41 +925,36 @@ menuItemFeedback.onclick=function(){
 	hideMenu();
 }
 btnSendFeed.onclick=function(){
-	fetch("https://cdn.rthsoftware.cn/backend/feedback",getPostData({
-		"appname":appName,
-		"email":login.email,
-		"lang":navigator.language,
-		"name":login.username,
-		"recipient":"405801769@qq.com",
-		"text":txtFeedback.value,
-		"ver":version
-	})).then(function(response){
-		if(response.ok){
-			alert("发送成功！我们会尽快处理您的反馈，祝您有开心的一天 :D");
-			popFeedback.style.opacity="0";
-			mainBox.style.opacity="1";
-			setTimeout(function(){
-				popFeedback.style.display="none";
-			},250);
-		}else{
-			alert("发送失败...请您再试一次，或通过微博私信反馈（@是毛布斯呀 @YSZ-RTH）");
-		}
-	})
-}
-menuItemAutoServer.onclick=
-menuItemCnServer.onclick=
-menuItemUsServer.onclick=function(){
-	backend=this.getAttribute("value");
-	fileBackend=backend+"userdata/file/";
-	var tick=document.getElementsByClassName("tick");
-	for(var i=0;i<tick.length;i++){
-		if(tick[i].parentElement==this){
-			tick[i].style.opacity="1";
-		}else{
-			tick[i].style.opacity="0";
-		}
+	if(txtFeedback.value){
+		fetch("https://cdn.rthsoftware.cn/backend/feedback",getPostData({
+			"appname":appName,
+			"email":login.email,
+			"lang":navigator.language,
+			"name":login.username,
+			"recipient":"405801769@qq.com",
+			"text":txtFeedback.value,
+			"ver":version
+		})).then(function(response){
+			if(response.ok){
+				alert(multilang({
+					"en-US":"Send successfully! We will process your feedback as soon as possible. Have a nice day :D",
+					"zh-CN":"发送成功！我们会尽快处理您的反馈。祝您有开心的一天 :D",
+					"zh-TW":"發送成功！我們會盡快處理您的回饋。祝您有開心的一天 :D"
+				}));
+				popFeedback.style.opacity="0";
+				mainBox.style.opacity="1";
+				setTimeout(function(){
+					popFeedback.style.display="none";
+				},250);
+			}else{
+				alert(multilang({
+					"en-US":"Failed to send. . . Please try again or send an email to admin@yangshangzhen.com or fx_highway@qq.com",
+					"zh-CN":"发送失败……请您再试一次，或通过微博私信反馈（@是毛布斯呀 @YSZ-RTH）",
+					"zh-TW":"發送失敗……請您再試一次，或發送電郵到 admin@yangshangzhen.com 或 fx_highway@qq.com"
+				}));
+			}
+		});
 	}
-	hideMenu();
 }
 viewQRC.onclick=function(){
 	sendBox1.style.left="-500px";
@@ -745,10 +964,18 @@ copyLink.onclick=function(){
 	var url="https://rthe.cn/"+recvCode.innerText;
 	if("clipboard" in navigator){
 		navigator.clipboard.writeText(url).then(function(){
-			notify("下载链接已复制到剪贴板。");
+			notify(multilang({
+				"en-US":"The download link is copied to the clipboard.",
+				"zh-CN":"下载链接已复制到剪贴板。",
+				"zh-TW":"下載連結已複製到剪貼簿。"
+			}));
 		});
 	}else{
-		prompt("您的浏览器不支持剪贴板功能，请手动复制。",url);
+		prompt(multilang({
+			"en-US":"Your browser does not support the clipboard API. Please copy it manually.",
+			"zh-CN":"您的浏览器不支持剪贴板功能。请手动复制。",
+			"zh-TW":"您的瀏覽器不支援剪貼簿功能。請手動複製。"
+		}),url);
 	}
 }
 btnDone0.onclick=function(){
@@ -869,30 +1096,6 @@ btnClose3.onclick=function(){
 showPrivilege.onclick=function(){
 	accBox0.style.left="500px";
 	accBox_1.style.left="0px";
-}
-function btnPay0State(){
-	if(document.getElementsByClassName("selected").length==2){
-		btnPay0.style.pointerEvents="auto";
-		btnPay0.style.opacity="1";
-	}else{
-		btnPay0.style.pointerEvents="none";
-		btnPay0.style.opacity="0.5";
-	}
-}
-function payItemClick(element,className){
-	if(element.classList.contains("selected")){
-		element.classList.remove("selected");
-	}else{
-		var elements=document.getElementsByClassName(className);
-		for(var i=0;i<elements.length;i++){
-			if(elements[i]==element){
-				element.classList.add("selected");
-			}else{
-				elements[i].classList.remove("selected");
-			}
-		}
-	}
-	btnPay0State();
 }
 payItem1M.onclick=payItem3M.onclick=payItem1Y.onclick=function() {
 	payItemClick(this,"plan");
@@ -1019,9 +1222,17 @@ settingsNeedLogin.onchange=function(){
 			"value":this.checked.toString()
 		})).then(function(response){
 			if(response.ok){
-				notify("设置已保存",1500);
+				notify(multilang({
+					"en-US":"Settings are saved.",
+					"zh-CN":"设置已保存。",
+					"zh-TW":"設定已保存。"
+				}),1500);
 			}else{
-				notify("无法连接至服务器："+response.status);
+				notify(multilang({
+					"en-US":"Unable to connect to the server: ",
+					"zh-CN":"无法连接至服务器：",
+					"zh-TW":"無法連接至伺服器："
+				})+response.status);
 			}
 		})
 	}else{
@@ -1052,9 +1263,22 @@ file.onchange=function(input){
 		},250);
 	}
 }
-if(navigator.language.indexOf("zh")==-1){
-	send.innerText="Send";
-	receive.innerText="Receive";
+var servers=document.getElementsByClassName("server");
+for(var i=0;i<servers.length;i++){
+	servers[i].onclick=function(){
+		backend=this.getAttribute("value");
+		fileBackend=backend+"userdata/file/";
+		var tick=document.getElementsByClassName("tick");
+		for(var i=0;i<tick.length;i++){
+			if(tick[i].parentElement==this){
+				tick[i].style.opacity="1";
+			}else{
+				tick[i].style.opacity="0";
+			}
+		}
+		hideMenu();
+	}
+	fetch(servers[i].getAttribute("value")+"userdata/file/");
 }
 if($_GET["code"]){
 	receive.click();
@@ -1095,37 +1319,6 @@ if(login.username){
 	ssoIFrame.src="https://rthsoftware.cn/sso";
 	document.body.appendChild(ssoIFrame);
 }
-var servers=document.getElementsByClassName("server");
-var speedTest=function(index){
-	var start=performance.now();
-	fetch(servers[index].getAttribute("value")+"userdata/file/").then(function(response){
-		if(response.ok){
-			var end=performance.now();
-			var time=Math.round(end-start);
-			var timeStr;
-			if(time>1000){
-				timeStr=(time/1000).toFixed(2)+"s";
-			}else{
-				timeStr=time+"ms";
-			}
-			if(time<500){
-				console.log("%c%s %s",consoleGeneralStyle+"color:#A5C220;",servers[index].innerText,timeStr);
-				servers[index].lastElementChild.classList.add("good");
-			}else if(time<1000){
-				console.log("%c%s %s",consoleGeneralStyle+"color:#F5B641;",servers[index].innerText,timeStr);
-				servers[index].lastElementChild.classList.add("soso");
-			}else{
-				console.log("%c%s %s",consoleGeneralStyle+"color:#F7695A;",servers[index].innerText,timeStr);
-				servers[index].lastElementChild.classList.add("bad");
-			}
-			index++;
-			if(index<servers.length){
-				speedTest(index);
-			}
-		}
-	});
-}
-speedTest(0);
 if(location.hostname&&"serviceWorker" in navigator){
 	navigator.serviceWorker.getRegistrations().then(function(registrations){
 		for(var i=0;i<registrations.length;i++){
@@ -1146,7 +1339,11 @@ newScript.src="https://cdn.rthsoftware.cn/backend/code?"+encodeData({
 newScript.onerror=function(){
 	document.body.innerHTML="";
 	if(!$_GET["code"]){
-		alert("无法加载关键组件，请检查您的浏览器插件的拦截设置。");
+		alert(multilang({
+			"en-US":"Unable to connect to the server.",
+			"zh-CN":"无法连接至服务器。",
+			"zh-TW":"無法連接至伺服器。"
+		}));
 	}
 }
 document.body.appendChild(newScript);

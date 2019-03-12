@@ -26,9 +26,18 @@
 			<a class="menuItem" id="menuItemSettings">设置</a>
 			<a class="menuItem" id="menuItemFeedback">联系我们</a>
 			<span class="menuLine" id="menuLine0"></span>
-			<a class="menuItem server" id="menuItemAutoServer" value="https://cdn.rthsoftware.cn/backend/"><span class="tick" id="tickAutoServer"></span>自动选择服务器<div class="latencyStatus"> ●</div></a>
-			<a class="menuItem server" id="menuItemCnServer" value="https://server.rthsoftware.cn/backend/"><span class="tick" id="tickCnServer"></span>大陆服务器<div class="latencyStatus"> ●</div></a>
-			<a class="menuItem server" id="menuItemUsServer" value="https://server.us.rthsoftware.cn/backend/"><span class="tick" id="tickUsServer2"></span>北美服务器<div class="latencyStatus"> ●</div></a>
+			<a class="menuItem server" id="menuItemAutoServer" value="https://cdn.rthsoftware.cn/backend/">
+				<span class="tick" id="tickAutoServer"></span>
+				<span id="nameAutoServer">自动选择服务器</span>
+			</a>
+			<a class="menuItem server" id="menuItemCnServer" value="https://server.rthsoftware.cn/backend/">
+				<span class="tick" id="tickCnServer"></span>
+				<span id="nameCnServer">大陆服务器</span>
+			</a>
+			<a class="menuItem server" id="menuItemUsServer" value="https://server.us.rthsoftware.cn/backend/">
+				<span class="tick" id="tickUsServer2"></span>
+				<span id="nameUsServer">北美服务器</span>
+			</a>
 		</div>
 		<div class="popUp" id="popSend">
 			<div id="sendBox0">
@@ -37,11 +46,11 @@
 				<span class="progressBar" id="progressBar0"></span>
 			</div>
 			<div id="sendBox1">
-				<p class="p1">文件已成功传送。</p>
-				<p>您的取件码（1天内有效）：</p>
+				<p id="sentSuccessfully" class="p1">文件已成功传送。</p>
+				<p id="yourCode">您的取件码（1天内有效）：</p>
 				<p id="recvCode">XXXX</p>
-				<p>接收文件时，请输入该四位数密码。</p>
-				<p>您也可以<a class="link1" id="copyLink">复制下载链接</a>或<a class="link1" id="viewQRC">直接扫描二维码下载</a>。</p>
+				<p id="whenReceving">接收文件时，请输入该四位数密码。</p>
+				<p id="otherWays">您也可以<a class="link1" id="copyLink">复制下载链接</a>或<a class="link1" id="viewQRC">直接扫描二维码下载</a>。</p>
 			</div>
 			<div id="sendBox2">
 				<div id="QRBox"></div>
@@ -52,14 +61,14 @@
 		<div id="popRecvCode"></div>
 		<div class="popUp" id="popRecv">
 			<div id="recvBox0">
-				<p class="p1" style="padding-top: 40px;">请输入取件码</p>
+				<p id="enterCode" class="p1" style="padding-top: 40px;">请输入取件码</p>
 				<input type="tel" id="inputCode" maxlength="4" autocomplete="off"><br>
 				<input type="submit" class="btn1" id="btnSub" value="确定">
 				<span class="btnBack" id="btnBack1"></span>
 			</div>
 			<div id="recvBox1">
-				<p class="p1" style="margin-top: -40px;">您接收到多个文件。</p>
-				<p style="margin-top: -10px;">单击列表中的项目来分别下载它们。</p>
+				<p id="multiFilesReceived" class="p1" style="margin-top: -40px;">您接收到多个文件。</p>
+				<p id="multiFilesTip" style="margin-top: -10px;">单击列表中的项目来分别下载它们。</p>
 				<ul id="fileList"></ul>
 				<button class="btn1" id="btnDone1">关闭</button>
 			</div>
@@ -74,15 +83,15 @@
 			<span class="progressBar" id="progressBar2"></span>
 			<div class="dlTipBox">
 				<p id="dlTip0">如无法下载，请使用Chrome或Firefox浏览器重试</p>
-				<p id="dlTip1">读取完成后，文件会立即保存到您的设备上</p>
+				<p id="dlTip1">读取完成后，文件会立即被保存到您的设备上</p>
 			</div>
 		</div>
 		<div class="popUp" id="popAccount">
 			<div id="accBox_1">
 				<span class="btnBack" id="btnBack3"></span>
-				<p class="p1">高级账号特权</p>
+				<p id="titlePrivileges" class="p1">高级账号特权</p>
 				<span class="line"></span>
-				<p class="p3" style="margin-top: 100px;">1. 批量上传文件；<br>2. 上传大于100Mb的文件；<br>3. 用最实在的方式表达对我们的爱 _(:з)∠)_</p>
+				<p id="txtPrivileges" class="p3" style="margin-top: 100px;">1. 批量上传文件；<br>2. 上传大于 100 MB 的文件；<br>3. 用最实在的方式表达对我们的爱 _(:з)∠)_</p>
 			</div>
 			<div id="accBox0">
 				<span class="btnClose" id="btnClose0"></span>
@@ -122,26 +131,26 @@
 			</div>
 		</div>
 		<div class="popUp" id="popHistory">
-			<p class="p1">历史记录</p>
+			<p id="titleHistory" class="p1">历史记录</p>
 			<span class="line"></span>
 			<p id="lblEmpty" style="color: rgba(0,0,0,0.3);">您尚未上传任何文件</p>
 			<div id="historyList"></div>
 			<button class="btn1" id="btnDone2">关闭</button>
 		</div>
 		<div class="popUp" id="popSettings">
-			<p class="p1">设置</p>
+			<p id="titleSettings" class="p1">设置</p>
 			<span class="line"></span>
 			<div>
 				<input type="checkbox" class="cbox" id="settingsNeedLogin"></input>
-				<label class="lblCbox" for="settingsNeedLogin">接收文件时需要登录我的账号</label>
+				<label id="labelNeedLogin" class="lblCbox" for="settingsNeedLogin">接收我的文件时需要登录我的账号</label>
 			</div>
 			<button class="btn1" id="btnDone5">完成</button>
 		</div>
 		<div class="popUp" id="popFeedback">
 			<span class="btnClose" id="btnClose3"></span>
-			<p class="p1">向我们发送反馈</p>
+			<p id="titleFeedback" class="p1">向我们发送消息</p>
 			<span class="line"></span>
-			<textarea id="txtFeedback" placeholder="如果您没有登录，请务必留下您的RTH账号邮箱或联系方式"></textarea>
+			<textarea id="txtFeedback" placeholder="如果您没有登录，请留下您的电子邮箱地址或其它联系方式"></textarea>
 			<button class="btn1" id="btnSendFeed">发送</button>
 		</div>
 		<div class="popUp" id="popSetPri">
@@ -159,9 +168,9 @@
 			<button class="btn1" id="btnDone4">关闭</button>
 		</div>
 		<div class="popUp" id="popWarning">
-			<p class="p1">警告</p>
+			<p id="titleWarning" class="p1">警告</p>
 			<span class="line"></span>
-			<div class="contentBox1">上传违法违规文件（包括但不限于：内容涉及色情、低俗、暴力、反动、欺诈、科学上网、外挂、木马、病毒的文件）<span class="txtRed">将导致您的账号或IP地址被永久封停。</span></div>
+			<div id="txtWarning" class="contentBox1"></div>
 			<div class="btnBox">
 				<button class="btn1" id="btnContinue">同意并继续</button>
 				<a class="link1" id="cancelUpl">放弃上传</a>
@@ -170,14 +179,16 @@
 		<div class="popUp" id="popLogin">
 			<span class="btnClose" id="btnClose1"></span>
 			<div class="loginLogo"></div>
-			<p class="p4">使用RTH通行证来登录到AirPortal <a href="https://rthsoftware.cn/login?continue=https%3A%2F%2Frthsoftware.cn%2Fairportal%2F&page=signup" class="link1" >注册</a></p>
+			<p class="p4">
+				<span id="loginTip">使用热铁盒账号来登录到 AirPortal</span><a id="signUp" href="https://rthsoftware.cn/login?continue=https%3A%2F%2Frthsoftware.cn%2Fairportal%2F&page=signup" class="link1" style="margin-left: 5px;">注册</a>
+			</p>
 			<input type="email" name="email" class="input1" id="inputEmail" placeholder="邮箱">
 			<input type="password" name="password" class="input1" id="inputPsw" placeholder="密码">
 			<button class="btn1" id="btnLogin">登录</button>
 		</div>
 		<div id="notificationBar">Notification</div>
 
-		<div class="footer" id="footerL"><span id="txtVer">Version</span>丨<a href="https://rthe.cn/privacy" target="_blank" rel="noopener" class="link1">隐私政策</a></div>
+		<div class="footer" id="footerL"><span id="txtVer">脚本未加载</span>丨<a id="privacyPolicy" href="https://rthe.cn/privacy" target="_blank" rel="noopener" class="link1">隐私政策</a></div>
 		<div class="footer" id="footerR">由 <a href="https://maorx.cn/" target="_blank" rel="noopener" class="link1">毛若昕</a> 和 <a href="https://rthsoftware.cn/" target="_blank" rel="noopener" class="link1">杨尚臻</a> 联合开发。保留所有权利。</div>
 		<input id="file" type="file" multiple="multiple">
 		<script src="js/bluebird.min.js"></script>
