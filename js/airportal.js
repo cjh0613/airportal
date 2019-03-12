@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w11a";
+var version="19w11a1";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -45,13 +45,9 @@ if(!firstRun||firstRun[version]==undefined){
 	firstRun={};
 }
 if(firstRun[version]!=false){
-	/*mainBox.style.opacity="0";
-	popUpdate.style.display="block";
-	setTimeout(function(){
-		popUpdate.style.opacity="1";
-	},250);*/
 	firstRun[version]=false;
 	localStorage.setItem("firstRun",JSON.stringify(firstRun));
+	firstRun=true;
 }
 function addHistory(filename,code){
 	var newHistory=document.createElement("span");
@@ -489,6 +485,16 @@ function payItemClick(element,className){
 	}
 	btnPay0State();
 }
+function showChangelog(text,firstRunOnly){
+	if(firstRun||!firstRunOnly){
+		mainBox.style.opacity="0";
+		popUpdate.style.display="block";
+		txtUpdate.innerHTML=text;
+		setTimeout(function(){
+			popUpdate.style.opacity="1";
+		},250);
+	}
+}
 function upload(input){
 	var files=[];
 	for(var i=0;i<input.target.files.length;i++){
@@ -701,7 +707,7 @@ if(navigator.language.indexOf("zh")==-1){
 	btnDone0.innerText=btnDone5.innerText="Done";
 	titleHistory.innerText="History";
 	lblEmpty.innerText="You have not uploaded any files yet";
-	btnDone1.innerText=btnDone2.innerText="Close";
+	btnDone1.innerText=btnDone2.innerText=btnDone4.innerText="Close";
 	titleSettings.innerText="Settings";
 	labelNeedLogin.innerText="Require my password when receiving my files";
 	titleFeedback.innerText="Send us a message";
@@ -715,6 +721,7 @@ if(navigator.language.indexOf("zh")==-1){
 	cancelUpl.innerText="Cancel Upload";
 	multiFilesReceived.innerText="Multiple files received.";
 	multiFilesTip.innerText="Click on the items in the list to download them separately.";
+	titleUpdate.innerText="We Updated AirPortal";
 }else if(navigator.language.toLowerCase()!="zh-cn"){
 	document.getElementsByTagName("html")[0].lang="zh-TW"
 	send.innerText=btnSendFeed.innerText="發送";
@@ -741,7 +748,7 @@ if(navigator.language.indexOf("zh")==-1){
 	otherWays.innerHTML="您也可以<a class=\"link1\" id=\"copyLink\">複製下載連結</a>或<a class=\"link1\" id=\"viewQRC\">直接掃描 QR 碼下載</a>。";
 	titleHistory.innerText="歷史記錄";
 	lblEmpty.innerText="您尚未上傳任何檔案";
-	btnDone1.innerText=btnDone2.innerText="關閉";
+	btnDone1.innerText=btnDone2.innerText=btnDone4.innerText="關閉";
 	titleSettings.innerText="設定";
 	labelNeedLogin.innerText="接收我的檔案時需要登入我的賬號";
 	titleFeedback.innerText="向我們發送訊息";
@@ -749,11 +756,12 @@ if(navigator.language.indexOf("zh")==-1){
 	showPrivilege.innerText="高級賬號有哪些特權？";
 	titlePrivileges.innerText="高級賬號特權";
 	txtPrivileges.innerText="1. 批量上傳檔案；\n2. 上傳大於 100 MB 的檔案；\n3. 用最實在的方式表達對我們的愛 _(:з)∠)_";
-	txtWarning.innerHTML="上傳違法違規檔案（包括但不限於：內容涉及色情、低俗、政治敏感、翻墻、暴力、惡意軟體、詐騙、外掛的檔案）<span class=\"txtRed\">將導致您的賬號或 IP 位址被永久封禁。</span>";
+	txtWarning.innerHTML="上傳違法違規檔案（包括但不限於：內容涉及色情、低俗、政治敏感、翻墻、暴力、惡意軟體、詐騙、外掛的檔案）<span class=\"txtRed\">將導致您的賬號或 IP 位址被永久停權。</span>";
 	btnContinue.innerText="同意并繼續";
 	cancelUpl.innerText="放棄上傳";
 	multiFilesReceived.innerText="您接收到多個檔案。";
 	multiFilesTip.innerText="單擊列表中的項目來分別下載它們。";
+	titleUpdate.innerText="我們更新了 AirPortal";
 }else{
 	txtWarning.innerHTML="上传违法违规文件（包括但不限于：内容涉及色情、低俗、政治敏感、翻墙、暴力、恶意软件、诈骗、外挂的文件）<span class=\"txtRed\">将导致您的账号或 IP 地址被永久封禁。</span>";
 }
