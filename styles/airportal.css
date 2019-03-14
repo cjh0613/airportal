@@ -71,9 +71,16 @@ a,button {outline: none;}
 	border: none;
 	color: white;
 	background-color: rgb(65,145,245);
+	background-position: -230px;
+	background-repeat: no-repeat;
 	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
 	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
+	-webkit-transition: color 0.25s, background-color 0.25s, box-shadow 0.25s, background-position 1.5s;
+	-moz-transition: color 0.25s, background-color 0.25s, box-shadow 0.25s, background-position 1.5s;
+	-o-transition: color 0.25s, background-color 0.25s, box-shadow 0.25s, background-position 1.5s;
+	-ms-transition: color 0.25s, background-color 0.25s, box-shadow 0.25s, background-position 1.5s;
+	transition: color 0.25s, background-color 0.25s, box-shadow 0.25s, background-position 1.5s;
 }
 #send:hover {
 	-webkit-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
@@ -81,8 +88,10 @@ a,button {outline: none;}
 	box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 }
 #send:active {
-	color: rgb(65,145,245);
+	/*color: rgb(65,145,245);*/
 	background-color: white;
+	background-position: 100%;
+	background-image: url("../images/themeColor.jpg");
 	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
