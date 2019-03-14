@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w11b";
+var version="19w11b3";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -29,7 +29,6 @@ var $_GET=(function(){
 	}
 	return json;
 })();
-var agree=!!localStorage.getItem("firstUpload");
 var backend=localStorage.getItem("Backend")||"https://cdn.rthsoftware.cn/backend/";
 var currentExpTime;
 var fileBackend=backend+"userdata/file/";
@@ -169,9 +168,17 @@ function downloadFile(fileInfo,code,index,path){
 					var percentage=Math.round(e.loaded/e.total*100);
 					document.title="["+progress+"/"+fileInfo.slice+": "+percentage+"%] "+title;
 					progressBar1.style.width=percentage+"px";
-					lblDownloadP1.innerText="下载文件碎片中 "+percentage+"%";
+					lblDownloadP1.innerText=multilang({
+						"en-US":"Downloading file slices ",
+						"zh-CN":"下载文件碎片中 ",
+						"zh-TW":"下載檔案碎片中 "
+					})+percentage+"%";
 					progressBar2.style.width=Math.round(progress/fileInfo.slice*100)+"px";
-					lblDownloadP2.innerText="总下载进度 "+progress+"/"+fileInfo.slice;
+					lblDownloadP2.innerText=multilang({
+						"en-US":"Total Progress ",
+						"zh-CN":"总下载进度 ",
+						"zh-TW":"總下載進度 "
+					})+progress+"/"+fileInfo.slice;
 				}
 			}
 			xhr.open("GET",path+code+"-"+index+"-"+progress,true);
@@ -543,7 +550,11 @@ function upload(input){
 			sendBox0.style.left="-500px";
 			sendBox1.style.left="0px";
 			sendBox2.style.left="500px";
-			lblUploadP.innerText="上传中...";
+			lblUploadP.innerText=multilang({
+				"en-US":"Uploading...",
+				"zh-CN":"上传中...",
+				"zh-TW":"上傳中..."
+			});
 		}
 		if(files.length<=1&&files[0].size<=10240000){
 			showUploading();
@@ -641,7 +652,11 @@ function upload(input){
 											uploadProgress++;
 											var percentage=Math.round(uploadProgress/fileSlice.length*100);
 											document.title="["+percentage+"%] "+title;
-											lblUploadP.innerText="上传中 "+percentage+"%";
+											lblUploadP.innerText=multilang({
+												"en-US":"Uploading ",
+												"zh-CN":"上传中 ",
+												"zh-TW":"上傳中 "
+											})+percentage+"%";
 											progressBar0.style.width=percentage+"px";
 											uploadSlice(uploadProgress);
 										}
@@ -715,13 +730,15 @@ if(navigator.language.indexOf("zh")==-1){
 	showPrivilege.innerText="Why Premium Plan?";
 	titlePrivileges.innerText="Privileges of Premium Plan";
 	txtPrivileges.innerText="1. Batch upload;\n2. Upload files larger than 100 MB.";
-	titleWarning.innerText="Warning";
-	txtWarning.innerHTML="Uploading illegal files (including but not limited to: pornography, vulgarity, political sensitivity, VPN software, violence, malware, fraud, plug-ins) <span class=\"txtRed\">will result in your account or IP address being permanently banned.</span>";
-	btnContinue.innerText="Agree & Continue";
-	cancelUpl.innerText="Cancel Upload";
 	multiFilesReceived.innerText="Multiple files received.";
 	multiFilesTip.innerText="Click on the items in the list to download them separately.";
 	titleUpdate.innerText="We Updated AirPortal";
+	lblUploadP.innerText="Uploading...";
+	prefetching.innerText="Prefetching files from the server";
+	lblDownloadP1.innerText="Downloading File Slices";
+	lblDownloadP2.innerText="Total Progress";
+	dlTip0.innerText="If the download fails, please try again with Chrome or Firefox";
+	dlTip1.innerText="Once the fetching is complete, the file will be saved to your device immediately";
 }else if(navigator.language.toLowerCase()!="zh-cn"){
 	document.getElementsByTagName("html")[0].lang="zh-TW"
 	send.innerText=btnSendFeed.innerText="發送";
@@ -733,8 +750,8 @@ if(navigator.language.indexOf("zh")==-1){
 	menuItemSettings.innerText="設定";
 	menuItemFeedback.innerText="聯繫我們";
 	nameAutoServer.innerText="自動選擇伺服器";
-	nameCnServer.innerText="大陸伺服器";
-	nameUsServer.innerText="北美伺服器";
+	nameCnServer.innerText="大陸伺服器（更快）";
+	nameUsServer.innerText="北美伺服器（更安全）";
 	enterCode.innerText="請輸入取件碼";
 	btnSub.value="確定";
 	loginTip.innerText="使用熱鐵盒賬號來登入到 AirPortal";
@@ -756,14 +773,15 @@ if(navigator.language.indexOf("zh")==-1){
 	showPrivilege.innerText="高級賬號有哪些特權？";
 	titlePrivileges.innerText="高級賬號特權";
 	txtPrivileges.innerText="1. 批量上傳檔案；\n2. 上傳大於 100 MB 的檔案；\n3. 用最實在的方式表達對我們的愛 _(:з)∠)_";
-	txtWarning.innerHTML="上傳違法違規檔案（包括但不限於：內容涉及色情、低俗、政治敏感、翻墻、暴力、惡意軟體、詐騙、外掛的檔案）<span class=\"txtRed\">將導致您的賬號或 IP 位址被永久停權。</span>";
-	btnContinue.innerText="同意并繼續";
-	cancelUpl.innerText="放棄上傳";
 	multiFilesReceived.innerText="您接收到多個檔案。";
 	multiFilesTip.innerText="單擊列表中的項目來分別下載它們。";
 	titleUpdate.innerText="我們更新了 AirPortal";
-}else{
-	txtWarning.innerHTML="上传违法违规文件（包括但不限于：内容涉及色情、低俗、政治敏感、翻墙、暴力、恶意软件、诈骗、外挂的文件）<span class=\"txtRed\">将导致您的账号或 IP 地址被永久封禁。</span>";
+	lblUploadP.innerText="上傳中...";
+	prefetching.innerText="正在從伺服器預讀取檔案";
+	lblDownloadP1.innerText="下載檔案碎片中";
+	lblDownloadP2.innerText="總下載進度";
+	dlTip0.innerText="如無法下載，請使用Chrome或Firefox瀏覽器重試";
+	dlTip1.innerText="讀取完成后，檔案會立即被保存到您的裝置上";
 }
 btnLogin.onclick=function(){
 	if(inputEmail.value&&inputPsw.value){
@@ -1087,13 +1105,6 @@ btnClose1.onclick=function(){
 		popLogin.style.display="none";
 	},250);
 }
-btnClose2.onclick=function(){
-	popSetPri.style.opacity="0";
-	mainBox.style.opacity="1";
-	setTimeout(function(){
-		popSetPri.style.display="none";
-	},250);
-}
 btnClose3.onclick=function(){
 	popFeedback.style.opacity="0";
 	mainBox.style.opacity="1";
@@ -1249,27 +1260,7 @@ settingsNeedLogin.onchange=function(){
 	}
 }
 file.onchange=function(input){
-	if(agree){
-		upload(input);
-	}else{
-		var closeWarning=function(){
-			popWarning.style.opacity=
-			mainBox.style.opacity=
-			popWarning.style.display="";
-		}
-		btnContinue.onclick=function(){
-			agree=true;
-			localStorage.setItem("firstUpload",false);
-			closeWarning();
-			upload(input);
-		};
-		cancelUpl.onclick=closeWarning;
-		mainBox.style.opacity="0";
-		popWarning.style.display="block";
-		setTimeout(function(){
-			popWarning.style.opacity="1";
-		},250);
-	}
+	upload(input);
 }
 var servers=document.getElementsByClassName("server");
 for(var i=0;i<servers.length;i++){
@@ -1286,7 +1277,17 @@ for(var i=0;i<servers.length;i++){
 		}
 		hideMenu();
 	}
-	fetch(servers[i].getAttribute("value")+"userdata/file/");
+	if(!login.username&&i==0||login.username&&servers[i].getAttribute("value")==backend){
+		fetch(servers[i].getAttribute("value")+"userdata/file/").then(function(response){
+			if(response.ok){
+				return response.json();
+			}
+		}).then(function(data){
+			nameAutoServer.innerText+=" = "+data.server;
+		});
+	}else{
+		fetch(servers[i].getAttribute("value")+"userdata/file/");
+	}
 }
 if($_GET["code"]){
 	receive.click();
