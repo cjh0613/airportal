@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w11b";
+var version="19w11b1";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -730,7 +730,6 @@ if(navigator.language.indexOf("zh")==-1){
 	showPrivilege.innerText="Why Premium Plan?";
 	titlePrivileges.innerText="Privileges of Premium Plan";
 	txtPrivileges.innerText="1. Batch upload;\n2. Upload files larger than 100 MB.";
-	titleWarning.innerText="Warning";
 	multiFilesReceived.innerText="Multiple files received.";
 	multiFilesTip.innerText="Click on the items in the list to download them separately.";
 	titleUpdate.innerText="We Updated AirPortal";
