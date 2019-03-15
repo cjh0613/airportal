@@ -1057,7 +1057,7 @@ input[type=file]{
 	.input1 {left: 10%;width: 75%;}
 	.contentBox1 {width: 80%; left: 10%;}
 	.payPlans,#historyList,.line {width: 80%;left: 10%;}
-	.payItem {width: 70px;margin-right: 5px;}
+	.payItem {min-width: 70px;margin-right: 5px;}
 	.footer {font-size: 11px;}
 	#footerL {top: 0;margin-top: 20px;}
 }
