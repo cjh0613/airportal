@@ -71,7 +71,7 @@ a,button {outline: none;}
 	border: none;
 	color: white;
 	background-color: rgb(65,145,245);
-	background-position: -230px;
+	background-position: -500px;
 	background-repeat: no-repeat;
 	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
 	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
@@ -677,9 +677,9 @@ a,button {outline: none;}
 }
 .payPlans {
 	position: relative;
-	width: 60%;
+	width: 70%;
 	height: 150px;
-	left: 20%;
+	left: 15%;
 	text-align: left;
 	overflow-y: scroll;
 }
@@ -691,7 +691,7 @@ a,button {outline: none;}
 	display: inline-block;
 	margin-right: 10px;
 	margin-bottom: 10px;
-	width: 80px;
+	min-width: 80px;
 	padding-bottom: 5px;
 	background-color: white;
 	border: solid 1px;
