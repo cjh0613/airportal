@@ -235,6 +235,26 @@ a,button {outline: none;}
 #tickCnServer,#tickUsServer1,#tickUsServer2 {
 	opacity: 0;
 }
+/*.latencyStatus {
+	display: inline;
+	color: rgba(0,0,0,0.15);
+	position: absolute;
+	right: 37px;
+	transition: all 0.25s;
+	-webkit-transition: all 0.25s;
+	-moz-transition: all 0.25s;
+	-o-transition: all 0.25s;
+	-ms-transition: all 0.25s;
+}
+.latencyStatus.good{
+	color: #A5C220;
+}
+.latencyStatus.soso{
+	color: #F5B641;
+}
+.latencyStatus.bad{
+	color: #F7695A;
+}*/
 .menuLine {
 	display: block;
 	width: 100%;
