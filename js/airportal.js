@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w11c";
+var version="19w11c1";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -318,15 +318,21 @@ function loadPrice(priceInfo){
 	window.priceInfo=priceInfo;
 	Object.keys(priceInfo).forEach(function(key){
 		var newP=document.createElement("p");
+		var priceSymbol="¥";
 		newP.classList.add("p2");
+		if(navigator.language.toLowerCase()=="zh-tw"){
+			priceSymbol="NT$";
+			priceInfo[key]["specialPrice"]=Math.round(priceInfo[key]["specialPrice"]*4.6/10)*10;
+			priceInfo[key]["price"]=Math.round(priceInfo[key]["price"]*4.6/10)*10;
+		}
 		if(priceInfo[key]["discount"]===true||priceInfo[key]["discount"]<1){
 			var newSpan=document.createElement("span");
 			newSpan.classList.add("pDel");
-			newP.innerText="¥"+priceInfo[key]["specialPrice"];
-			newSpan.innerText="¥"+priceInfo[key]["price"];
+			newP.innerText=priceSymbol+priceInfo[key]["specialPrice"];
+			newSpan.innerText=priceSymbol+priceInfo[key]["price"];
 			newP.appendChild(newSpan);
 		}else{
-			newP.innerText="¥"+priceInfo[key]["price"];
+			newP.innerText=priceSymbol+priceInfo[key]["price"];
 		}
 		document.getElementById("price-"+key).appendChild(newP);
 	})
@@ -1119,7 +1125,7 @@ showPrivilege.onclick=function(){
 payItem1M.onclick=payItem3M.onclick=payItem1Y.onclick=function() {
 	payItemClick(this,"plan");
 }
-payItemAli.onclick=payItemWechat.onclick=function() {
+payItemAli.onclick=payItemWechat.onclick=payItemPaypal.onclick=function() {
 	payItemClick(this,"method");
 }
 var pubPayPlan="N/A";
@@ -1131,7 +1137,8 @@ btnPay0.onclick=function(){
 	pubPayMethod=payMethod.innerText;
 	payQRC.innerHTML="";
 	var qrcode=new Image(200,200);
-	if(pubPayMethod=="支付宝"){
+	switch(pubPayMethod){
+		case "支付宝":
 		switch(pubPayPlan){
 			case "一个月":
 			qrcode.src=getQRCode(priceInfo.one.alipay);
@@ -1143,7 +1150,8 @@ btnPay0.onclick=function(){
 			qrcode.src=getQRCode(priceInfo.twelve.alipay);
 			break;
 		}
-	}else{
+		break;
+		case "微信支付":
 		switch(pubPayPlan){
 			case "一个月":
 			qrcode.src=getQRCode(priceInfo.one.wechatpay);
@@ -1155,6 +1163,20 @@ btnPay0.onclick=function(){
 			qrcode.src=getQRCode(priceInfo.twelve.wechatpay);
 			break;
 		}
+		break;
+		case "PayPal":
+		switch(pubPayPlan){
+			case "一个月":
+			qrcode.src=getQRCode(priceInfo.one.paypal);
+			break;
+			case "三个月":
+			qrcode.src=getQRCode(priceInfo.three.paypal);
+			break;
+			case "一年":
+			qrcode.src=getQRCode(priceInfo.twelve.paypal);
+			break;
+		}
+		break;
 	}
 	payQRC.appendChild(qrcode);
 	lblPayTip.innerText="使用 "+pubPayMethod+" 为 "+login.email+"\n激活 / 续期"+pubPayPlan+"的高级账号";
