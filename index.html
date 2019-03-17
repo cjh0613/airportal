@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<meta name="description" content="随时随地跨设备传输文件。">
 		<title>AirPortal丨空投</title>
-		<link rel="canonical" href="https://rthsoftware.cn/airportal/">
+		<link rel="canonical" href="https://airportal.cn/">
 		<link rel="manifest" href="manifest.json">
 		<link rel="shortcut icon" href="favicon.ico">
 		<style type="text/css">
@@ -91,7 +91,7 @@
 				<span class="btnBack" id="btnBack3"></span>
 				<p id="titlePrivileges" class="p1">高级账号特权</p>
 				<span class="line"></span>
-				<p id="txtPrivileges" class="p3" style="margin-top: 100px;">1. 批量上传文件；<br>2. 上传大于 100 MB 的文件；<br>3. 用最实在的方式表达对我们的爱 _(:з)∠)_</p>
+				<p id="txtPrivileges" class="p3" style="margin-top: 100px;">1. 批量上传文件；<br>2. 上传大于 500 MB 的文件；<br>3. 用最实在的方式表达对我们的爱 _(:з)∠)_</p>
 			</div>
 			<div id="accBox0">
 				<span class="btnClose" id="btnClose0"></span>
@@ -99,23 +99,35 @@
 				<span class="line"></span>
 				<p class="p3" id="lblExpTime">高级账号 剩余 天</p>
 				<div class="payPlans">
-					<p class="p2">激活 / 续期高级账号 <a class="link1" id="showPrivilege">高级账号有哪些特权？</a></p>
-					<p class="p4">支付方案 <span id="promotionText"></span></p>
+					<p class="p2">
+						<span id="activatePremium">激活 / 续期高级账号</span>
+						<a class="link1" id="showPrivilege">高级账号有哪些特权？</a>
+					</p>
+					<p class="p4">
+						<span id="plans">支付方案</span>
+						<span id="promotionText"></span>
+					</p>
 					<span class="payItem plan" id="payItem1M">
 						<span id="price-one"></span>
-						<p class="p4">一个月</p>
+						<p id="month1" class="p4">一个月</p>
 					</span>
 					<span class="payItem plan" id="payItem3M">
 						<span id="price-three"></span>
-						<p class="p4">三个月</p>
+						<p id="month3" class="p4">三个月</p>
 					</span>
 					<span class="payItem plan" id="payItem1Y">
 						<span id="price-twelve"></span>
-						<p class="p4">一年</p></span>
-					<p class="p4" style="margin-top: 0px;">支付方式</p>
-					<span class="payItem method" id="payItemAli"><p class="p5">支付宝</p></span>
-					<span class="payItem method" id="payItemWechat"><p class="p5">微信支付</p></span>
-					<span class="payItem method" id="payItemPaypal"><p class="p5">PayPal</p></span>
+						<p id="month12" class="p4">一年</p></span>
+					<p id="paymentMethod" class="p4" style="margin-top: 0px;">支付方式</p>
+					<span class="payItem method" id="payItemAli">
+						<p id="alipay" class="p5">支付宝</p>
+					</span>
+					<span class="payItem method" id="payItemWechat">
+						<p id="wechatPay" class="p5">微信支付</p>
+					</span>
+					<span class="payItem method" id="payItemPaypal">
+						<p id="paypal" class="p5">PayPal</p>
+					</span>
 				</div>
 				<button class="btn1" id="btnPay0">确认支付</button>
 			</div>
@@ -177,6 +189,7 @@
 		<div class="footer" id="footerL"><span id="txtVer">脚本未加载</span>丨<a id="privacyPolicy" href="https://rthe.cn/privacy" target="_blank" rel="noopener" class="link1">隐私政策</a></div>
 		<div class="footer" id="footerR">由 <a href="https://maorx.cn/" target="_blank" rel="noopener" class="link1">毛若昕</a> 和 <a href="https://yangshangzhen.com/" target="_blank" rel="noopener" class="link1">杨尚臻</a> 联合开发。保留所有权利。</div>
 		<input id="file" type="file" multiple="multiple">
+		<script src="js/i18n.js"></script>
 		<script src="js/bluebird.min.js"></script>
 		<script src="js/fetch.min.js"></script>
 		<script src="js/md5.min.js"></script>

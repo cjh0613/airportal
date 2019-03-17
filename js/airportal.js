@@ -1,12 +1,12 @@
 "use strict";
 var appName="AirPortal";
-var version="19w11c4";
+var version="19w12a";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
 console.info("%c版本：%s",consoleInfoStyle,version);
 
-if(navigator.language=="zh-CN"&&(location.hostname=="rthsoftware.cn"||location.hostname=="www.rthsoftware.cn")){
+if(navigator.language=="zh-CN"&&location.hostname=="airportal.cn"){
 	txtVer.innerText="闽ICP备18016273号";
 	txtVer.onclick=function(){
 		open("http://www.miitbeian.gov.cn/");
@@ -32,14 +32,15 @@ var $_GET=(function(){
 var backend=localStorage.getItem("Backend")||"https://cdn.rthsoftware.cn/backend/";
 var currentExpTime;
 var fileBackend=backend+"userdata/file/";
+var firstRun=JSON.parse(localStorage.getItem("firstRun"));
 var invalidAttempt=0;
 var login={
 	"email":localStorage.getItem("Email"),
 	"token":localStorage.getItem("Token"),
 	"username":localStorage.getItem("Username")
 };
+var longPress;
 var title=document.title;
-var firstRun=JSON.parse(localStorage.getItem("firstRun"));
 if(!firstRun||firstRun[version]==undefined){
 	firstRun={};
 }
@@ -169,7 +170,7 @@ function downloadFile(fileInfo,code,index,path){
 					document.title="["+progress+"/"+fileInfo.slice+": "+percentage+"%] "+title;
 					progressBar1.style.width=percentage+"px";
 					lblDownloadP1.innerText=multilang({
-						"en-US":"Downloading file slices ",
+						"en-US":"Downloading File Slices ",
 						"zh-CN":"下载文件碎片中 ",
 						"zh-TW":"下載檔案碎片中 "
 					})+percentage+"%";
@@ -320,11 +321,16 @@ function loadPrice(priceInfo){
 		var newP=document.createElement("p");
 		var priceSymbol="¥";
 		newP.classList.add("p2");
-		if(navigator.language.toLowerCase()=="zh-tw"){
+		if(navigator.language.toLowerCase()=="en-us"){
+			priceSymbol="$";
+			priceInfo[key]["specialPrice"]=Math.round(priceInfo[key]["specialPrice"]*.15);
+			priceInfo[key]["price"]=Math.round(priceInfo[key]["price"]*.15);
+		}else if(navigator.language.toLowerCase()=="zh-tw"){
 			priceSymbol="NT$";
 			priceInfo[key]["specialPrice"]=Math.round(priceInfo[key]["specialPrice"]*4.6/10)*10;
 			priceInfo[key]["price"]=Math.round(priceInfo[key]["price"]*4.6/10)*10;
 		}
+		priceInfo[key]["actualPrice"]=priceSymbol+priceInfo[key]["specialPrice"];
 		if(priceInfo[key]["discount"]===true||priceInfo[key]["discount"]<1){
 			var newSpan=document.createElement("span");
 			newSpan.classList.add("pDel");
@@ -497,6 +503,13 @@ function payItemClick(element,className){
 		}
 	}
 	btnPay0State();
+}
+function sendText(){
+	notify(multilang({
+		"en-US":"The feature of sending text is being developed.",
+		"zh-CN":"发送文本的功能正在开发中。",
+		"zh-TW":"發送文字的功能正在開發中。"
+	}));
 }
 function showChangelog(text,firstRunOnly){
 	if(firstRun===true||!firstRunOnly){
@@ -701,94 +714,6 @@ function upload(input){
 		}
 	}
 }
-if(navigator.language.indexOf("zh")==-1){
-	document.getElementsByTagName("html")[0].lang="en-US"
-	send.innerText=btnSendFeed.innerText="Send";
-	receive.innerText="Receive";
-	privacyPolicy.innerText="Privacy Policy";
-	footerR.innerHTML="Developed by <a href=\"https://maorx.cn/\" target=\"_blank\" class=\"link1\">Ruoxin Mao</a> and <a href=\"https://yangshangzhen.com/\" target=\"_blank\" class=\"link1\">Shangzhen Yang</a>. All rights reserved.";
-	menuItemLogin.innerText="Login";
-	menuItemHistory.innerText="History";
-	menuItemSettings.innerText="Settings";
-	menuItemFeedback.innerText="Contact Us";
-	nameAutoServer.innerText="Auto-Select Server";
-	nameCnServer.innerText="CN Server";
-	nameUsServer.innerText="US Server";
-	enterCode.innerText="Please enter the code";
-	btnSub.value="OK";
-	loginTip.innerText="Log in to AirPortal with Your RTH Account";
-	signUp.innerText="Sign Up";
-	inputEmail.placeholder="Email";
-	inputPsw.placeholder="Password";
-	btnLogin.innerText="Login";
-	sentSuccessfully.innerText="File is sent successfully.";
-	yourCode.innerText="Your Code (Expires in 1 Day):";
-	whenReceving.innerText="When receving files, please enter this code.";
-	otherWays.innerHTML="You can also <a class=\"link1\" id=\"copyLink\">copy the download link</a> or <a class=\"link1\" id=\"viewQRC\">scan the QR code to download</a>.";
-	btnDone0.innerText=btnDone5.innerText="Done";
-	titleHistory.innerText="History";
-	lblEmpty.innerText="You have not uploaded any files yet";
-	btnDone1.innerText=btnDone2.innerText=btnDone4.innerText="Close";
-	titleSettings.innerText="Settings";
-	labelNeedLogin.innerText="Require my password when receiving my files";
-	titleFeedback.innerText="Send us a message";
-	txtFeedback.placeholder="If you are not logged in, please leave your email address or other contact information";
-	showPrivilege.innerText="Why Premium Plan?";
-	titlePrivileges.innerText="Privileges of Premium Plan";
-	txtPrivileges.innerText="1. Batch upload;\n2. Upload files larger than 100 MB.";
-	multiFilesReceived.innerText="Multiple files received.";
-	multiFilesTip.innerText="Click on the items in the list to download them separately.";
-	titleUpdate.innerText="We Updated AirPortal";
-	lblUploadP.innerText="Uploading...";
-	prefetching.innerText="Prefetching files from the server";
-	lblDownloadP1.innerText="Downloading File Slices";
-	lblDownloadP2.innerText="Total Progress";
-	dlTip0.innerText="If the download fails, please try again with Chrome or Firefox";
-	dlTip1.innerText="Once the fetching is complete, the file will be saved to your device immediately";
-}else if(navigator.language.toLowerCase()!="zh-cn"){
-	document.getElementsByTagName("html")[0].lang="zh-TW"
-	send.innerText=btnSendFeed.innerText="發送";
-	receive.innerText="接收";
-	privacyPolicy.innerText="隱私政策";
-	footerR.innerHTML="由 <a href=\"https://maorx.cn/\" target=\"_blank\" class=\"link1\">毛若昕</a> 和 <a href=\"https://yangshangzhen.com/\" target=\"_blank\" class=\"link1\">楊尚臻</a> 聯合開發。保留所有權利。";
-	menuItemLogin.innerText="登入";
-	menuItemHistory.innerText="歷史記錄";
-	menuItemSettings.innerText="設定";
-	menuItemFeedback.innerText="聯繫我們";
-	nameAutoServer.innerText="自動選擇伺服器";
-	nameCnServer.innerText="大陸伺服器（更快）";
-	nameUsServer.innerText="北美伺服器（更安全）";
-	enterCode.innerText="請輸入取件碼";
-	btnSub.value="確定";
-	loginTip.innerText="使用熱鐵盒賬號來登入到 AirPortal";
-	signUp.innerText="註冊";
-	inputEmail.placeholder="郵箱";
-	inputPsw.placeholder="密碼";
-	btnLogin.innerText="登入";
-	sentSuccessfully.innerText="檔案已成功傳送。";
-	yourCode.innerText="您的取件碼（1天內有效）：";
-	whenReceving.innerText="接收檔案時，請輸入該四位數密碼。";
-	otherWays.innerHTML="您也可以<a class=\"link1\" id=\"copyLink\">複製下載連結</a>或<a class=\"link1\" id=\"viewQRC\">直接掃描 QR 碼下載</a>。";
-	titleHistory.innerText="歷史記錄";
-	lblEmpty.innerText="您尚未上傳任何檔案";
-	btnDone1.innerText=btnDone2.innerText=btnDone4.innerText="關閉";
-	titleSettings.innerText="設定";
-	labelNeedLogin.innerText="接收我的檔案時需要登入我的賬號";
-	titleFeedback.innerText="向我們發送訊息";
-	txtFeedback.placeholder="如果您沒有登入，請留下您的電子郵箱地址或其它聯繫方式";
-	showPrivilege.innerText="高級賬號有哪些特權？";
-	titlePrivileges.innerText="高級賬號特權";
-	txtPrivileges.innerText="1. 批量上傳檔案；\n2. 上傳大於 100 MB 的檔案；\n3. 用最實在的方式表達對我們的愛 _(:з)∠)_";
-	multiFilesReceived.innerText="您接收到多個檔案。";
-	multiFilesTip.innerText="單擊列表中的項目來分別下載它們。";
-	titleUpdate.innerText="我們更新了 AirPortal";
-	lblUploadP.innerText="上傳中...";
-	prefetching.innerText="正在從伺服器預讀取檔案";
-	lblDownloadP1.innerText="下載檔案碎片中";
-	lblDownloadP2.innerText="總下載進度";
-	dlTip0.innerText="如無法下載，請使用Chrome或Firefox瀏覽器重試";
-	dlTip1.innerText="讀取完成后，檔案會立即被保存到您的裝置上";
-}
 btnLogin.onclick=function(){
 	if(inputEmail.value&&inputPsw.value){
 		var email=inputEmail.value.toLowerCase();
@@ -843,10 +768,32 @@ inputPsw.onkeydown=function(event){
 	}
 }
 send.onclick=function(){
-	file.value="";
-	file.click();
-	progressBarBg0.style.background="rgba(0,0,0,0)";
-	progressBar0.style.width="0px";
+	if(longPress===true){
+		sendText();
+	}else{
+		file.value="";
+		file.click();
+		progressBarBg0.style.background="rgba(0,0,0,0)";
+		progressBar0.style.width="0px";
+	}
+}
+send.oncontextmenu=function(){
+	return false
+}
+send.onmousedown=send.ontouchstart=function(){
+	longPress=setTimeout(function(){
+		longPress=true;
+	},1500);
+}
+send.onmouseup=function(){
+	clearTimeout(longPress);
+}
+send.ontouchend=function(){
+	if(longPress===true){
+		sendText();
+	}else{
+		clearTimeout(longPress);
+	}
 }
 receive.onclick=function(){
 	if(/(MicroMessenger|QQ)\//i.test(navigator.userAgent)){
@@ -1133,53 +1080,69 @@ var pubPayMethod="N/A";
 btnPay0.onclick=function(){
 	var payPlan=document.getElementsByClassName("payItem plan selected").item(0).lastElementChild;
 	var payMethod=document.getElementsByClassName("payItem method selected").item(0).lastElementChild;
+	var actualPrice;
+	var idPayPlan=payPlan.id;
+	var idPayMethod=payMethod.id;
 	pubPayPlan=payPlan.innerText;
 	pubPayMethod=payMethod.innerText;
 	payQRC.innerHTML="";
 	var qrcode=new Image(200,200);
-	switch(pubPayMethod){
-		case "支付宝":
-		switch(pubPayPlan){
-			case "一个月":
+	switch(idPayMethod){
+		case "alipay":
+		switch(idPayPlan){
+			case "month1":
 			qrcode.src=getQRCode(priceInfo.one.alipay);
+			actualPrice=priceInfo.one.actualPrice;
 			break;
-			case "三个月":
+			case "month3":
 			qrcode.src=getQRCode(priceInfo.three.alipay);
+			actualPrice=priceInfo.three.actualPrice;
 			break;
-			case "一年":
+			case "month12":
 			qrcode.src=getQRCode(priceInfo.twelve.alipay);
+			actualPrice=priceInfo.twelve.actualPrice;
 			break;
 		}
 		break;
-		case "微信支付":
-		switch(pubPayPlan){
-			case "一个月":
+		case "wechatPay":
+		switch(idPayPlan){
+			case "month1":
 			qrcode.src=getQRCode(priceInfo.one.wechatpay);
+			actualPrice=priceInfo.one.actualPrice;
 			break;
-			case "三个月":
+			case "month3":
 			qrcode.src=getQRCode(priceInfo.three.wechatpay);
+			actualPrice=priceInfo.three.actualPrice;
 			break;
-			case "一年":
+			case "month12":
 			qrcode.src=getQRCode(priceInfo.twelve.wechatpay);
+			actualPrice=priceInfo.twelve.actualPrice;
 			break;
 		}
 		break;
-		case "PayPal":
-		switch(pubPayPlan){
-			case "一个月":
+		case "paypal":
+		switch(idPayPlan){
+			case "month1":
 			qrcode.src=getQRCode(priceInfo.one.paypal);
+			actualPrice=priceInfo.one.actualPrice;
 			break;
-			case "三个月":
+			case "month3":
 			qrcode.src=getQRCode(priceInfo.three.paypal);
+			actualPrice=priceInfo.three.actualPrice;
 			break;
-			case "一年":
+			case "month12":
 			qrcode.src=getQRCode(priceInfo.twelve.paypal);
+			actualPrice=priceInfo.twelve.actualPrice;
 			break;
 		}
 		break;
 	}
 	payQRC.appendChild(qrcode);
-	lblPayTip.innerText="使用 "+pubPayMethod+" 为 "+login.email+"\n激活 / 续期"+pubPayPlan+"的高级账号";
+	lblPayTip.innerText=multilang({
+		"en-US":"Activate/Renew "+pubPayPlan+" of Premium Plan ("+actualPrice+")\nfor "+login.email+" with "+pubPayMethod,
+		"zh-CN":"使用 "+pubPayMethod+" 为 "+login.email+"\n激活 / 续期"+pubPayPlan+"的高级账号（"+actualPrice+"）",
+		"zh-TW":"使用 "+pubPayMethod+" 為 "+login.email+"\n啟用 / 續期"+pubPayPlan+"的高級賬號（"+actualPrice+"）"
+	});
 	accBox0.style.left="-500px";
 	accBox1.style.left="0px";
 }
@@ -1213,21 +1176,53 @@ btnPay1.onclick=function(){
 	})).then(function(response){
 		if(response.ok){
 			payState="success";
-			btnDone3.innerText="关闭";
-			lblPayState0.innerText="提交成功";
-			lblPayState1.innerText="我们正在处理您的支付订单。\n您的高级账号剩余天数会在24小时内自动更新;\n否则请在确保您已支付后与我们联系。";
+			btnDone3.innerText=multilang({
+				"en-US":"Close",
+				"zh-CN":"关闭",
+				"zh-TW":"關閉"
+			});
+			lblPayState0.innerText=multilang({
+				"en-US":"Submitted Successfully",
+				"zh-CN":"提交成功",
+				"zh-TW":"提交成功"
+			});
+			lblPayState1.innerText=multilang({
+				"en-US":"We are processing your order.\nThe number of days remaining will be automatically updated within 24 hours;\nif not, please contact us after making sure you have paid.",
+				"zh-CN":"我们正在处理您的支付订单。\n您的高级账号剩余天数会在24小时内自动更新；\n如果24小时后仍没有更新，请在确保您已支付后与我们联系。",
+				"zh-TW":"我們正在處理您的支付訂單。\n您的高級賬號剩餘天數會在24小時內自動更新；\n如果24小時后仍沒有更新，請在確保您已支付后與我們聯繫。"
+			});
 			btnDone3.style.pointerEvents="auto";
 			btnDone3.style.opacity="1";
 		}else{
 			payState="error";
-			btnDone3.innerText="重试";
-			lblPayState0.innerText="Oops...出错了";
+			btnDone3.innerText=multilang({
+				"en-US":"Try Again",
+				"zh-CN":"重试",
+				"zh-TW":"重試"
+			});
+			lblPayState0.innerText=multilang({
+				"en-US":"Oops...An error occurred",
+				"zh-CN":"Oops...出错了",
+				"zh-TW":"Oops...出錯了"
+			});
 			if(response.status==504){
-				lblPayState1.innerText="服务器无法及时响应。";
+				lblPayState1.innerText=multilang({
+					"en-US":"The server was unable to respond in time.",
+					"zh-CN":"服务器无法及时响应。",
+					"zh-TW":"伺服器無法及時反應。"
+				});
 			}else{
-				lblPayState1.innerText="无法连接至服务器。";
+				lblPayState1.innerText=multilang({
+					"en-US":"Unable to connect to the server.",
+					"zh-CN":"无法连接至服务器。",
+					"zh-TW":"無法連接至伺服器。"
+				});
 			}
-			lblPayState1.innerText+="\n请重试（无需再次扫码付款）\n如需更多帮助，请与我们联系。";
+			lblPayState1.innerText+=multilang({
+				"en-US":"\nPlease try again (no need to pay again)\nIf you need more help, please contact us.",
+				"zh-CN":"\n请重试（无需再次扫码付款）\n如需更多帮助，请与我们联系。",
+				"zh-TW":"\n請重試（無需再次掃碼付款）\n如需更多幫助，請與我們聯繫。"
+			});
 			btnDone3.style.pointerEvents="auto";
 			btnDone3.style.opacity="1";
 		}
@@ -1246,8 +1241,16 @@ btnDone3.onclick=function(){
 			accBox2.style.left="1000px";
 			btnDone3.style.pointerEvents="none";
 			btnDone3.style.opacity="0.5";
-			lblPayState0.innerText="提交中";
-			lblPayState1.innerText="我们正在处理您的支付订单\n请稍候\n如需帮助，请与我们联系。";
+			lblPayState0.innerText=multilang({
+				"en-US":"Submitting",
+				"zh-CN":"提交中",
+				"zh-TW":"提交中"
+			});
+			lblPayState1.innerText=multilang({
+				"en-US":"We are processing your order\nPlease wait\nIf you need help, please contact us.",
+				"zh-CN":"我们正在处理您的支付订单\n请稍候\n如需帮助，请与我们联系。",
+				"zh-TW":"我們正在處理您的支付訂單\n請稍候\n如需幫助，請與我們聯繫。"
+			});
 		},250);
 	}else{
 		btnPay1.onclick();
