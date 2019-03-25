@@ -371,7 +371,7 @@ a,button {outline: none;}
 	pointer-events: none;
 }
 #btnLogin {
-	top: 30px;
+	top: 20px;
 }
 #btnSetPri {
 	top: 100px;
@@ -380,6 +380,7 @@ a,button {outline: none;}
 	text-decoration: none;
 	color: rgb(65,145,245);
 	cursor: pointer;
+	margin: 0px 4px;
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
@@ -389,6 +390,9 @@ a,button {outline: none;}
 .link1:link,.link1:visted {color: rgb(65,145,245);}
 .link1:hover {color: #A5C220;}
 .link1:active {color: rgba(65,145,245,0.8);}
+#privacyPolicy {
+	margin: 0px;
+}
 .progressBar {
 	position: absolute;
 	left: 50%;
@@ -847,7 +851,7 @@ a,button {outline: none;}
 	border: none;
 	width: 55%;
 	padding: 10px 2.5%;
-	margin-top: 20px;
+	margin-top: 15px;
 	text-align: center;
 	font-size: small;
 	color: rgba(0,0,0,0.8);
@@ -992,8 +996,11 @@ a,button {outline: none;}
 }
 .btnBox {
 	position: relative;
-	width: 100%;
-	top: 75px;
+	top: 38px;
+}
+.btnBox .link1{
+	border-bottom: 1px solid rgb(65,145,245);
+	font-size: 12px;
 }
 #cancelUpl {
 	margin-left: 10px;

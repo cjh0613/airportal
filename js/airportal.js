@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w12a1";
+var version="19w13a";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -489,6 +489,11 @@ function notify(content,duration){
 		notificationBar.style.bottom="-50px";
 	},duration);
 }
+function onTouchStart(){
+	longPress=setTimeout(function(){
+		longPress=true;
+	},1500);
+}
 function payItemClick(element,className){
 	if(element.classList.contains("selected")){
 		element.classList.remove("selected");
@@ -780,21 +785,26 @@ send.onclick=function(){
 send.oncontextmenu=function(){
 	return false
 }
-send.onmousedown=send.ontouchstart=function(){
-	longPress=setTimeout(function(){
-		longPress=true;
-	},1500);
-}
-send.onmouseup=function(){
+send.addEventListener("touchstart",onTouchStart,{
+	passive:true
+});
+send.addEventListener("mousedown",onTouchStart,{
+	passive:true
+});
+send.addEventListener("mouseup",function(){
 	clearTimeout(longPress);
-}
-send.ontouchend=function(){
+},{
+	passive:true
+});
+send.addEventListener("touchend",function(){
 	if(longPress===true){
 		sendText();
 	}else{
 		clearTimeout(longPress);
 	}
-}
+},{
+	passive:true
+});
 receive.onclick=function(){
 	if(/(MicroMessenger|QQ)\//i.test(navigator.userAgent)){
 		alert("请在浏览器中打开此页面。");

@@ -5,12 +5,9 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<meta name="description" content="随时随地跨设备传输文件。">
 		<title>AirPortal丨空投</title>
+		<link rel="stylesheet" href="styles/airportal.css">
 		<link rel="canonical" href="https://airportal.cn/">
 		<link rel="manifest" href="manifest.json">
-		<link rel="shortcut icon" href="favicon.ico">
-		<style type="text/css">
-			@import "styles/airportal.css";
-		</style>
 	</head>
 	<body>
 		<div class="logoBox"></div>
@@ -163,8 +160,7 @@
 			<span class="btnClose" id="btnClose3"></span>
 			<p id="titleFeedback" class="p1">向我们发送消息</p>
 			<span class="line"></span>
-			<a class="link1" href="https://rthe.cn/faq-ap" target="_blank">常见问题</a> &
-			<a class="link1" href="https://shang.qq.com/wpa/qunwpa?idkey=846414dde5b85a4ac77be8d6e63029d9abea174e571b52d45e4840257f5cb850" target="_blank">我们的QQ群：319496964</a>
+			<a id="faq" class="link1" href="https://rthe.cn/faq-ap" target="_blank">常见问题</a>&amp;<a id="qqGroup" class="link1" href="https://shang.qq.com/wpa/qunwpa?idkey=846414dde5b85a4ac77be8d6e63029d9abea174e571b52d45e4840257f5cb850" target="_blank">我们的QQ群：319496964</a>
 			<textarea id="txtFeedback" placeholder="如果您没有登录，请留下您的电子邮箱地址或其它联系方式"></textarea>
 			<button class="btn1" id="btnSendFeed">发送</button>
 		</div>
@@ -177,17 +173,19 @@
 		<div class="popUp" id="popLogin">
 			<span class="btnClose" id="btnClose1"></span>
 			<div class="loginLogo"></div>
-			<p class="p4">
-				<span id="loginTip">使用热铁盒账号来登录到 AirPortal</span><a id="signUp" href="https://rthsoftware.cn/login?continue=https%3A%2F%2Frthsoftware.cn%2Fairportal%2F&page=signup" class="link1" style="margin-left: 5px;">注册</a>
-			</p>
+			<p id="loginTip" class="p4">使用热铁盒账号来登录到 AirPortal</p>
 			<input type="email" name="email" class="input1" id="inputEmail" placeholder="邮箱">
 			<input type="password" name="password" class="input1" id="inputPsw" placeholder="密码">
 			<button class="btn1" id="btnLogin">登录</button>
+			<div class="btnBox">
+				<a id="signUp" href="https://rthsoftware.cn/login?continue=https%3A%2F%2Fairportal.cn%2F&page=signup" class="link1">注册</a>
+				<a id="resetPassword" href="https://rthsoftware.cn/login?continue=https%3A%2F%2Fairportal.cn%2F&page=resetpassword" class="link1">重置密码</a>
+			</div>
 		</div>
 		<div id="notificationBar">Notification</div>
 
-		<div class="footer" id="footerL"><span id="txtVer">脚本未加载</span>丨<a id="privacyPolicy" href="https://rthe.cn/privacy" target="_blank" rel="noopener" class="link1">隐私政策</a></div>
-		<div class="footer" id="footerR">由 <a href="https://maorx.cn/" target="_blank" rel="noopener" class="link1">毛若昕</a> 和 <a href="https://yangshangzhen.com/" target="_blank" rel="noopener" class="link1">杨尚臻</a> 联合开发。保留所有权利。</div>
+		<div class="footer" id="footerL"><span id="txtVer">脚本未加载</span>丨<a id="privacyPolicy" href="https://rthe.cn/privacy" target="_blank" class="link1">隐私政策</a></div>
+		<div class="footer" id="footerR">由<a href="https://maorx.cn/" target="_blank" class="link1">毛若昕</a>和<a href="https://yangshangzhen.com/" target="_blank" class="link1">杨尚臻</a>联合开发。保留所有权利。</div>
 		<input id="file" type="file" multiple="multiple">
 		<script src="js/i18n.js"></script>
 		<script src="js/bluebird.min.js"></script>

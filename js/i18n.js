@@ -14,10 +14,11 @@ if(navigator.language.indexOf("zh")==-1){
 	enterCode.innerText="Please enter the code";
 	btnSub.value="OK";
 	loginTip.innerText="Log in to AirPortal with Your RTH Account";
-	signUp.innerText="Sign Up";
 	inputEmail.placeholder="Email";
 	inputPsw.placeholder="Password";
 	btnLogin.innerText="Login";
+	signUp.innerText="Sign Up";
+	resetPassword.innerText="Reset Password";
 	sentSuccessfully.innerText="File is sent successfully.";
 	yourCode.innerText="Your Code (Expires in 1 Day):";
 	whenReceving.innerText="When receving files, please enter this code.";
@@ -28,7 +29,9 @@ if(navigator.language.indexOf("zh")==-1){
 	btnDone1.innerText=btnDone2.innerText=btnDone3.innerText=btnDone4.innerText="Close";
 	titleSettings.innerText="Settings";
 	labelNeedLogin.innerText="Require my password when receiving my files";
-	titleFeedback.innerText="Send us a message";
+	titleFeedback.innerText="Send Us a Message";
+	faq.innerText="FAQ";
+	qqGroup.innerText="Our QQ Group: 319496964";
 	txtFeedback.placeholder="If you are not logged in, please leave your email address or other contact information";
 	activatePremium.innerText="Activate/Renew Premium Plan";
 	showPrivilege.innerText="Why Premium Plan?";
@@ -70,10 +73,11 @@ if(navigator.language.indexOf("zh")==-1){
 	enterCode.innerText="請輸入取件碼";
 	btnSub.value="確定";
 	loginTip.innerText="使用熱鐵盒賬號來登入到 AirPortal";
-	signUp.innerText="註冊";
 	inputEmail.placeholder="郵箱";
 	inputPsw.placeholder="密碼";
 	btnLogin.innerText="登入";
+	signUp.innerText="註冊";
+	resetPassword.innerText="重設密碼";
 	sentSuccessfully.innerText="檔案已成功傳送。";
 	yourCode.innerText="您的取件碼（1天內有效）：";
 	whenReceving.innerText="接收檔案時，請輸入該四位數密碼。";
@@ -84,6 +88,8 @@ if(navigator.language.indexOf("zh")==-1){
 	titleSettings.innerText="設定";
 	labelNeedLogin.innerText="接收我的檔案時需要登入我的賬號";
 	titleFeedback.innerText="向我們發送訊息";
+	faq.innerText="常見問題集";
+	qqGroup.innerText="我們的QQ群：319496964";
 	txtFeedback.placeholder="如果您沒有登入，請留下您的電子郵箱地址或其它聯繫方式";
 	activatePremium.innerText="啟用 / 續期高級賬號";
 	showPrivilege.innerText="高級賬號有哪些特權？";
