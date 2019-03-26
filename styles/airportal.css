@@ -995,15 +995,9 @@ a,button {outline: none;}
 	color: red;
 }
 .btnBox {
+	font-size: 12px;
 	position: relative;
 	top: 38px;
-}
-.btnBox .link1{
-	border-bottom: 1px solid rgb(65,145,245);
-	font-size: 12px;
-}
-#cancelUpl {
-	margin-left: 10px;
 }
 .cbox {
 	-webkit-appearance: none; 
