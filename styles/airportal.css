@@ -67,6 +67,9 @@ a,button {outline: none;}
 	-ms-transition: all 0.25s;
 	width: 224px;
 }
+.btnMain.textColored {
+	color: white !important;
+}
 #send {
 	border: none;
 	color: white;
@@ -88,7 +91,7 @@ a,button {outline: none;}
 	box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 }
 #send:active {
-	/*color: rgb(65,145,245);*/
+	color: rgb(65,145,245);
 	background-color: white;
 	background-position: 100%;
 	background-image: url("../images/themeColor.jpg");
@@ -313,6 +316,31 @@ a,button {outline: none;}
 }
 .p5 {
 	color: rgb(65,145,245);
+}
+#txtSend {
+	position: relative;
+	left: 10%;
+	top: 0px;
+	display: block;
+	border: 1px solid transparent;
+	width: 75%;
+	height: 150px;
+	padding: 10px 2.5%;
+	margin-top: 10px;
+	text-align: center;
+	font-size: small;
+	font-family: "Microsoft Yahei Light","Microsoft Yahei",Helvetica,sans-serif,"等线";
+	color: rgba(0,0,0,0.8);
+	background-color: rgba(0,0,0,0.05);
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	resize: none;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	-ms-transition: all 0.5s;
 }
 #recvCode {
 	font-size: 35px;

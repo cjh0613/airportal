@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w13a4";
+var version="19w13b";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -490,8 +490,13 @@ function notify(content,duration){
 	},duration);
 }
 function onTouchStart(){
+	setTimeout(function(){
+		send.classList.add("textColored");
+		send.innerText="发送文本";
+	},900);
 	longPress=setTimeout(function(){
 		longPress=true;
+		sendText()
 	},1500);
 }
 function payItemClick(element,className){
@@ -509,9 +514,20 @@ function payItemClick(element,className){
 	}
 	btnPay0State();
 }
+send.onmousedown=function(){
+	send.classList.remove("textColored");
+}
 function sendText(){
+	setTimeout(function(){
+		send.innerText="发送";
+	},500);
+	//mainBox.style.opacity="0";
+	//popSendText.style.display="block";
+	//setTimeout(function(){
+	//	popSendText.style.opacity="1";
+	//},250);
 	notify(multilang({
-		"en-US":"The feature of sending text is being developed.",
+		"en-US":"We are working on this feature.",
 		"zh-CN":"发送文本的功能正在开发中。",
 		"zh-TW":"發送文字的功能正在開發中。"
 	}));
@@ -774,7 +790,7 @@ inputPsw.onkeydown=function(event){
 }
 send.onclick=function(){
 	if(longPress===true){
-		sendText();
+		//sendText();
 	}else{
 		file.value="";
 		file.click();
@@ -793,12 +809,14 @@ send.addEventListener("mousedown",onTouchStart,{
 });
 send.addEventListener("mouseup",function(){
 	clearTimeout(longPress);
+	send.classList.remove("textColored");
+	send.innerText="发送";
 },{
 	passive:true
 });
 send.addEventListener("touchend",function(){
 	if(longPress===true){
-		sendText();
+		//sendText();
 	}else{
 		clearTimeout(longPress);
 	}

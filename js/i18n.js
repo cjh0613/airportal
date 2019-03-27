@@ -13,7 +13,7 @@ if(navigator.language.indexOf("zh")==-1){
 	nameUsServer.innerText="US Server";
 	enterCode.innerText="Please enter the code";
 	btnSub.value="OK";
-	loginTip.innerText="Log in to AirPortal with Your RTH Account";
+	//loginTip.innerText="Log in to AirPortal with Your RTH Account";
 	inputEmail.placeholder="Email";
 	inputPsw.placeholder="Password";
 	btnLogin.innerText="Login";
@@ -72,7 +72,7 @@ if(navigator.language.indexOf("zh")==-1){
 	nameUsServer.innerText="北美伺服器（更安全）";
 	enterCode.innerText="請輸入取件碼";
 	btnSub.value="確定";
-	loginTip.innerText="使用熱鐵盒賬號來登入到 AirPortal";
+	//loginTip.innerText="使用熱鐵盒賬號來登入到 AirPortal";
 	inputEmail.placeholder="郵箱";
 	inputPsw.placeholder="密碼";
 	btnLogin.innerText="登入";
