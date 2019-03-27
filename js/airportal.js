@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w13b";
+var version="19w13b1";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -29,7 +29,7 @@ var $_GET=(function(){
 	}
 	return json;
 })();
-var backend=localStorage.getItem("Backend")||"https://cdn.rthsoftware.cn/backend/";
+var backend=localStorage.getItem("Backend")||"https://server-auto.rthe.cn/backend/";
 var currentExpTime;
 var fileBackend=backend+"userdata/file/";
 var firstRun=JSON.parse(localStorage.getItem("firstRun"));
@@ -303,7 +303,7 @@ function getPostData(data){
 	};
 }
 function getQRCode(content){
-	return "https://cdn.rthsoftware.cn/backend/get?"+encodeData({
+	return "https://server-auto.rthe.cn/backend/get?"+encodeData({
 		"url":"http://qr.topscan.com/api.php?text="+content,
 		"username":"admin"
 	});
@@ -437,7 +437,7 @@ function loggedIn(newLogin){
 		}
 	})
 	if(!newLogin){
-		fetch("https://cdn.rthsoftware.cn/backend/userdata/verify?"+encodeData({
+		fetch("https://server-auto.rthe.cn/backend/userdata/verify?"+encodeData({
 			"token":login.token,
 			"username":login.username
 		})).then(function(response){
@@ -489,15 +489,25 @@ function notify(content,duration){
 		notificationBar.style.bottom="-50px";
 	},duration);
 }
+function onTouchEnd(){
+	clearTimeout(longPress);
+	send.classList.remove("textColored");
+	send.innerText=multilang({
+		"en-US":"Send",
+		"zh-CN":"发送",
+		"zh-TW":"發送"
+	});
+}
 function onTouchStart(){
-	setTimeout(function(){
-		send.classList.add("textColored");
-		send.innerText="发送文本";
-	},900);
 	longPress=setTimeout(function(){
+		send.classList.add("textColored");
+		send.innerText=multilang({
+			"en-US":"Send Text",
+			"zh-CN":"发送文本",
+			"zh-TW":"發送文字"
+		});
 		longPress=true;
-		sendText()
-	},1500);
+	},900);
 }
 function payItemClick(element,className){
 	if(element.classList.contains("selected")){
@@ -739,7 +749,7 @@ btnLogin.onclick=function(){
 	if(inputEmail.value&&inputPsw.value){
 		var email=inputEmail.value.toLowerCase();
 		var password=MD5(inputPsw.value);
-		fetch("https://cdn.rthsoftware.cn/backend/userdata/verify?"+encodeData({
+		fetch("https://server-auto.rthe.cn/backend/userdata/verify?"+encodeData({
 			"email":email,
 			"password":password,
 			"token":true
@@ -790,7 +800,7 @@ inputPsw.onkeydown=function(event){
 }
 send.onclick=function(){
 	if(longPress===true){
-		//sendText();
+		sendText();
 	}else{
 		file.value="";
 		file.click();
@@ -807,18 +817,13 @@ send.addEventListener("touchstart",onTouchStart,{
 send.addEventListener("mousedown",onTouchStart,{
 	passive:true
 });
-send.addEventListener("mouseup",function(){
-	clearTimeout(longPress);
-	send.classList.remove("textColored");
-	send.innerText="发送";
-},{
+send.addEventListener("mouseup",onTouchEnd,{
 	passive:true
 });
 send.addEventListener("touchend",function(){
+	onTouchEnd();
 	if(longPress===true){
-		//sendText();
-	}else{
-		clearTimeout(longPress);
+		sendText();
 	}
 },{
 	passive:true
@@ -933,7 +938,7 @@ menuItemFeedback.onclick=function(){
 }
 btnSendFeed.onclick=function(){
 	if(txtFeedback.value){
-		fetch("https://cdn.rthsoftware.cn/backend/feedback",getPostData({
+		fetch("https://server-auto.rthe.cn/backend/feedback",getPostData({
 			"appname":appName,
 			"email":login.email,
 			"lang":navigator.language,
@@ -1193,7 +1198,7 @@ btnPay1.onclick=function(){
 		expTime=expTime+60*60*24*30*12;
 		break;
 	}
-	fetch("https://cdn.rthsoftware.cn/backend/feedback",getPostData({
+	fetch("https://server-auto.rthe.cn/backend/feedback",getPostData({
 		"appname":appName,
 		"email":login.email,
 		"lang":navigator.language,
@@ -1392,7 +1397,7 @@ if(location.hostname&&"serviceWorker" in navigator){
 }
 var newScript=document.createElement("script");
 newScript.async=true;
-newScript.src="https://cdn.rthsoftware.cn/backend/code?"+encodeData({
+newScript.src="https://server-auto.rthe.cn/backend/code?"+encodeData({
 	"appname":appName,
 	"lang":navigator.language,
 	"username":login.username,
