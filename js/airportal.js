@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w13b1";
+var version="19w13b2";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -451,24 +451,11 @@ function loggedIn(newLogin){
 					localStorage.setItem("Backend",backend);
 					fileBackend=backend+"userdata/file/";
 				}else{
-					notify(multilang({
-						"en-US":"Login session is expired.",
-						"zh-CN":"登录会话已过期。",
-						"zh-TW":"登入對談已過期。"
-					}));
-					logOut();
+					rmAccountInfo();
 				}
 			}
 		});
 	}
-}
-function logOut(){
-	var ssoIFrame=document.createElement("iframe");
-	ssoIFrame.style.display="none";
-	ssoIFrame.src="https://rthsoftware.cn/sso?"+encodeData({
-		"action":"logout"
-	});
-	document.body.appendChild(ssoIFrame);
 }
 function multilang(json){
 	if(navigator.language.toLowerCase()=="zh-cn"){
@@ -499,6 +486,7 @@ function onTouchEnd(){
 	});
 }
 function onTouchStart(){
+	send.classList.remove("textColored");
 	longPress=setTimeout(function(){
 		send.classList.add("textColored");
 		send.innerText=multilang({
@@ -524,8 +512,12 @@ function payItemClick(element,className){
 	}
 	btnPay0State();
 }
-send.onmousedown=function(){
-	send.classList.remove("textColored");
+function rmAccountInfo(){
+	localStorage.removeItem("Backend")
+	localStorage.removeItem("Email")
+	localStorage.removeItem("Token")
+	localStorage.removeItem("Username")
+	location.reload();
 }
 function sendText(){
 	setTimeout(function(){
@@ -886,14 +878,19 @@ function hideMenu(){
 }
 mask.onclick=hideMenu;
 menuItemLogin.onclick=function(){
-	if(!login.username){
+	if(login.username){
+		var ssoIFrame=document.createElement("iframe");
+		ssoIFrame.style.display="none";
+		ssoIFrame.src="https://rthsoftware.cn/sso?"+encodeData({
+			"action":"logout"
+		});
+		document.body.appendChild(ssoIFrame);
+	}else{
 		mainBox.style.opacity="0";
 		popLogin.style.display="block";
 		setTimeout(function(){
 			popLogin.style.opacity="1";
 		},250);
-	}else{
-		logOut();
 	}
 	hideMenu();
 }
@@ -909,11 +906,7 @@ addEventListener("message",function(e){
 	try{
 		login=JSON.parse(atob(e.data));
 		if(login.username===null){
-			localStorage.removeItem("Backend")
-			localStorage.removeItem("Email")
-			localStorage.removeItem("Token")
-			localStorage.removeItem("Username")
-			location.reload();
+			rmAccountInfo();
 		}else{
 			backend=login.backend;
 			loggedIn(true);
