@@ -3,7 +3,7 @@ if(navigator.language.indexOf("zh")==-1){
 	send.innerText=btnSendFeed.innerText="Send";
 	receive.innerText="Receive";
 	privacyPolicy.innerText="Privacy Policy";
-	footerR.innerHTML="Developed by <a href=\"https://maorx.cn/\" target=\"_blank\" class=\"link1\">Ruoxin Mao</a> and <a href=\"https://yangshangzhen.com/\" target=\"_blank\" class=\"link1\">Shangzhen Yang</a>. All rights reserved.";
+	footerR.innerHTML="Developed by<a href=\"https://maorx.cn/\" target=\"_blank\" class=\"link1\">Ruoxin Mao</a>and<a href=\"https://yangshangzhen.com/\" target=\"_blank\" class=\"link1\" style=\"margin-right: 0px;\">Shangzhen Yang</a>.<br>All rights reserved.";
 	menuItemLogin.innerText="Login";
 	menuItemHistory.innerText="History";
 	menuItemSettings.innerText="Settings";
@@ -61,7 +61,7 @@ if(navigator.language.indexOf("zh")==-1){
 	send.innerText=btnSendFeed.innerText="發送";
 	receive.innerText="接收";
 	privacyPolicy.innerText="隱私政策";
-	footerR.innerHTML="由 <a href=\"https://maorx.cn/\" target=\"_blank\" class=\"link1\">毛若昕</a> 和 <a href=\"https://yangshangzhen.com/\" target=\"_blank\" class=\"link1\">楊尚臻</a> 聯合開發。保留所有權利。";
+	footerR.innerHTML="由<a href=\"https://maorx.cn/\" target=\"_blank\" class=\"link1\">毛若昕</a>和<a href=\"https://yangshangzhen.com/\" target=\"_blank\" class=\"link1\">楊尚臻</a>聯合開發。保留所有權利。";
 	menuItemLogin.innerText="登入";
 	menuItemHistory.innerText="歷史記錄";
 	menuItemSettings.innerText="設定";

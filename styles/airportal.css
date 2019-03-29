@@ -956,9 +956,9 @@ a,button {outline: none;}
 }
 .footer {
 	position: absolute;
-	top: 100%;
-	margin-top: -35px;
+	bottom: 18px;
 	font-size: 12px;
+	line-height: 16px;
 	color: rgba(0,0,0,0.35);
 }
 .loginLogo {
@@ -1060,13 +1060,12 @@ a,button {outline: none;}
 }
 #footerL {
 	text-align: left;
-	margin-left: 30px;
+	left: 30px;
 }
 #footerR {
 	width: 300px;
-	left: 100%;
+	right: 30px;
 	text-align: right;
-	margin-left: -330px;
 }
 
 input[type=file]{
@@ -1090,5 +1089,5 @@ input[type=file]{
 	.payPlans,#historyList,.line {width: 80%;left: 10%;}
 	.payItem {min-width: 70px;margin-right: 5px;}
 	.footer {font-size: 11px;}
-	#footerL {top: 0;margin-top: 20px;}
+	#footerL {bottom: auto;top: 20px;}
 }
