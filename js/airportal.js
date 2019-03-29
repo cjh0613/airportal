@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w13b2";
+var version="19w13b3";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -513,10 +513,10 @@ function payItemClick(element,className){
 	btnPay0State();
 }
 function rmAccountInfo(){
-	localStorage.removeItem("Backend")
-	localStorage.removeItem("Email")
-	localStorage.removeItem("Token")
-	localStorage.removeItem("Username")
+	localStorage.removeItem("Backend");
+	localStorage.removeItem("Email");
+	localStorage.removeItem("Token");
+	localStorage.removeItem("Username");
 	location.reload();
 }
 function sendText(){
@@ -1235,7 +1235,7 @@ btnPay1.onclick=function(){
 				lblPayState1.innerText=multilang({
 					"en-US":"The server was unable to respond in time.",
 					"zh-CN":"服务器无法及时响应。",
-					"zh-TW":"伺服器無法及時反應。"
+					"zh-TW":"伺服器無法及時響應。"
 				});
 			}else{
 				lblPayState1.innerText=multilang({
@@ -1327,6 +1327,7 @@ for(var i=0;i<servers.length;i++){
 			}
 		}
 		hideMenu();
+		fetch(fileBackend);
 	}
 	if(!login.username&&i==0||login.username&&servers[i].getAttribute("value")==backend){
 		fetch(servers[i].getAttribute("value")+"userdata/file/").then(function(response){
@@ -1336,8 +1337,6 @@ for(var i=0;i<servers.length;i++){
 		}).then(function(data){
 			nameAutoServer.innerText+=" : "+data.server;
 		});
-	}else{
-		fetch(servers[i].getAttribute("value")+"userdata/file/");
 	}
 }
 if($_GET["code"]){

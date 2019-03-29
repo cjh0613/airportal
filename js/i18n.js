@@ -18,7 +18,6 @@ if(navigator.language.indexOf("zh")==-1){
 	inputPsw.placeholder="Password";
 	btnLogin.innerText="Login";
 	signUp.innerText="Sign Up";
-	resetPassword.innerText="Reset Password";
 	sentSuccessfully.innerText="File is sent successfully.";
 	yourCode.innerText="Your Code (Expires in 1 Day):";
 	whenReceving.innerText="When receving files, please enter this code.";
@@ -77,7 +76,6 @@ if(navigator.language.indexOf("zh")==-1){
 	inputPsw.placeholder="密碼";
 	btnLogin.innerText="登入";
 	signUp.innerText="註冊";
-	resetPassword.innerText="重設密碼";
 	sentSuccessfully.innerText="檔案已成功傳送。";
 	yourCode.innerText="您的取件碼（1天內有效）：";
 	whenReceving.innerText="接收檔案時，請輸入該四位數密碼。";
