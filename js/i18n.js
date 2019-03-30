@@ -1,4 +1,6 @@
-if(navigator.language.indexOf("zh")==-1){
+var chs=/zh-cn|zh-hans|zh-hans-cn/i.test(navigator.language)
+var zh=navigator.language.indexOf("zh")!=-1
+if(!zh){
 	document.getElementsByTagName("html")[0].lang="en-US"
 	send.innerText=btnSendFeed.innerText="Send";
 	receive.innerText="Receive";
@@ -56,7 +58,7 @@ if(navigator.language.indexOf("zh")==-1){
 	lblDownloadP2.innerText="Total Progress";
 	dlTip0.innerText="If the download fails, please try again with Chrome or Firefox";
 	dlTip1.innerText="Once the fetching is complete, the file will be saved to your device immediately";
-}else if(navigator.language.toLowerCase()!="zh-cn"){
+}else if(!chs){
 	document.getElementsByTagName("html")[0].lang="zh-TW"
 	send.innerText=btnSendFeed.innerText="發送";
 	receive.innerText="接收";

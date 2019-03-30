@@ -1,12 +1,12 @@
 "use strict";
 var appName="AirPortal";
-var version="19w13b4";
+var version="19w14a";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
 console.info("%c版本：%s",consoleInfoStyle,version);
 
-if(navigator.language=="zh-CN"&&location.hostname=="airportal.cn"){
+if(chs&&location.hostname=="airportal.cn"){
 	txtVer.innerText="闽ICP备18016273号";
 	txtVer.onclick=function(){
 		open("http://www.miitbeian.gov.cn/");
@@ -458,9 +458,9 @@ function loggedIn(newLogin){
 	}
 }
 function multilang(json){
-	if(navigator.language.toLowerCase()=="zh-cn"){
+	if(chs){
 		return json["zh-CN"];
-	}else if(navigator.language.indexOf("zh")!=-1){
+	}else if(zh){
 		return json["zh-TW"];
 	}else{
 		return json["en-US"];
