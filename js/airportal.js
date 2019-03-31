@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w14a2";
+var version="19w14a3";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -1395,14 +1395,4 @@ newScript.src="https://server-auto.rthe.cn/backend/code?"+encodeData({
 	"username":login.username,
 	"ver":version
 });
-newScript.onerror=function(){
-	document.body.innerHTML="";
-	if(!$_GET["code"]){
-		alert(multilang({
-			"en-US":"Unable to connect to the server.",
-			"zh-CN":"无法连接至服务器。",
-			"zh-TW":"無法連接至伺服器。"
-		}));
-	}
-}
 document.body.appendChild(newScript);
