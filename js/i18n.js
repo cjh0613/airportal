@@ -28,6 +28,7 @@ if(!chs){
 		nameAutoServer.innerText="Auto-Select Server";
 		nameCnServer.innerText="CN Server";
 		nameUsServer.innerText="US Server";
+		nameTestServer.innerText="Test Server";
 		enterCode.innerText="Please enter the code";
 		btnSub.value="OK";
 		loginTip.innerText="Log in to AirPortal with Your RTH Account";
@@ -92,6 +93,7 @@ if(!chs){
 		nameAutoServer.innerText="自動選擇伺服器";
 		nameCnServer.innerText="大陸伺服器（更快）";
 		nameUsServer.innerText="北美伺服器（更安全）";
+		nameTestServer.innerText="測試伺服器";
 		enterCode.innerText="請輸入取件碼";
 		btnSub.value="確定";
 		loginTip.innerText="使用熱鐵盒賬號來登入到 AirPortal";

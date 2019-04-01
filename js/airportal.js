@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w14a3";
+var version="19w14a4";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -48,52 +48,6 @@ if(firstRun[version]!=false){
 	firstRun[version]=false;
 	localStorage.setItem("firstRun",JSON.stringify(firstRun));
 	firstRun=true;
-}
-function addHistory(filename,code){
-	var newHistory=document.createElement("span");
-	var newP=document.createElement("p");
-	var newDelBtn=document.createElement("span");
-	newHistory.className="historyItem";
-	newHistory.innerText=code;
-	newP.innerText=filename;
-	newDelBtn.className="btnDel";
-	newDelBtn.title=multilang({
-		"en-US":"Delete",
-		"zh-CN":"删除",
-		"zh-TW":"刪除"
-	});
-	newDelBtn.onclick=function(){
-		if(confirm(multilang({
-			"en-US":"Are you sure that you want to delete "+filename+" from the server?",
-			"zh-CN":"确定要删除存储在服务器上的 "+filename+" 吗？",
-			"zh-TW":"確定要刪除存儲在伺服器上的 "+filename+" 嗎？"
-		}))){
-			fetch(fileBackend+"del",getPostData({
-				"code":code,
-				"username":login.username
-			})).then(function(response){
-				if(response.ok){
-					notify(multilang({
-						"en-US":"Deleted successfully.",
-						"zh-CN":"删除成功。",
-						"zh-TW":"刪除成功。"
-					}));
-					historyList.removeChild(newHistory);
-				}else{
-					notify(multilang({
-						"en-US":"Unable to connect to the server: ",
-						"zh-CN":"无法连接至服务器：",
-						"zh-TW":"無法連接至伺服器："
-					})+response.status);
-				}
-			});
-		}
-	}
-	newHistory.appendChild(newP);
-	newHistory.appendChild(newDelBtn);
-	historyList.insertBefore(newHistory,historyList.firstChild);
-	lblEmpty.style.display="none";
-	historyList.style.marginTop="-10px";
 }
 function btnPay0State(){
 	if(document.getElementsByClassName("selected").length==2){
@@ -315,6 +269,73 @@ function getRandomCharacter(length){
 	}
 	return str;
 }
+function loadHistory(){
+	historyList.innerHTML="";
+	fetch(fileBackend+"get?"+encodeData({
+		"token":login.token,
+		"username":login.username
+	})).then(function(response){
+		if(response.ok){
+			return response.json();
+		}
+	}).then(function(data){
+		if(data){
+			if(data.length>0){
+				lblEmpty.style.display="none";
+				historyList.style.marginTop="-10px";
+				for(var i=data.length-1;i>=0;i--){
+					var newHistory=document.createElement("span");
+					var newP=document.createElement("p");
+					var newDelBtn=document.createElement("span");
+					newHistory.classList.add("historyItem");
+					newHistory.innerText=data[i].code;
+					newHistory.setAttribute("code",data[i].code);
+					newP.innerText=decodeURIComponent(data[i].multifile[0].name);
+					newDelBtn.classList.add("btnDel");
+					newDelBtn.title=multilang({
+						"en-US":"Delete",
+						"zh-CN":"删除",
+						"zh-TW":"刪除"
+					});
+					newDelBtn.onclick=function(){
+						var code=this.parentElement.getAttribute("code");
+						var filename=this.parentElement.getElementsByTagName("p")[0].innerText;
+						if(confirm(multilang({
+							"en-US":"Are you sure that you want to delete "+filename+" from the server?",
+							"zh-CN":"确定要删除存储在服务器上的 "+filename+" 吗？",
+							"zh-TW":"確定要刪除存儲在伺服器上的 "+filename+" 嗎？"
+						}))){
+							fetch(fileBackend+"del",getPostData({
+								"code":code,
+								"username":login.username
+							})).then(function(response){
+								if(response.ok){
+									notify(multilang({
+										"en-US":"Deleted successfully.",
+										"zh-CN":"删除成功。",
+										"zh-TW":"刪除成功。"
+									}));
+									loadHistory();
+								}else{
+									notify(multilang({
+										"en-US":"Unable to connect to the server: ",
+										"zh-CN":"无法连接至服务器：",
+										"zh-TW":"無法連接至伺服器："
+									})+response.status);
+								}
+							});
+						}
+					}
+					newHistory.appendChild(newP);
+					newHistory.appendChild(newDelBtn);
+					historyList.appendChild(newHistory);
+				}
+			}else{
+				lblEmpty.style.display=historyList.style.marginTop="";
+			}
+		}
+	});
+}
 function loadPrice(priceInfo){
 	window.priceInfo=priceInfo;
 	Object.keys(priceInfo).forEach(function(key){
@@ -352,20 +373,7 @@ function loggedIn(newLogin){
 		localStorage.setItem("Username",login.username);
 		mainBox.style.opacity="1";
 		popLogin.style.display="none";
-		fetch(fileBackend+"get?"+encodeData({
-			"token":login.token,
-			"username":login.username
-		})).then(function(response){
-			if(response.ok){
-				return response.json();
-			}
-		}).then(function(data){
-			if(data){
-				for(var i=0;i<data.length;i++){
-					addHistory(decodeURIComponent(data[i].multifile[0].name),data[i].code);
-				}
-			}
-		});
+		loadHistory();
 	}
 	menuItemLogin.innerText=multilang({
 		"en-US":"Log Out",
@@ -373,7 +381,7 @@ function loggedIn(newLogin){
 		"zh-TW":"登出"
 	});
 	var newItem=document.createElement("a");
-	newItem.className="menuItem";
+	newItem.classList.add("menuItem");
 	newItem.onclick=function(){
 		mainBox.style.opacity="0";
 		popAccount.style.display="block";
@@ -588,7 +596,7 @@ function upload(input){
 			QRBox.appendChild(qrcode);
 			recvCode.innerText=code;
 			popRecvCode.innerText=code;
-			addHistory(input.target.files[0].name,code);
+			loadHistory();
 			sendBox0.style.left="-500px";
 			sendBox1.style.left="0px";
 			sendBox2.style.left="500px";
@@ -1313,6 +1321,9 @@ settingsNeedLogin.onchange=function(){
 file.onchange=function(input){
 	upload(input);
 }
+if(location.hostname){
+	menuItemTestServer.style.display="none";
+}
 var servers=document.getElementsByClassName("server");
 for(var i=0;i<servers.length;i++){
 	servers[i].onclick=function(){
@@ -1328,6 +1339,7 @@ for(var i=0;i<servers.length;i++){
 		}
 		hideMenu();
 		fetch(fileBackend);
+		loadHistory();
 	}
 	if(!login.username&&i==0||login.username&&servers[i].getAttribute("value")==backend){
 		fetch(servers[i].getAttribute("value")+"userdata/file/").then(function(response){
@@ -1356,20 +1368,7 @@ if($_GET["code"]){
 		},400);
 	}
 }
-fetch(fileBackend+"get?"+encodeData({
-	"token":login.token,
-	"username":login.username
-})).then(function(response){
-	if(response.ok){
-		return response.json();
-	}
-}).then(function(data){
-	if(data){
-		for(var i=0;i<data.length;i++){
-			addHistory(decodeURIComponent(data[i].multifile[0].name),data[i].code);
-		}
-	}
-});
+loadHistory();
 if(login.username){
 	loggedIn();
 }else if(location.hostname!="rthsoftware.cn"){

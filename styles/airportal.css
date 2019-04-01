@@ -211,6 +211,7 @@ a,button {outline: none;}
 	color: white;
 }
 .tick {
+	opacity: 0;
 	position: relative;
 }
 .tick::before {
@@ -234,9 +235,6 @@ a,button {outline: none;}
 }
 #tickAutoServer {
 	opacity: 1;
-}
-#tickCnServer,#tickUsServer1,#tickUsServer2 {
-	opacity: 0;
 }
 /*.latencyStatus {
 	display: inline;
