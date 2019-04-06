@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w14a5";
+var version="19w14a6";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -1185,21 +1185,8 @@ btnPay0.onclick=function(){
 var payState="success";
 btnPay1.onclick=function(){
 	var action="续期";
-	var expTime=currentExpTime;
-	if(!expTime){
+	if(!currentExpTime){
 		action="激活";
-		expTime=Math.round(new Date().getTime()/1000);
-	}
-	switch(pubPayPlan){
-		case "一个月":
-		expTime=expTime+60*60*24*30*1;
-		break;
-		case "三个月":
-		expTime=expTime+60*60*24*30*3;
-		break;
-		case "一年":
-		expTime=expTime+60*60*24*30*12;
-		break;
 	}
 	fetch("https://server-auto.rthe.cn/backend/feedback",getPostData({
 		"appname":appName,
@@ -1207,7 +1194,7 @@ btnPay1.onclick=function(){
 		"lang":navigator.language,
 		"name":login.username,
 		"recipient":"405801769@qq.com",
-		"text":"用户通过 "+pubPayMethod+" "+action+"了 "+pubPayPlan+" 的高级账号，将于 "+expTime+" ("+new Date(expTime*1000).toLocaleDateString()+") 到期。",
+		"text":"通过 "+pubPayMethod+" "+action+" "+pubPayPlan+" 的高级账号",
 		"ver":version
 	})).then(function(response){
 		if(response.ok){
