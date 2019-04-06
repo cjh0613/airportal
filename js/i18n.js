@@ -91,8 +91,8 @@ if(!chs){
 		menuItemSettings.innerText="設定";
 		menuItemFeedback.innerText="聯繫我們";
 		nameAutoServer.innerText="自動選擇伺服器";
-		nameCnServer.innerText="大陸伺服器（更快）";
-		nameUsServer.innerText="北美伺服器（更安全）";
+		nameCnServer.innerText="大陸伺服器";
+		nameUsServer.innerText="北美伺服器";
 		nameTestServer.innerText="測試伺服器";
 		enterCode.innerText="請輸入取件碼";
 		btnSub.value="確定";
