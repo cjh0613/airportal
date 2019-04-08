@@ -45,7 +45,6 @@ a,button {outline: none;}
 	position: absolute;
 	top: 60%;
 	width: 100%;
-	text-align: center;
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
@@ -54,12 +53,13 @@ a,button {outline: none;}
 }
 .btnMain {
 	padding: 15px 10px;
-	margin-bottom: 20px;
+	margin: 0px calc(50% - 112px) 20px calc(50% - 112px);
 	-webkit-border-radius: 30px;
 	-moz-border-radius: 30px;
 	border-radius: 30px;
 	text-decoration: none;
 	cursor: pointer;
+	display: block;
 	transition: all 0.25s;
 	-webkit-transition: all 0.25s;
 	-moz-transition: all 0.25s;
@@ -67,10 +67,7 @@ a,button {outline: none;}
 	-ms-transition: all 0.25s;
 	width: 224px;
 }
-.btnMain.textColored {
-	color: white !important;
-}
-#send {
+.send {
 	border: none;
 	color: white;
 	background-color: rgb(65,145,245);
@@ -85,12 +82,12 @@ a,button {outline: none;}
 	-ms-transition: color 0.25s, background-color 0.25s, box-shadow 0.25s, background-position 1.5s;
 	transition: color 0.25s, background-color 0.25s, box-shadow 0.25s, background-position 1.5s;
 }
-#send:hover {
+.send:hover {
 	-webkit-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 	-moz-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 }
-#send:active {
+.send:active {
 	color: rgb(65,145,245);
 	background-color: white;
 	background-position: 100%;
@@ -98,6 +95,11 @@ a,button {outline: none;}
 	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
+}
+#btnMainSendText {
+	display: none;
+	position: relative;
+	z-index: 1;
 }
 #receive {
 	border: none;
@@ -232,9 +234,6 @@ a,button {outline: none;}
 	-moz-transition: all 0.25s;
 	-o-transition: all 0.25s;
 	-ms-transition: all 0.25s;
-}
-#tickAutoServer {
-	opacity: 1;
 }
 /*.latencyStatus {
 	display: inline;

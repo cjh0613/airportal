@@ -11,7 +11,8 @@
 	<body>
 		<div class="logoBox"></div>
 		<div class="mainBox" id="mainBox">
-			<button id="send" class="btnMain">发送</button><br>
+			<button id="send" class="btnMain send">发送</button>
+			<button id="btnMainSendText" class="btnMain send">发送文本</button>
 			<button id="receive" class="btnMain">接收</button>
 		</div>
 		<span id="menuIcon"></span>
@@ -22,26 +23,10 @@
 			<a class="menuItem" id="menuItemSettings">设置</a>
 			<a class="menuItem" id="menuItemFeedback">获取帮助</a>
 			<span class="menuLine" id="menuLine0"></span>
-			<a class="menuItem server" value="https://server-auto.rthe.cn/backend/">
-				<span class="tick" id="tickAutoServer"></span>
-				<span id="nameAutoServer">自动选择服务器</span>
-			</a>
-			<a class="menuItem server" value="https://server-cn.rthe.cn/backend/">
-				<span class="tick"></span>
-				<span id="nameCnServer">大陆服务器</span>
-			</a>
-			<a class="menuItem server" value="https://server-us.rthe.cn/backend/">
-				<span class="tick"></span>
-				<span id="nameUsServer">北美服务器</span>
-			</a>
-			<a class="menuItem server" id="menuItemTestServer" value="http://server-test.rthe.cn/backend/">
-				<span class="tick"></span>
-				<span id="nameTestServer">测试服务器</span>
-			</a>
 		</div>
 		<div class="popUp" id="popSend">
 			<div id="sendBox0">
-				<p class="p1" id="lblUploadP">上传中...</p>
+				<p class="p1" id="lblUploadP">正在上传...</p>
 				<span class="progressBar" id="progressBarBg0"></span>
 				<span class="progressBar" id="progressBar0"></span>
 			</div>
@@ -190,20 +175,17 @@
 			<input type="email" name="email" class="input1" id="inputEmail" placeholder="邮箱">
 			<input type="password" name="password" class="input1" id="inputPsw" placeholder="密码">
 			<button class="btn1" id="btnLogin">登录</button>
-			<!--<div class="btnBox">
-				<a id="signUp" href="https://rthsoftware.cn/login?continue=https%3A%2F%2Fairportal.cn%2F&page=signup" class="link1">注册</a>
-				<a id="resetPassword" href="https://rthsoftware.cn/login?continue=https%3A%2F%2Fairportal.cn%2F&page=resetpassword" class="link1">重置密码</a>
-			</div>-->
 		</div>
 		<div id="notificationBar">Notification</div>
 
 		<div class="footer" id="footerL"><span id="txtVer">脚本未加载</span>丨<a id="privacyPolicy" href="https://rthe.cn/privacy" target="_blank" class="link1">隐私政策</a></div>
 		<div class="footer" id="footerR">由<a class="link1" href="https://www.maorx.cn/" target="_blank">毛若昕</a>和<a class="link1" href="https://www.yangshangzhen.com/" target="_blank">杨尚臻</a>联合开发。保留所有权利。</div>
-		<input id="file" type="file" multiple="multiple">
 		<script src="js/i18n.js"></script>
 		<script src="https://static.rthe.cn/js/bluebird.min.js"></script>
 		<script src="https://static.rthe.cn/js/fetch.min.js"></script>
 		<script src="https://static.rthe.cn/js/md5.min.js"></script>
+		<script src="https://static.rthe.cn/js/plupload.full.min.js"></script>
 		<script src="js/airportal.js"></script>
+		<script src="js/core.js"></script>
 	</body>
 </html>

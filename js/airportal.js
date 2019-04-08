@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w14a6";
+var version="19w15a";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -29,9 +29,7 @@ var $_GET=(function(){
 	}
 	return json;
 })();
-var backend=localStorage.getItem("Backend")||"https://server-auto.rthe.cn/backend/";
-var currentExpTime;
-var fileBackend=backend+"userdata/file/";
+var backend,currentExpTime,fileBackend;
 var firstRun=JSON.parse(localStorage.getItem("firstRun"));
 var invalidAttempt=0;
 var login={
@@ -58,92 +56,6 @@ function btnPay0State(){
 		btnPay0.style.opacity="0.5";
 	}
 }
-function downloadFile(fileInfo,code,index,path){
-	if(fileInfo.slice){
-		mainBox.style.opacity="0";
-		popDownl.style.display="block";
-		setTimeout(function(){
-			popDownl.style.opacity="1";
-		},250);
-		var intervalId=setInterval(function(){
-			if(dlTip0.style.marginTop=="0px"){
-				dlTip0.style.marginTop="-20px";
-				dlTip1.style.marginTop="-10px";
-			}else{
-				dlTip0.style.marginTop="0px";
-				dlTip1.style.marginTop="0px";
-			}
-		},5000);
-		var slice=[];
-		var downloadSlice=function(progress){
-			var xhr=new XMLHttpRequest();
-			xhr.responseType="arraybuffer";
-			xhr.onload=function(){
-				if(xhr.status==200){
-					slice.push(xhr.response);
-					if(progress>=fileInfo.slice){
-						clearInterval(intervalId);
-						document.title=title;
-						var newA=document.createElement("a");
-						var url=URL.createObjectURL(new Blob(slice,{
-							"type":fileInfo.type
-						}));
-						newA.href=url;
-						newA.download=decodeURIComponent(fileInfo.name);
-						newA.style.display="none";
-						document.body.appendChild(newA);
-						newA.click();
-						popDownl.style.opacity="0";
-						mainBox.style.opacity="1";
-						setTimeout(function(){
-							popDownl.style.display="none";
-						},250);
-					}else{
-						progress++;
-						downloadSlice(progress);
-					}
-				}else if(xhr.status==404){
-					notify(multilang({
-						"en-US":"The file is incomplete. Please upload it again.",
-						"zh-CN":"文件损坏。请重新上传。",
-						"zh-TW":"檔案損壞。請重新上傳。"
-					}));
-					popDownl.style.opacity="0";
-					popDownl.style.display="none";
-				}else{
-					notify(multilang({
-						"en-US":"Unable to connect to the server: ",
-						"zh-CN":"无法连接至服务器：",
-						"zh-TW":"無法連接至伺服器："
-					})+xhr.status);
-				}
-			}
-			xhr.onprogress=function(e){
-				if(e.lengthComputable){
-					var percentage=Math.round(e.loaded/e.total*100);
-					document.title="["+progress+"/"+fileInfo.slice+": "+percentage+"%] "+title;
-					progressBar1.style.width=percentage+"px";
-					lblDownloadP1.innerText=multilang({
-						"en-US":"Downloading File Slices ",
-						"zh-CN":"下载文件碎片中 ",
-						"zh-TW":"下載檔案碎片中 "
-					})+percentage+"%";
-					progressBar2.style.width=Math.round(progress/fileInfo.slice*100)+"px";
-					lblDownloadP2.innerText=multilang({
-						"en-US":"Total Progress ",
-						"zh-CN":"总下载进度 ",
-						"zh-TW":"總下載進度 "
-					})+progress+"/"+fileInfo.slice;
-				}
-			}
-			xhr.open("GET",path+code+"-"+index+"-"+progress,true);
-			xhr.send();
-		}
-		downloadSlice(1);
-	}else{
-		location.href=fileInfo.download;
-	}
-}
 function encodeData(data){
 	var array=[];
 	for(var key in data){
@@ -153,96 +65,12 @@ function encodeData(data){
 	}
 	return array.join("&");
 }
-function getInfo(code){
-	if(code){
-		btnSub.disabled=true;
-		invalidAttempt++;
-		fetch(fileBackend+"getinfo?"+encodeData({
-			"code":code,
-			"username":function(){
-				if(login.username){
-					return login.username
-				}else{
-					return "null"
-				}
-			}()
-		})).then(function(response){
-			btnSub.disabled=false;
-			if(response.ok){
-				return response.text();
-			}else{
-				invalidAttempt--;
-				notify(multilang({
-					"en-US":"Unable to connect to the server: ",
-					"zh-CN":"无法连接至服务器：",
-					"zh-TW":"無法連接至伺服器："
-				})+response.status);
-			}
-		}).then(function(data){
-			if(data===""){
-				notify(multilang({
-					"en-US":"The file does not exist.",
-					"zh-CN":"文件不存在。",
-					"zh-TW":"檔案不存在。"
-				}));
-			}else if(data){
-				invalidAttempt--;
-				data=JSON.parse(data);
-				if(data.download===false){
-					if(login.username){
-						notify(multilang({
-							"en-US":"You do not have permission to download this file.",
-							"zh-CN":"您没有下载此文件的权限。",
-							"zh-TW":"您沒有下載此檔案的權限。"
-						}));
-					}else{
-						notify(multilang({
-							"en-US":"Login is required for downloading this file.",
-							"zh-CN":"需要登录才能下载此文件。",
-							"zh-TW":"需要登入才能下載此檔案。"
-						}));
-						menuItemLogin.click();
-					}
-				}else if(data.multifile.length==1){
-					downloadFile(data.multifile[0],code,1,data.path);
-					popRecv.style.opacity="0";
-					mainBox.style.opacity="1";
-					setTimeout(function(){
-						inputCode.value="";
-						popRecv.style.display="none";
-					},250);
-				}else{
-					for(var file=0;file<data.multifile.length;file++){
-						var newLi=document.createElement("li");
-						newLi.classList.add("menu");
-						newLi.innerText=decodeURIComponent(data.multifile[file].name);
-						newLi.setAttribute("code",data.code);
-						if(data.multifile.length>1){
-							newLi.setAttribute("index",file+1);
-						}
-						newLi.onclick=function(){
-							var index=this.getAttribute("index")-1;
-							downloadFile(data.multifile[index],code,index+1,data.path);
-						}
-						fileList.appendChild(newLi);
-					}
-					mainBox.style.opacity="0";
-					popRecv.style.display="block";
-					popRecv.style.opacity="1";
-					recvBox0.style.left="-500px";
-					recvBox1.style.left="0px";
-				}
-			}
-		}).catch(function(){
-			btnSub.disabled=false;
-			invalidAttempt--;
-			notify(multilang({
-				"en-US":"Unable to connect to the server.",
-				"zh-CN":"无法连接至服务器。",
-				"zh-TW":"無法連接至伺服器。"
-			}));
-		})
-	}
+function error(e){
+	notify(multilang({
+		"en-US":"Unable to connect to the server: ",
+		"zh-CN":"无法连接至服务器：",
+		"zh-TW":"無法連接至伺服器："
+	})+e.status);
 }
 function getPostData(data){
 	var formData=new FormData();
@@ -271,7 +99,7 @@ function getRandomCharacter(length){
 }
 function loadHistory(){
 	historyList.innerHTML="";
-	fetch(fileBackend+"get?"+encodeData({
+	fetch(backend+"airportal/get?"+encodeData({
 		"token":login.token,
 		"username":login.username
 	})).then(function(response){
@@ -290,7 +118,7 @@ function loadHistory(){
 					newHistory.classList.add("historyItem");
 					newHistory.innerText=data[i].code;
 					newHistory.setAttribute("code",data[i].code);
-					newP.innerText=decodeURIComponent(data[i].multifile[0].name);
+					newP.innerText=decodeURIComponent(data[i].name);
 					newDelBtn.classList.add("btnDel");
 					newDelBtn.title=multilang({
 						"en-US":"Delete",
@@ -305,7 +133,7 @@ function loadHistory(){
 							"zh-CN":"确定要删除存储在服务器上的 "+filename+" 吗？",
 							"zh-TW":"確定要刪除存儲在伺服器上的 "+filename+" 嗎？"
 						}))){
-							fetch(fileBackend+"del",getPostData({
+							fetch(backend+"airportal/del",getPostData({
 								"code":code,
 								"username":login.username
 							})).then(function(response){
@@ -317,11 +145,7 @@ function loadHistory(){
 									}));
 									loadHistory();
 								}else{
-									notify(multilang({
-										"en-US":"Unable to connect to the server: ",
-										"zh-CN":"无法连接至服务器：",
-										"zh-TW":"無法連接至伺服器："
-									})+response.status);
+									error(response);
 								}
 							});
 						}
@@ -366,7 +190,6 @@ function loadPrice(priceInfo){
 }
 function loggedIn(newLogin){
 	if(newLogin){
-		fileBackend=backend+"userdata/file/";
 		localStorage.setItem("Backend",backend);
 		localStorage.setItem("Email",login.email);
 		localStorage.setItem("Token",login.token);
@@ -455,9 +278,7 @@ function loggedIn(newLogin){
 		}).then(function(data){
 			if(data){
 				if(data.token){
-					backend=data.backend;
 					localStorage.setItem("Backend",backend);
-					fileBackend=backend+"userdata/file/";
 				}else{
 					rmAccountInfo();
 				}
@@ -496,13 +317,9 @@ function onTouchEnd(){
 function onTouchStart(){
 	send.classList.remove("textColored");
 	longPress=setTimeout(function(){
-		send.classList.add("textColored");
-		send.innerText=multilang({
-			"en-US":"Send Text",
-			"zh-CN":"发送文本",
-			"zh-TW":"發送文字"
-		});
-		longPress=true;
+		send.style.display="none";
+		btnMainSendText.style.display="block";
+		btnMainSendText.onclick=sendText
 	},900);
 }
 function payItemClick(element,className){
@@ -531,16 +348,11 @@ function sendText(){
 	setTimeout(function(){
 		send.innerText="发送";
 	},500);
-	//mainBox.style.opacity="0";
-	//popSendText.style.display="block";
-	//setTimeout(function(){
-	//	popSendText.style.opacity="1";
-	//},250);
-	notify(multilang({
-		"en-US":"We are working on this feature.",
-		"zh-CN":"发送文本的功能正在开发中。",
-		"zh-TW":"發送文字的功能正在開發中。"
-	}));
+	mainBox.style.opacity="0";
+	popSendText.style.display="block";
+	setTimeout(function(){
+		popSendText.style.opacity="1";
+	},250)
 }
 function showChangelog(text,firstRunOnly){
 	if(firstRun===true||!firstRunOnly){
@@ -552,198 +364,20 @@ function showChangelog(text,firstRunOnly){
 		},250);
 	}
 }
-function upload(input){
-	var files=[];
-	for(var i=0;i<input.target.files.length;i++){
-		if(input.target.files[i].name.indexOf(".php")!=-1||input.target.files[i].type=="text/php"){
-			notify(multilang({
-				"en-US":"Transferring PHP files is not allowed.",
-				"zh-CN":"不允许传输 PHP 文件。",
-				"zh-TW":"不允許傳輸 PHP 檔案。"
-			}));
-		}else if(input.target.files[i].size>4294967296){
-			notify(multilang({
-				"en-US":"Transferring files larger than 4 GB is not allowed.",
-				"zh-CN":"不允许传输大于 4 GB 的文件。",
-				"zh-TW":"不允許傳輸大於 4 GB 的檔案。"
-			}));
-		}else{
-			files.push({
-				"name":input.target.files[i].name,
-				"progress":0,
-				"type":input.target.files[i].type,
-				"size":input.target.files[i].size
-			});
-		}
-	}
-	if(files.length>0){
-		var showUploading=function(){
-			document.title="[上传中] "+title;
-			sendBox0.style.left="0px";
-			sendBox1.style.left="500px";
-			sendBox2.style.left="1000px";
-			mainBox.style.opacity="0";
-			popSend.style.display="block";
-			setTimeout(function(){
-				popSend.style.opacity="1";
-			},250);
-		}
-		var uploadSuccess=function(code){
-			document.title="[取件码 "+code+"] "+title;
-			QRBox.innerHTML="";
-			var qrcode=new Image(200,200);
-			qrcode.src=getQRCode("http://rthe.cn/"+code);
-			QRBox.appendChild(qrcode);
-			recvCode.innerText=code;
-			popRecvCode.innerText=code;
-			loadHistory();
-			sendBox0.style.left="-500px";
-			sendBox1.style.left="0px";
-			sendBox2.style.left="500px";
-			lblUploadP.innerText=multilang({
-				"en-US":"Uploading...",
-				"zh-CN":"上传中...",
-				"zh-TW":"上傳中..."
-			});
-		}
-		if(files.length<=1&&files[0].size<=10240000){
-			showUploading();
-			fetch(fileBackend+"upload",getPostData({
-				"file":input.target.files[0],
-				"username":login.username
-			})).then(function(response){
-				if(response.ok){
-					return response.json();
-				}else{
-					notify(multilang({
-						"en-US":"Unable to connect to the server: ",
-						"zh-CN":"无法连接至服务器：",
-						"zh-TW":"無法連接至伺服器："
-					})+response.status);
-					document.title=title;
-					mainBox.style.opacity="1";
-					popSend.style.opacity="0";
-					popSend.style.display="none";
-				}
-			}).then(function(data){
-				if(data){
-					if(data.error){
-						alert(data.error);
-						document.title=title;
-						mainBox.style.opacity="1";
-						popSend.style.opacity="0";
-						popSend.style.display="none";
-					}else{
-						uploadSuccess(data.code);
-					}
-				}
-			});
-		}else{
-			fetch(fileBackend+"getcode",getPostData({
-				"info":JSON.stringify(files),
-				"username":login.username
-			})).then(function(response){
-				switch(response.status){
-					case 200:
-					return response.text();
-					case 402:
-					alert(multilang({
-						"en-US":"Payment is required for uploading multiple files or large files.",
-						"zh-CN":"批量上传和上传大文件需要付费。",
-						"zh-TW":"批量上傳和上傳大檔案需要付費。"
-					}));
-					if(!login.username){
-						menuItemLogin.click();
-					}
-					break;
-					default:
-					notify(multilang({
-						"en-US":"Unable to connect to the server: ",
-						"zh-CN":"无法连接至服务器：",
-						"zh-TW":"無法連接至伺服器："
-					})+response.status);
-					break;
-				}
-			}).then(function(code){
-				if(code){
-					var upload=function(fileIndex){
-						var thisFile=input.target.files[fileIndex];
-						var fileSlice=[];
-						var sliceSize=10240000;
-						var uploadSlice=function(uploadProgress){
-							fetch(fileBackend+"uploadslice",getPostData({
-								"code":code,
-								"file":fileSlice[uploadProgress],
-								"index":fileIndex+1,
-								"progress":uploadProgress+1
-							})).then(function(response){
-								if(response.ok){
-									return response.json();
-								}
-							}).then(function(data){
-								if(data){
-									if(data.error){
-										alert(data.error);
-										document.title=title;
-										mainBox.style.opacity="1";
-										popSend.style.opacity="0";
-										popSend.style.display="none";
-									}else if(data.success==uploadProgress+1){
-										if(uploadProgress==fileSlice.length-1){
-											if(fileIndex==input.target.files.length-1){
-												uploadSuccess(code);
-											}else{
-												setTimeout(function(){
-													upload(fileIndex+1);
-												},1000);
-											}
-										}else{
-											progressBarBg0.style.background="rgba(0,0,0,0.1)";
-											uploadProgress++;
-											var percentage=Math.round(uploadProgress/fileSlice.length*100);
-											document.title="["+percentage+"%] "+title;
-											lblUploadP.innerText=multilang({
-												"en-US":"Uploading ",
-												"zh-CN":"上传中 ",
-												"zh-TW":"上傳中 "
-											})+percentage+"%";
-											progressBar0.style.width=percentage+"px";
-											uploadSlice(uploadProgress);
-										}
-									}
-								}
-							}).catch(function(){
-								if(thisFile.size<104857600){
-									fileSlice=[thisFile];
-									uploadSlice(0);
-								}else{
-									alert(multilang({
-										"en-US":"Unable to send files larger than 100 MB on this device.",
-										"zh-CN":"无法在此设备上发送大于 100 MB 的文件。",
-										"zh-TW":"無法在此裝置上發送大於 100 MB 的檔案。"
-									}));
-									document.title=title;
-									mainBox.style.opacity="1";
-									popSend.style.opacity="0";
-									popSend.style.display="none";
-								}
-							});
-						}
-						if(thisFile.size>10240000){
-							for(var i=0;i<thisFile.size/sliceSize;i++){
-								fileSlice.push(thisFile.slice(i*sliceSize,(i+1)*sliceSize));
-							}
-						}else{
-							fileSlice.push(thisFile);
-						}
-						uploadSlice(0);
-					}
-					showUploading();
-					upload(0);
-				}
-			});
-		}
-	}
+function showUploading(){
+	document.title="["+multilang({
+		"en-US":"Uploading",
+		"zh-CN":"正在上传",
+		"zh-TW":"正在上傳"
+	})+"] "+title;
+	sendBox0.style.left="0px";
+	sendBox1.style.left="500px";
+	sendBox2.style.left="1000px";
+	mainBox.style.opacity="0";
+	popSend.style.display="block";
+	setTimeout(function(){
+		popSend.style.opacity="1";
+	},250);
 }
 btnLogin.onclick=function(){
 	if(inputEmail.value&&inputPsw.value){
@@ -757,11 +391,7 @@ btnLogin.onclick=function(){
 			if(response.ok){
 				return response.json();
 			}else{
-				notify(multilang({
-					"en-US":"Unable to connect to the server: ",
-					"zh-CN":"无法连接至服务器：",
-					"zh-TW":"無法連接至伺服器："
-				})+response.status);
+				error(response);
 			}
 		}).then(function(data){
 			if(data){
@@ -769,7 +399,6 @@ btnLogin.onclick=function(){
 					alert(data.alert)
 				}else if(data.index){
 					if(data.token){
-						backend=data.backend;
 						login.email=data.email;
 						login.token=data.token;
 						login.username=data.username;
@@ -800,16 +429,6 @@ inputPsw.onkeydown=function(event){
 		btnLogin.click();
 	}
 }
-send.onclick=function(){
-	if(longPress===true){
-		sendText();
-	}else{
-		file.value="";
-		file.click();
-		progressBarBg0.style.background="rgba(0,0,0,0)";
-		progressBar0.style.width="0px";
-	}
-}
 send.oncontextmenu=function(){
 	return false
 }
@@ -824,9 +443,6 @@ send.addEventListener("mouseup",onTouchEnd,{
 });
 send.addEventListener("touchend",function(){
 	onTouchEnd();
-	if(longPress===true){
-		sendText();
-	}
 },{
 	passive:true
 });
@@ -918,7 +534,6 @@ addEventListener("message",function(e){
 		if(login.username===null){
 			rmAccountInfo();
 		}else{
-			backend=login.backend;
 			loggedIn(true);
 		}
 	}catch(e){}
@@ -1295,11 +910,7 @@ settingsNeedLogin.onchange=function(){
 					"zh-TW":"設定已保存。"
 				}),1500);
 			}else{
-				notify(multilang({
-					"en-US":"Unable to connect to the server: ",
-					"zh-CN":"无法连接至服务器：",
-					"zh-TW":"無法連接至伺服器："
-				})+response.status);
+				error(response);
 			}
 		})
 	}else{
@@ -1307,39 +918,49 @@ settingsNeedLogin.onchange=function(){
 		menuItemLogin.click();
 	}
 }
-file.onchange=function(input){
-	upload(input);
-}
 if(location.hostname){
-	menuItemTestServer.style.display="none";
+	backend="https://server-cn.rthe.cn/backend/";
+}else{
+	backend="http://server-test.rthe.cn/backend/";
 }
-var servers=document.getElementsByClassName("server");
-for(var i=0;i<servers.length;i++){
-	servers[i].onclick=function(){
-		backend=this.getAttribute("value");
-		fileBackend=backend+"userdata/file/";
-		var tick=document.getElementsByClassName("tick");
-		for(var i=0;i<tick.length;i++){
-			if(tick[i].parentElement==this){
-				tick[i].style.opacity="1";
-			}else{
-				tick[i].style.opacity="0";
+fetch("https://server-auto.rthe.cn/backend/airportal/getserverlist").then(function(response){
+	if(response.ok){
+		return response.json();
+	}
+}).then(function(data){
+	fileBackend=data.servers[data.auto].host;
+	Object.keys(data.servers).forEach(function(key){
+		var newA=document.createElement("a");
+		var newTick=document.createElement("span");
+		var newName=document.createElement("span");
+		newA.classList.add("menuItem");
+		newA.setAttribute("value",data.servers[key].host);
+		newA.onclick=function(){
+			fileBackend=this.getAttribute("value");
+			var tick=document.getElementsByClassName("tick");
+			for(var i=0;i<tick.length;i++){
+				if(tick[i].parentElement==this){
+					tick[i].style.opacity="1";
+				}else{
+					tick[i].style.opacity="0";
+				}
 			}
+			hideMenu();
 		}
-		hideMenu();
-		fetch(fileBackend);
-		loadHistory();
-	}
-	if(!login.username&&i==0||login.username&&servers[i].getAttribute("value")==backend){
-		fetch(servers[i].getAttribute("value")+"userdata/file/").then(function(response){
-			if(response.ok){
-				return response.json();
-			}
-		}).then(function(data){
-			nameAutoServer.innerText+=" : "+data.server;
-		});
-	}
-}
+		newTick.classList.add("tick");
+		if(key==data.auto){
+			newTick.style.opacity="1";
+		}
+		newName.innerText=multilang({
+			"en-US":data.servers[key].name["en-US"],
+			"zh-CN":data.servers[key].name["zh-CN"],
+			"zh-TW":data.servers[key].name["zh-TW"]
+		})
+		newA.appendChild(newTick);
+		newA.appendChild(newName);
+		menu.appendChild(newA);
+	});
+});
 if($_GET["code"]){
 	receive.click();
 	if(popRecv.style.display){

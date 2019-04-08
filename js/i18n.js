@@ -25,10 +25,6 @@ if(!chs){
 		menuItemHistory.innerText="History";
 		menuItemSettings.innerText="Settings";
 		menuItemFeedback.innerText="Contact Us";
-		nameAutoServer.innerText="Auto-Select Server";
-		nameCnServer.innerText="CN Server";
-		nameUsServer.innerText="US Server";
-		nameTestServer.innerText="Test Server";
 		enterCode.innerText="Please enter the code";
 		btnSub.value="OK";
 		loginTip.innerText="Log in to AirPortal with Your RTH Account";
@@ -90,10 +86,6 @@ if(!chs){
 		menuItemHistory.innerText="歷史記錄";
 		menuItemSettings.innerText="設定";
 		menuItemFeedback.innerText="聯繫我們";
-		nameAutoServer.innerText="自動選擇伺服器";
-		nameCnServer.innerText="大陸伺服器";
-		nameUsServer.innerText="北美伺服器";
-		nameTestServer.innerText="測試伺服器";
 		enterCode.innerText="請輸入取件碼";
 		btnSub.value="確定";
 		loginTip.innerText="使用熱鐵盒賬號來登入到 AirPortal";
@@ -126,7 +118,7 @@ if(!chs){
 		multiFilesReceived.innerText="您接收到多個檔案。";
 		multiFilesTip.innerText="單擊列表中的項目來分別下載它們。";
 		titleUpdate.innerText="我們更新了 AirPortal";
-		lblUploadP.innerText="上傳中...";
+		lblUploadP.innerText="正在上傳...";
 		prefetching.innerText="正在從伺服器預讀取檔案";
 		lblDownloadP1.innerText="下載檔案碎片中";
 		lblDownloadP2.innerText="總下載進度";
