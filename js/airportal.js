@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w15a";
+var version="19w15a1";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -317,10 +317,16 @@ function onTouchEnd(){
 function onTouchStart(){
 	send.classList.remove("textColored");
 	longPress=setTimeout(function(){
-		send.style.display="none";
-		btnMainSendText.style.display="block";
-		btnMainSendText.onclick=sendText
-	},900);
+		send.style.opacity="0";
+		longPress=setTimeout(function(){
+			send.style.display="none";
+			btnMainSendText.style.display="block";
+			longPress=setTimeout(function(){
+				btnMainSendText.style.opacity="1";
+			},100);
+			btnMainSendText.onclick=sendText
+		},250);		
+	},600);
 }
 function payItemClick(element,className){
 	if(element.classList.contains("selected")){
