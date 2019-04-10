@@ -11,6 +11,7 @@ if(!chs){
 	if(!zh){
 		document.getElementsByTagName("html")[0].lang="en-US";
 		send.innerText=btnSendFeed.innerText="Send";
+		send.title="Right click to send text";
 		receive.innerText="Receive";
 		privacyPolicy.innerText="Privacy Policy";
 		footerR.innerHTML="Developed by";
@@ -49,7 +50,9 @@ if(!chs){
 		activatePremium.innerText="Activate/Renew Premium Plan";
 		showPrivilege.innerText="Why Premium Plan?";
 		titlePrivileges.innerText="Privileges of Premium Plan";
-		txtPrivileges.innerText="1. Batch upload;\n2. Upload files larger than 500 MB.";
+		txtPrivileges.innerText="1. Batch upload;\n\
+		2. Upload files larger than 500 MB;\n\
+		3. Faster download speed.";
 		plans.innerText="Plans";
 		month1.innerText="1 Month";
 		month3.innerText="3 Months";
@@ -73,6 +76,7 @@ if(!chs){
 	}else{
 		document.getElementsByTagName("html")[0].lang="zh-TW";
 		send.innerText=btnSendFeed.innerText="發送";
+		send.title="右鍵單擊發送文字";
 		receive.innerText="接收";
 		privacyPolicy.innerText="隱私政策";
 		footerR.innerHTML="由";
@@ -109,7 +113,10 @@ if(!chs){
 		activatePremium.innerText="啟用 / 續期高級賬號";
 		showPrivilege.innerText="高級賬號有哪些特權？";
 		titlePrivileges.innerText="高級賬號特權";
-		txtPrivileges.innerText="1. 批量上傳檔案；\n2. 上傳大於 500 MB 的檔案；\n3. 用最實在的方式表達對我們的愛 _(:з)∠)_";
+		txtPrivileges.innerText="1. 批量上傳檔案；\n\
+		2. 上傳大於 500 MB 的檔案；\n\
+		3. 更快的下載速度；\n\
+		4. 用最實在的方式表達對我們的愛 _(:з)∠)_";
 		month1.innerText="一個月";
 		month3.innerText="三個月";
 		alipay.innerText="支付寶";

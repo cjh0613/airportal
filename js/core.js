@@ -113,7 +113,7 @@ function getInfo(code){
 			}else if(data){
 				invalidAttempt--;
 				data=JSON.parse(data);
-				if(data.download===false){
+				if(data.error=="loginRequired"){
 					if(login.username){
 						notify(multilang({
 							"en-US":"You do not have permission to download this file.",
@@ -128,6 +128,8 @@ function getInfo(code){
 						}));
 						menuItemLogin.click();
 					}
+				}else if(data.text){
+					alert(decodeURIComponent(data.text));
 				}else if(data.length==1){
 					downloadFile(data[0]);
 					popRecv.style.opacity="0";
@@ -224,6 +226,28 @@ function upload(up,file){
 						up.start();
 					})
 				}
+			}
+		}
+	});
+}
+btnSendText.onclick=function(){
+	fetch(backend+"airportal/getcode",getPostData({
+		"text":txtSend.value,
+		"username":login.username
+	})).then(function(response){
+		if(response.ok){
+			return response.json();
+		}else{
+			error(response);
+		}
+	}).then(function(data){
+		if(data){
+			if(data.alert){
+				alert(data.alert);
+			}else{
+				txtSend.value="";
+				alert("发送成功，取件码："+data.code);
+				loadHistory();
 			}
 		}
 	});
