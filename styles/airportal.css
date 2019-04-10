@@ -9,14 +9,11 @@ body {
 	font-family: "Microsoft Yahei Light","Microsoft Yahei",Helvetica,sans-serif,"等线";
 	cursor: default;
 	-webkit-tap-highlight-color: transparent;
-	-moz-user-select: none; 
 	-webkit-user-select: none;
-	-ms-user-select: none;
-	-khtml-user-select: none;
 	user-select: none; 
 }
 * {
-  outline: none;
+	outline: none;
 }
 @-webkit-keyframes fadeIn {
 	0% {opacity: 0;}
@@ -46,25 +43,15 @@ a,button {outline: none;}
 	top: 60%;
 	width: 100%;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 .btnMain {
 	padding: 15px 10px;
 	margin: 0px calc(50% - 112px) 20px calc(50% - 112px);
-	-webkit-border-radius: 30px;
-	-moz-border-radius: 30px;
 	border-radius: 30px;
 	text-decoration: none;
 	cursor: pointer;
 	display: block;
-	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
+	transition: color 0.25s, background-color 0.25s, opacity 0.25s, box-shadow 0.25s;
 	width: 224px;
 }
 .send {
@@ -73,18 +60,10 @@ a,button {outline: none;}
 	background-color: rgb(65,145,245);
 	background-position: -500px;
 	background-repeat: no-repeat;
-	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
-	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 20px;
-	-webkit-transition: color 0.25s, background-color 0.25s, opacity 0.25s, box-shadow 0.25s, background-position 1.5s;
-	-moz-transition: color 0.25s, background-color 0.25s, opacity 0.25s, box-shadow 0.25s, background-position 1.5s;
-	-o-transition: color 0.25s, background-color 0.25s, opacity 0.25s, box-shadow 0.25s, background-position 1.5s;
-	-ms-transition: color 0.25s, background-color 0.25s, opacity 0.25s, box-shadow 0.25s, background-position 1.5s;
 	transition: color 0.25s, background-color 0.25s, opacity 0.25s, box-shadow 0.25s, background-position 1.5s;
 }
 .send:hover {
-	-webkit-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
-	-moz-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 }
 .send:active {
@@ -92,8 +71,6 @@ a,button {outline: none;}
 	background-color: white;
 	background-position: 100%;
 	background-image: url("../images/themeColor.jpg");
-	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
-	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 }
 #btnMainSendText {
@@ -106,20 +83,14 @@ a,button {outline: none;}
 	border: none;
 	color: rgb(65,145,245);
 	background-color: white;
-	-webkit-box-shadow: rgba(65,145,245,0.2) 0px 5px 20px;
-	-moz-box-shadow: rgba(65,145,245,0.2) 0px 5px 20px;
 	box-shadow: rgba(65,145,245,0.2) 0px 5px 20px;
 }
 #receive:hover {
-	-webkit-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
-	-moz-box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 }
 #receive:active {
 	color: white;
 	background-color: rgb(65,145,245);
-	-webkit-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
-	-moz-box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 }
 #menuIcon {
@@ -133,10 +104,6 @@ a,button {outline: none;}
 	border-bottom: 2px solid rgb(65,145,245);
 	background-color: rgb(65,145,245);
 	background-clip: content-box;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 	transition: all 0.25s;
 	cursor: pointer;
 }
@@ -163,18 +130,10 @@ a,button {outline: none;}
 	padding-top: 15px;
 	padding-bottom: 13px;
 	background-color: white;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
 	border-radius: 10px;
 	overflow: hidden;
-	-webkit-box-shadow: rgba(0,0,0,0.1) 0px 5px 35px;
-	-moz-box-shadow: rgba(0,0,0,0.1) 0px 5px 35px;
 	box-shadow: rgba(0,0,0,0.1) 0px 5px 35px;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 	opacity: 0;
 	display: none;
 }
@@ -187,10 +146,6 @@ a,button {outline: none;}
 	font-size: 12px;
 	color: rgba(0,0,0,0.6);
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 	cursor: pointer;
 }
 .menuItem:hover {
@@ -205,10 +160,6 @@ a,button {outline: none;}
 	font-size: 10px;
 	color: rgb(65,145,245);
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 .menuItem:hover > p {
 	color: white;
@@ -229,12 +180,7 @@ a,button {outline: none;}
 	top: 2px;
 	transform-origin: center;
 	transform: translate(-50%, -30%) rotate(45deg);
-	-webkit-transform: translate(-50%, -30%) rotate(45deg);
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 /*.latencyStatus {
 	display: inline;
@@ -242,10 +188,6 @@ a,button {outline: none;}
 	position: absolute;
 	right: 37px;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 .latencyStatus.good{
 	color: #A5C220;
@@ -277,18 +219,10 @@ a,button {outline: none;}
 	background-color: white;
 	text-align: center;
 	font-size: small;
-	-webkit-border-radius: 20px;
-	-moz-border-radius: 20px;
 	border-radius: 20px;
 	overflow: hidden;
-	-webkit-box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
-	-moz-box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
 	box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 .popUp,#popRecvCode {
 	display: none;
@@ -330,15 +264,9 @@ a,button {outline: none;}
 	font-family: "Microsoft Yahei Light","Microsoft Yahei",Helvetica,sans-serif,"等线";
 	color: rgba(0,0,0,0.8);
 	background-color: rgba(0,0,0,0.05);
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
 	border-radius: 3px;
 	resize: none;
 	transition: all 0.5s;
-	-webkit-transition: all 0.5s;
-	-moz-transition: all 0.5s;
-	-o-transition: all 0.5s;
-	-ms-transition: all 0.5s;
 }
 #recvCode {
 	font-size: 35px;
@@ -350,8 +278,6 @@ a,button {outline: none;}
 .btn1 {
 	position: relative;
 	padding: 10px 35px;
-	-webkit-border-radius: 20px;
-	-moz-border-radius: 20px;
 	border-radius: 20px;
 	text-decoration: none;
 	cursor: pointer;
@@ -360,14 +286,8 @@ a,button {outline: none;}
 	font-size: small;
 	background-color: rgb(65,145,245);
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 .btn1:hover {
-	-webkit-box-shadow: rgba(65,145,245,0.35) 0px 5px 30px;
-	-moz-box-shadow: rgba(65,145,245,0.35) 0px 5px 30px;
 	box-shadow: rgba(65,145,245,0.35) 0px 5px 30px;
 }
 .btn1:active {
@@ -408,10 +328,6 @@ a,button {outline: none;}
 	cursor: pointer;
 	margin: 0px 4px;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 .link1:link,.link1:visted {color: rgb(65,145,245);}
 .link1:hover {color: #A5C220;}
@@ -424,8 +340,6 @@ a,button {outline: none;}
 	left: 50%;
 	margin-left: -50px;
 	height: 3px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
 	border-radius: 2px;
 }
 #progressBarBg0,#progressBarBg1,#progressBarBg2 {
@@ -436,10 +350,6 @@ a,button {outline: none;}
 	width: 0;
 	background-color: rgb(65,145,245);
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 .dlTipBox {
 	margin-top: 65px;
@@ -449,10 +359,6 @@ a,button {outline: none;}
 .dlTipBox p {
 	margin-top: 0px;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 #sendBox0 {
 	z-index: 99;
@@ -463,19 +369,11 @@ a,button {outline: none;}
 	top: 160px;
 	background-color: white;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 #sendBox1,#sendBox_1 {
 	position: absolute;
 	width: 100%;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 #sendBox1 {
 	left: 500px;
@@ -490,10 +388,6 @@ a,button {outline: none;}
 	left: 1000px;
 	top: 60px;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 #QRBox {
 	position: absolute;
@@ -509,13 +403,8 @@ a,button {outline: none;}
 	border-top: 3px solid rgba(0,0,0,0.35);
 	height: 15px;
 	width: 15px;
-	-webkit-transform: rotate(225deg);
 	transform: rotate(225deg);
 	cursor: pointer;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 	transition: all 0.25s;
 }
 .btnBack:hover {
@@ -549,10 +438,6 @@ a,button {outline: none;}
 	font-size: 35px;
 	letter-spacing: 10px;
 	text-align: center;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 	transition: all 0.25s;
 }
 #inputCode:hover {
@@ -566,10 +451,6 @@ a,button {outline: none;}
 	width: 100%;
 	left: 0px;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 #recvBox1 {
 	position: absolute;
@@ -578,10 +459,6 @@ a,button {outline: none;}
 	margin-top: 30px;
 	background-color: white;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 #fileList {
 	width: 85%;
@@ -598,10 +475,6 @@ a,button {outline: none;}
 	padding-left: 30px;
 	background-color: white;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 	cursor: pointer;
 }
 #fileList li:nth-child(2n+1){
@@ -650,6 +523,9 @@ a,button {outline: none;}
 	font-weight: normal;
 	color: rgba(0,0,0,0.5);
 }
+.historyItem span{
+	cursor: pointer;
+}
 .btnDel {
 	position: absolute;
 	width: 12px;
@@ -657,7 +533,6 @@ a,button {outline: none;}
 	top: 50%;
 	right: 12px;
 	margin-top: -5px;
-	cursor: pointer;
 }
 .btnDel::before, .btnDel::after {
 	content: '';
@@ -669,23 +544,11 @@ a,button {outline: none;}
 	margin-top: -1px;
 	background-color: rgb(200,200,200);;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 .btnDel::before {
-	-webkit-transform: rotate(45deg);
-	-moz-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	-o-transform: rotate(45deg);
 	transform: rotate(45deg);
 }
 .btnDel::after {
-	-webkit-transform: rotate(-45deg);
-	-moz-transform: rotate(-45deg);
-	-ms-transform: rotate(-45deg);
-	-o-transform: rotate(-45deg);
 	transform: rotate(-45deg);
 }
 .btnDel:hover::before,.btnDel:hover::after {
@@ -713,18 +576,10 @@ a,button {outline: none;}
 	line-height: 30px;
 	letter-spacing: 10px;
 
-	-webkit-border-radius: 20px;
-	-moz-border-radius: 20px;
 	border-radius: 20px;
 	overflow: hidden;
-	-webkit-box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
-	-moz-box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
 	box-shadow: rgba(0,0,0,0.1) 0px 10px 20px;
 	transition: all 0.5s;
-	-webkit-transition: all 0.5s;
-	-moz-transition: all 0.5s;
-	-o-transition: all 0.5s;
-	-ms-transition: all 0.5s;
 }
 .payPlans {
 	position: relative;
@@ -746,15 +601,9 @@ a,button {outline: none;}
 	padding-bottom: 5px;
 	background-color: white;
 	border: solid 1px;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
 	border-radius: 5px;
 	cursor: pointer;
 	transition: all 0.5s;
-	-webkit-transition: all 0.5s;
-	-moz-transition: all 0.5s;
-	-o-transition: all 0.5s;
-	-ms-transition: all 0.5s;
 }
 .payItem {
 	color: rgb(65,145,245);
@@ -790,10 +639,6 @@ a,button {outline: none;}
 	color: rgb(65,145,245);
 	margin: 13px 10px 18px;
 	transition: all 0.5s;
-	-webkit-transition: all 0.5s;
-	-moz-transition: all 0.5s;
-	-o-transition: all 0.5s;
-	-ms-transition: all 0.5s;
 }
 .selected .p2 {
 	color: white;
@@ -801,19 +646,11 @@ a,button {outline: none;}
 .payItem .p4 {
 	font-size: 10px;
 	transition: all 0.5s;
-	-webkit-transition: all 0.5s;
-	-moz-transition: all 0.5s;
-	-o-transition: all 0.5s;
-	-ms-transition: all 0.5s;
 }
 .payItem .p5 {
 	font-size: 12px;
 	padding-top: 3.5px;
 	transition: all 0.5s;
-	-webkit-transition: all 0.5s;
-	-moz-transition: all 0.5s;
-	-o-transition: all 0.5s;
-	-ms-transition: all 0.5s;
 }
 .pDel {
 	font-size: 10px;
@@ -821,50 +658,30 @@ a,button {outline: none;}
 	margin-left: 5px;
 	text-decoration: line-through;
 	transition: all 0.5s;
-	-webkit-transition: all 0.5s;
-	-moz-transition: all 0.5s;
-	-o-transition: all 0.5s;
-	-ms-transition: all 0.5s;
 }
 #accBox_1 {
 	position: absolute;
 	width: 100%;
 	left: -500px;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 #accBox0 {
 	position: absolute;
 	width: 100%;
 	left: 0px;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 #accBox1 {
 	position: absolute;
 	width: 100%;
 	left: 500px;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 #accBox2 {
 	position: absolute;
 	width: 100%;
 	left: 1000px;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 #payQRC {
 	margin-top: -10px;
@@ -882,14 +699,8 @@ a,button {outline: none;}
 	font-size: small;
 	color: rgba(0,0,0,0.8);
 	background-color: rgba(0,0,0,0.05);
-	-webkit-border-radius: 50px;
-	-moz-border-radius: 50px;
 	border-radius: 50px;
 	transition: all 0.5s;
-	-webkit-transition: all 0.5s;
-	-moz-transition: all 0.5s;
-	-o-transition: all 0.5s;
-	-ms-transition: all 0.5s;
 }
 .input1:hover,#txtFeedback:hover {
 	background-color: rgba(0,0,0,0.1);
@@ -924,23 +735,11 @@ a,button {outline: none;}
 	margin-top: -1px;
 	background-color: rgb(180,180,180);
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 .btnClose::before {
-	-webkit-transform: rotate(45deg);
-	-moz-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	-o-transform: rotate(45deg);
 	transform: rotate(45deg);
 }
 .btnClose::after {
-	-webkit-transform: rotate(-45deg);
-	-moz-transform: rotate(-45deg);
-	-ms-transform: rotate(-45deg);
-	-o-transform: rotate(-45deg);
 	transform: rotate(-45deg);
 }
 .btnClose:hover::before,.btnClose:hover::after {
@@ -992,15 +791,9 @@ a,button {outline: none;}
 	font-family: "Microsoft Yahei Light","Microsoft Yahei",Helvetica,sans-serif,"等线";
 	color: rgba(0,0,0,0.8);
 	background-color: rgba(0,0,0,0.05);
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
 	border-radius: 3px;
 	resize: none;
 	transition: all 0.5s;
-	-webkit-transition: all 0.5s;
-	-moz-transition: all 0.5s;
-	-o-transition: all 0.5s;
-	-ms-transition: all 0.5s;
 }
 .contentBox {
 	position: relative;
@@ -1051,10 +844,6 @@ a,button {outline: none;}
 	font-size: small;
 	padding-top: 8px;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
-	-ms-transition: all 0.25s;
 }
 #footerL {
 	text-align: left;

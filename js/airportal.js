@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w15b";
+var version="19w15b1";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -113,11 +113,20 @@ function loadHistory(){
 				historyList.style.marginTop="-10px";
 				for(var i=data.length-1;i>=0;i--){
 					var newHistory=document.createElement("span");
+					var newSpan=document.createElement("span");
 					var newP=document.createElement("p");
 					var newDelBtn=document.createElement("span");
 					newHistory.classList.add("historyItem");
-					newHistory.innerText=data[i].code;
 					newHistory.setAttribute("code",data[i].code);
+					newSpan.innerText=data[i].code;
+					newSpan.title=multilang({
+						"en-US":"Download",
+						"zh-CN":"下载",
+						"zh-TW":"下載"
+					});
+					newSpan.onclick=function(){
+						open("https://rthe.cn/"+this.parentElement.getAttribute("code"));
+					}
 					newP.innerText=decodeURIComponent(data[i].name);
 					newDelBtn.classList.add("btnDel");
 					newDelBtn.title=multilang({
@@ -150,6 +159,7 @@ function loadHistory(){
 							});
 						}
 					}
+					newHistory.appendChild(newSpan);
 					newHistory.appendChild(newP);
 					newHistory.appendChild(newDelBtn);
 					historyList.appendChild(newHistory);
@@ -928,7 +938,7 @@ fetch("https://server-auto.rthe.cn/backend/airportal/getserverlist").then(functi
 		menu.appendChild(newA);
 	});
 });
-if($_GET["code"]){
+if(parseInt($_GET["code"])){
 	receive.click();
 	if(popRecv.style.display){
 		var animationProgress=0;
