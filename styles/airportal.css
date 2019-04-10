@@ -855,10 +855,6 @@ a,button {outline: none;}
 	text-align: right;
 }
 
-input[type=file]{
-	display: none;
-}
-
 @media screen and (max-width:500px){  
 	.btnMain {font-size: small;}
 	#menuIcon {top: 20px;margin-left: -45px;}

@@ -46,7 +46,7 @@ if(!chs){
 		titleFeedback.innerText="Send Us a Message";
 		faq.innerText="FAQ";
 		qqGroup.innerText="Our QQ Group: 319496964";
-		txtFeedback.placeholder="If you are not logged in, please leave your email address or other contact information";
+		txtFeedback.placeholder="If you are not logged in, please leave your email address";
 		activatePremium.innerText="Activate/Renew Premium Plan";
 		showPrivilege.innerText="Why Premium Plan?";
 		titlePrivileges.innerText="Privileges of Premium Plan";
@@ -109,7 +109,7 @@ if(!chs){
 		titleFeedback.innerText="向我們發送訊息";
 		faq.innerText="常見問題集";
 		qqGroup.innerText="我們的QQ群：319496964";
-		txtFeedback.placeholder="如果您沒有登入，請留下您的電子郵箱地址或其它聯繫方式";
+		txtFeedback.placeholder="如果您沒有登入，請留下您的電子郵箱地址";
 		activatePremium.innerText="啟用 / 續期高級賬號";
 		showPrivilege.innerText="高級賬號有哪些特權？";
 		titlePrivileges.innerText="高級賬號特權";

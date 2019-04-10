@@ -1,7 +1,6 @@
 var filename,option,randomKey,signature,uploadCode;
 var chunk=1;
 var expire=0;
-var now=Date.parse(new Date())/1000;
 function downloadFile(fileInfo){
 	if(fileInfo.download.length>1){
 		mainBox.style.opacity="0";
@@ -88,12 +87,13 @@ function downloadFile(fileInfo){
 		location.href=fileInfo.download[0];
 	}
 }
-function getInfo(code){
+function getInfo(code,password){
 	if(code){
 		btnSub.disabled=true;
 		invalidAttempt++;
 		fetch(backend+"airportal/getinfo?"+encodeData({
 			"code":code,
+			"password":password,
 			"username":login.username
 		})).then(function(response){
 			btnSub.disabled=false;
@@ -113,20 +113,44 @@ function getInfo(code){
 			}else if(data){
 				invalidAttempt--;
 				data=JSON.parse(data);
-				if(data.error=="loginRequired"){
-					if(login.username){
+				if(data.error){
+					switch(data.error){
+						case "loginRequired":
+						if(login.username){
+							notify(multilang({
+								"en-US":"You do not have permission to download this file.",
+								"zh-CN":"您没有下载此文件的权限。",
+								"zh-TW":"您沒有下載此檔案的權限。"
+							}));
+						}else{
+							notify(multilang({
+								"en-US":"Login is required for downloading this file.",
+								"zh-CN":"需要登录才能下载此文件。",
+								"zh-TW":"需要登入才能下載此檔案。"
+							}));
+							menuItemLogin.click();
+						}
+						break;
+						case "passwordIncorrect":
 						notify(multilang({
-							"en-US":"You do not have permission to download this file.",
-							"zh-CN":"您没有下载此文件的权限。",
-							"zh-TW":"您沒有下載此檔案的權限。"
+							"en-US":"Incorrect password.",
+							"zh-CN":"密码错误。",
+							"zh-TW":"密碼錯誤。"
 						}));
-					}else{
+						break;
+						case "passwordRequired":
+						password=prompt("请输入密码");
+						if(password){
+							getInfo(code,MD5(password));
+						}
+						break;
+						default:
 						notify(multilang({
-							"en-US":"Login is required for downloading this file.",
-							"zh-CN":"需要登录才能下载此文件。",
-							"zh-TW":"需要登入才能下載此檔案。"
-						}));
-						menuItemLogin.click();
+							"en-US":"Error: ",
+							"zh-CN":"错误：",
+							"zh-TW":"錯誤："
+						})+data.error);
+						break;
 					}
 				}else if(data.text){
 					alert(decodeURIComponent(data.text));
@@ -181,12 +205,17 @@ function getRandStr(len){
 	}
 	return pwd;
 }
-function upload(up,file){
+function upload(up,files,settings){
 	randomKey=getRandStr(10);
+	if(settings.password){
+		settings.password=MD5(settings.password);
+	}
 	fetch(backend+"airportal/getcode",getPostData({
 		"host":fileBackend,
-		"info":JSON.stringify(file),
+		"info":JSON.stringify(files),
 		"key":randomKey,
+		"password":settings.password,
+		"times":settings.times,
 		"username":login.username
 	})).then(function(response){
 		if(response.ok){
@@ -204,8 +233,7 @@ function upload(up,file){
 			}else{
 				uploadCode=data.code;
 				showUploading();
-				now=Date.parse(new Date())/1000; 
-				if(expire<now+3){
+				if(expire<new Date().getTime()/1000+3){
 					fetch("https://server-auto.rthe.cn/backend/airportal/sign").then(function(response){
 						if(response.ok){
 							return response.json();
@@ -225,6 +253,8 @@ function upload(up,file){
 						};
 						up.start();
 					})
+				}else{
+					up.start();
 				}
 			}
 		}
@@ -258,8 +288,17 @@ var uploader=new plupload.Uploader({
 	"url":backend,
 	"chunk_size":536870912,
 	"init":{
-		"FilesAdded":function(up,file){
-			upload(up,file);
+		"FilesAdded":function(up,files){
+			console.log("您选择了这些文件：");
+			plupload.each(files,function(file){
+				console.log(file.name);
+			});
+			var password=prompt("设置密码");
+			var times=prompt("设置可下载次数");
+			upload(up,files,{
+				"password":password,
+				"times":times
+			});
 		},
 		"BeforeUpload":function(up,file){
 			option["multipart_params"]["key"]=uploadCode+"/"+randomKey+"/1/"+encodeURIComponent(file.name);

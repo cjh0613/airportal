@@ -1,12 +1,12 @@
 "use strict";
 var appName="AirPortal";
-var version="19w15b1";
+var version="19w15c";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
 console.info("%c版本：%s",consoleInfoStyle,version);
 
-if(chs&&location.hostname=="airportal.cn"){
+if(chs){
 	txtVer.innerText="闽ICP备18016273号";
 	txtVer.onclick=function(){
 		open("http://www.miitbeian.gov.cn/");
@@ -37,7 +37,7 @@ var login={
 	"token":localStorage.getItem("Token"),
 	"username":localStorage.getItem("Username")
 };
-var longPress;
+var orderSubmitted=localStorage.getItem("orderSubmitted");
 var title=document.title;
 if(!firstRun||firstRun[version]==undefined){
 	firstRun={};
@@ -96,6 +96,52 @@ function getRandomCharacter(length){
 		str+=unescape("%u"+(Math.round(Math.random()*20901)+19968).toString(16));
 	}
 	return str;
+}
+function loadExpTime(){
+	if(orderSubmitted&&new Date().getTime()-orderSubmitted>86400000){
+		orderSubmitted=null;
+		localStorage.removeItem("orderSubmitted");
+	}
+	if(document.getElementById("privilegeStatus")){
+		fetch(backend+"get?"+encodeData({
+			"name":appName,
+			"token":login.token,
+			"url":"privilege",
+			"username":login.username
+		})).then(function(response){
+			if(response.ok){
+				return response.text();
+			}
+		}).then(function(data){
+			var expTime=Math.round((data-new Date().getTime()/1000)/86400);
+			if(data&&expTime>0){
+				if(orderSubmitted){
+					orderSubmitted=null;
+					localStorage.removeItem("orderSubmitted");
+				}
+				currentExpTime=data*1;
+				privilegeStatus.innerText=lblExpTime.innerText=multilang({
+					"en-US":"Premium Plan "+expTime+" Days Remaining",
+					"zh-CN":"高级账号 剩余"+expTime+"天",
+					"zh-TW":"高級賬號 剩餘"+expTime+"天"
+				});
+			}else{
+				if(orderSubmitted){
+					privilegeStatus.innerText=lblExpTime.innerText=multilang({
+						"en-US":"Waiting for order confirmation",
+						"zh-CN":"等待订单确认 最长需要24个小时",
+						"zh-TW":"等待訂單確認 最長需要24個小時"
+					});
+				}else{
+					privilegeStatus.innerText=lblExpTime.innerText=multilang({
+						"en-US":"Premium Plan Not Activated",
+						"zh-CN":"高级账号 未激活",
+						"zh-TW":"高級賬號 未激活"
+					});
+				}
+			}
+		});
+	}
 }
 function loadHistory(){
 	historyList.innerHTML="";
@@ -227,42 +273,10 @@ function loggedIn(newLogin){
 	lblUsername.innerText=login.email;
 	newItem.innerText=login.email;
 	menu.insertBefore(newItem,menu.firstChild);
-	fetch(backend+"get?"+encodeData({
-		"name":appName,
-		"token":login.token,
-		"url":"privilege",
-		"username":login.username
-	})).then(function(response){
-		if(response.ok){
-			return response.text();
-		}
-	}).then(function(data){
-		var newP=document.createElement("p");
-		if(data){
-			var expTime=Math.round((data-new Date().getTime()/1000)/86400);
-			if(expTime>0){
-				currentExpTime=data*1;
-				newP.innerText=lblExpTime.innerText=multilang({
-					"en-US":"Premium Plan "+expTime+" Days Remaining",
-					"zh-CN":"高级账号 剩余"+expTime+"天",
-					"zh-TW":"高級賬號 剩餘"+expTime+"天"
-				});
-			}else{
-				newP.innerText=lblExpTime.innerText=multilang({
-					"en-US":"Premium Plan Not Activated",
-					"zh-CN":"高级账号 未激活",
-					"zh-TW":"高級賬號 未激活"
-				});
-			}
-		}else{
-			newP.innerText=lblExpTime.innerText=multilang({
-				"en-US":"Premium Plan Not Activated",
-				"zh-CN":"高级账号 未激活",
-				"zh-TW":"高級賬號 未激活"
-			});
-		}
-		newItem.appendChild(newP);
-	});
+	var newP=document.createElement("p");
+	newP.id="privilegeStatus";
+	newItem.appendChild(newP);
+	loadExpTime();
 	fetch(backend+"userdata/set?"+encodeData({
 		"appname":appName,
 		"key":"loginRequired",
@@ -331,10 +345,7 @@ function payItemClick(element,className){
 	btnPay0State();
 }
 function rmAccountInfo(){
-	localStorage.removeItem("Backend");
-	localStorage.removeItem("Email");
-	localStorage.removeItem("Token");
-	localStorage.removeItem("Username");
+	localStorage.clear();
 	location.reload();
 }
 function sendText(){
@@ -533,34 +544,48 @@ menuItemFeedback.onclick=function(){
 }
 btnSendFeed.onclick=function(){
 	if(txtFeedback.value){
-		fetch("https://server-auto.rthe.cn/backend/feedback",getPostData({
-			"appname":appName,
-			"email":login.email,
-			"lang":navigator.language,
-			"name":login.username,
-			"recipient":"405801769@qq.com",
-			"text":txtFeedback.value,
-			"ver":version
-		})).then(function(response){
-			if(response.ok){
-				alert(multilang({
-					"en-US":"Send successfully! We will process your feedback as soon as possible. Have a nice day :D",
-					"zh-CN":"发送成功！我们会尽快处理您的反馈。祝您有开心的一天 :D",
-					"zh-TW":"發送成功！我們會盡快處理您的回饋。祝您有開心的一天 :D"
-				}));
-				popFeedback.style.opacity="0";
-				mainBox.style.opacity="1";
-				setTimeout(function(){
-					popFeedback.style.display="none";
-				},250);
-			}else{
-				alert(multilang({
-					"en-US":"Failed to send. . . Please try again or send an email to admin@yangshangzhen.com or fx_highway@qq.com",
-					"zh-CN":"发送失败……请您再试一次，或通过微博私信反馈（@是毛布斯呀 @YSZ-RTH）",
-					"zh-TW":"發送失敗……請您再試一次，或發送電郵到 admin@yangshangzhen.com 或 fx_highway@qq.com"
-				}));
-			}
-		});
+		var emailPattern=/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/;
+		var email=login.email||emailPattern.exec(txtFeedback.value)[0]||prompt(multilang({
+			"en-US":"Please enter your email address.",
+			"zh-CN":"请输入您的电子邮箱地址。",
+			"zh-TW":"請輸入您的電子郵箱地址。"
+		}));
+		if(emailPattern.test(email)){
+			fetch("https://server-auto.rthe.cn/backend/feedback",getPostData({
+				"appname":appName,
+				"email":email,
+				"lang":navigator.language,
+				"name":login.username,
+				"recipient":"405801769@qq.com",
+				"text":txtFeedback.value,
+				"ver":version
+			})).then(function(response){
+				if(response.ok){
+					alert(multilang({
+						"en-US":"Send successfully! We will process your feedback as soon as possible. Have a nice day :D",
+						"zh-CN":"发送成功！我们会尽快处理您的反馈。祝您有开心的一天 :D",
+						"zh-TW":"發送成功！我們會盡快處理您的回饋。祝您有開心的一天 :D"
+					}));
+					popFeedback.style.opacity="0";
+					mainBox.style.opacity="1";
+					setTimeout(function(){
+						popFeedback.style.display="none";
+					},250);
+				}else{
+					alert(multilang({
+						"en-US":"Failed to send. . . Please try again or send an email to admin@yangshangzhen.com or fx_highway@qq.com",
+						"zh-CN":"发送失败……请您再试一次，或通过微博私信反馈（@是毛布斯呀 @YSZ-RTH）",
+						"zh-TW":"發送失敗……請您再試一次，或發送電郵到 admin@yangshangzhen.com 或 fx_highway@qq.com"
+					}));
+				}
+			});
+		}else{
+			alert(multilang({
+				"en-US":"Please provide the correct email address, or we will not be able to reply to you.",
+				"zh-CN":"请提供正确的电子邮箱地址，否则我们将无法回复您。",
+				"zh-TW":"請提供正確的電子郵箱地址，否則我們將無法回復您。"
+			}));
+		}
 	}
 }
 viewQRC.onclick=function(){
@@ -808,6 +833,9 @@ btnPay1.onclick=function(){
 			});
 			btnDone3.style.pointerEvents="auto";
 			btnDone3.style.opacity="1";
+			orderSubmitted=new Date().getTime();
+			localStorage.setItem("orderSubmitted",orderSubmitted);
+			loadExpTime();
 		}else{
 			payState="error";
 			btnDone3.innerText=multilang({
@@ -958,7 +986,7 @@ if(parseInt($_GET["code"])){
 loadHistory();
 if(login.username){
 	loggedIn();
-}else if(location.hostname!="rthsoftware.cn"){
+}else{
 	var ssoIFrame=document.createElement("iframe");
 	ssoIFrame.style.display="none";
 	ssoIFrame.src="https://rthsoftware.cn/sso";
