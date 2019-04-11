@@ -1,23 +1,11 @@
 "use strict";
 var appName="AirPortal";
-var version="19w15c";
+var version="19w15c1";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
 console.info("%c版本：%s",consoleInfoStyle,version);
 
-if(chs){
-	txtVer.innerText="闽ICP备18016273号";
-	txtVer.onclick=function(){
-		open("http://www.miitbeian.gov.cn/");
-	}
-	txtVer.oncontextmenu=function(){
-		txtVer.innerText=version;
-		return false;
-	}
-}else{
-	txtVer.innerText=version;
-}
 var $_GET=(function(){
 	var json={};
 	if(location.search){
@@ -252,7 +240,6 @@ function loggedIn(newLogin){
 		localStorage.setItem("Username",login.username);
 		mainBox.style.opacity="1";
 		popLogin.style.display="none";
-		loadHistory();
 	}
 	menuItemLogin.innerText=multilang({
 		"en-US":"Log Out",
@@ -276,21 +263,6 @@ function loggedIn(newLogin){
 	var newP=document.createElement("p");
 	newP.id="privilegeStatus";
 	newItem.appendChild(newP);
-	loadExpTime();
-	fetch(backend+"userdata/set?"+encodeData({
-		"appname":appName,
-		"key":"loginRequired",
-		"token":login.token,
-		"username":login.username
-	})).then(function(response){
-		if(response.ok){
-			return response.text();
-		}
-	}).then(function(data){
-		if(data=="1"){
-			settingsNeedLogin.checked=true;
-		}
-	})
 	if(!newLogin){
 		fetch("https://server-auto.rthe.cn/backend/userdata/verify?"+encodeData({
 			"token":login.token,
@@ -309,6 +281,22 @@ function loggedIn(newLogin){
 			}
 		});
 	}
+	loadExpTime();
+	loadHistory();
+	fetch(backend+"userdata/set?"+encodeData({
+		"appname":appName,
+		"key":"loginRequired",
+		"token":login.token,
+		"username":login.username
+	})).then(function(response){
+		if(response.ok){
+			return response.text();
+		}
+	}).then(function(data){
+		if(data=="1"){
+			settingsNeedLogin.checked=true;
+		}
+	})
 }
 function multilang(json){
 	if(chs){
@@ -545,7 +533,7 @@ menuItemFeedback.onclick=function(){
 btnSendFeed.onclick=function(){
 	if(txtFeedback.value){
 		var emailPattern=/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/;
-		var email=login.email||emailPattern.exec(txtFeedback.value)[0]||prompt(multilang({
+		var email=login.email||emailPattern.exec(txtFeedback.value)&&emailPattern.exec(txtFeedback.value)[0]||prompt(multilang({
 			"en-US":"Please enter your email address.",
 			"zh-CN":"请输入您的电子邮箱地址。",
 			"zh-TW":"請輸入您的電子郵箱地址。"
@@ -925,81 +913,36 @@ settingsNeedLogin.onchange=function(){
 }
 if(location.hostname){
 	backend="https://server-cn.rthe.cn/backend/";
+	if("serviceWorker" in navigator){
+		navigator.serviceWorker.getRegistrations().then(function(registrations){
+			for(var i=0;i<registrations.length;i++){
+				registrations[i].unregister();
+			}
+		});
+	}
 }else{
 	backend="http://server-test.rthe.cn/backend/";
 }
-fetch("https://server-auto.rthe.cn/backend/airportal/getserverlist").then(function(response){
-	if(response.ok){
-		return response.json();
-	}
-}).then(function(data){
-	fileBackend=data.servers[data.auto].host;
-	Object.keys(data.servers).forEach(function(key){
-		var newA=document.createElement("a");
-		var newTick=document.createElement("span");
-		var newName=document.createElement("span");
-		newA.classList.add("menuItem");
-		newA.setAttribute("value",data.servers[key].host);
-		newA.onclick=function(){
-			fileBackend=this.getAttribute("value");
-			var tick=document.getElementsByClassName("tick");
-			for(var i=0;i<tick.length;i++){
-				if(tick[i].parentElement==this){
-					tick[i].style.opacity="1";
-				}else{
-					tick[i].style.opacity="0";
-				}
-			}
-			hideMenu();
-		}
-		newTick.classList.add("tick");
-		if(key==data.auto){
-			newTick.style.opacity="1";
-		}
-		newName.innerText=multilang({
-			"en-US":data.servers[key].name["en-US"],
-			"zh-CN":data.servers[key].name["zh-CN"],
-			"zh-TW":data.servers[key].name["zh-TW"]
-		})
-		newA.appendChild(newTick);
-		newA.appendChild(newName);
-		menu.appendChild(newA);
-	});
-});
-if(parseInt($_GET["code"])){
-	receive.click();
-	if(popRecv.style.display){
-		var animationProgress=0;
-		var codeSplit=$_GET["code"].split("");
-		inputCode.value="";
-		var intervalId=setInterval(function(){
-			if(animationProgress<4){
-				inputCode.value+=codeSplit[animationProgress];
-				animationProgress++;
-			}else{
-				clearInterval(intervalId);
-				btnSub.click();
-			}
-		},400);
-	}
-}
-loadHistory();
 if(login.username){
 	loggedIn();
 }else{
+	loadHistory();
 	var ssoIFrame=document.createElement("iframe");
 	ssoIFrame.style.display="none";
 	ssoIFrame.src="https://rthsoftware.cn/sso";
 	document.body.appendChild(ssoIFrame);
 }
-if(location.hostname&&"serviceWorker" in navigator){
-	navigator.serviceWorker.getRegistrations().then(function(registrations){
-		for(var i=0;i<registrations.length;i++){
-			if(registrations[i].scope.indexOf("airportal")!=-1){
-				registrations[i].unregister();
-			}
-		}
-	})
+if(chs){
+	txtVer.innerText="闽ICP备18016273号";
+	txtVer.onclick=function(){
+		open("http://www.miitbeian.gov.cn/");
+	}
+	txtVer.oncontextmenu=function(){
+		txtVer.innerText=version;
+		return false;
+	}
+}else{
+	txtVer.innerText=version;
 }
 var newScript=document.createElement("script");
 newScript.async=true;

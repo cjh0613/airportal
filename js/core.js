@@ -347,4 +347,61 @@ var uploader=new plupload.Uploader({
 		}
 	}
 });
-uploader.init();
+fetch("https://server-auto.rthe.cn/backend/airportal/getserverlist").then(function(response){
+	if(response.ok){
+		return response.json();
+	}else{
+		error(response);
+	}
+}).then(function(data){
+	fileBackend=data.servers[data.auto].host;
+	uploader.init();
+	Object.keys(data.servers).forEach(function(key){
+		var newA=document.createElement("a");
+		var newTick=document.createElement("span");
+		var newName=document.createElement("span");
+		newA.classList.add("menuItem");
+		newA.setAttribute("value",data.servers[key].host);
+		newA.onclick=function(){
+			fileBackend=this.getAttribute("value");
+			var tick=document.getElementsByClassName("tick");
+			for(var i=0;i<tick.length;i++){
+				if(tick[i].parentElement==this){
+					tick[i].style.opacity="1";
+				}else{
+					tick[i].style.opacity="0";
+				}
+			}
+			hideMenu();
+		}
+		newTick.classList.add("tick");
+		if(key==data.auto){
+			newTick.style.opacity="1";
+		}
+		newName.innerText=multilang({
+			"en-US":data.servers[key].name["en-US"],
+			"zh-CN":data.servers[key].name["zh-CN"],
+			"zh-TW":data.servers[key].name["zh-TW"]
+		})
+		newA.appendChild(newTick);
+		newA.appendChild(newName);
+		menu.appendChild(newA);
+	});
+});
+if(parseInt($_GET["code"])){
+	receive.click();
+	if(popRecv.style.display){
+		var animationProgress=0;
+		var codeSplit=$_GET["code"].split("");
+		inputCode.value="";
+		var intervalId=setInterval(function(){
+			if(animationProgress<4){
+				inputCode.value+=codeSplit[animationProgress];
+				animationProgress++;
+			}else{
+				clearInterval(intervalId);
+				btnSub.click();
+			}
+		},400);
+	}
+}
