@@ -347,7 +347,10 @@ var uploader=new plupload.Uploader({
 		}
 	}
 });
-fetch("https://server-auto.rthe.cn/backend/airportal/getserverlist").then(function(response){
+fetch("https://server-auto.rthe.cn/backend/airportal/getserverlist?"+encodeData({
+	"token":login.token,
+	"username":login.username
+})).then(function(response){
 	if(response.ok){
 		return response.json();
 	}else{
@@ -363,16 +366,24 @@ fetch("https://server-auto.rthe.cn/backend/airportal/getserverlist").then(functi
 		newA.classList.add("menuItem");
 		newA.setAttribute("value",data.servers[key].host);
 		newA.onclick=function(){
-			fileBackend=this.getAttribute("value");
-			var tick=document.getElementsByClassName("tick");
-			for(var i=0;i<tick.length;i++){
-				if(tick[i].parentElement==this){
-					tick[i].style.opacity="1";
-				}else{
-					tick[i].style.opacity="0";
+			if(this.getAttribute("value")){
+				fileBackend=this.getAttribute("value");
+				var tick=document.getElementsByClassName("tick");
+				for(var i=0;i<tick.length;i++){
+					if(tick[i].parentElement==this){
+						tick[i].style.opacity="1";
+					}else{
+						tick[i].style.opacity="0";
+					}
 				}
+				hideMenu();
+			}else{
+				alert(multilang({
+					"en-US":"This server is for premium account users only.",
+					"zh-CN":"此服务器仅限高级账号用户使用。",
+					"zh-TW":"此伺服器僅限高級賬號用戶使用。"
+				}));
 			}
-			hideMenu();
 		}
 		newTick.classList.add("tick");
 		if(key==data.auto){
