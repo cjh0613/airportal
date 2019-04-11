@@ -1,4 +1,4 @@
-var filename,option,randomKey,signature,uploadCode;
+var filename,option,randomKey,servers,signature,uploadCode;
 var chunk=1;
 var expire=0;
 function downloadFile(fileInfo){
@@ -240,15 +240,15 @@ function upload(up,files,settings){
 						}else{
 							error(response);
 						}
-					}).then(function(data){
-						expire=parseInt(data.expire);
+					}).then(function(signData){
+						expire=parseInt(signData.expire);
 						option={
-							"url":fileBackend,
+							"url":"https://"+data.host,
 							"multipart_params":{
-								"policy":data.policy,
-								"OSSAccessKeyId":data.accessid, 
+								"policy":signData.policy,
+								"OSSAccessKeyId":signData.accessid, 
 								"success_action_status":"200",
-								"signature":data.signature
+								"signature":signData.signature
 							}
 						};
 						up.start();
@@ -347,27 +347,34 @@ var uploader=new plupload.Uploader({
 		}
 	}
 });
-fetch("https://server-auto.rthe.cn/backend/airportal/getserverlist?"+encodeData({
-	"token":login.token,
-	"username":login.username
-})).then(function(response){
+fetch("https://server-auto.rthe.cn/backend/airportal/getserverlist").then(function(response){
 	if(response.ok){
 		return response.json();
 	}else{
 		error(response);
 	}
 }).then(function(data){
-	fileBackend=data.servers[data.auto].host;
+	servers=data.servers;
+	fileBackend=servers[data.auto].host;
 	uploader.init();
-	Object.keys(data.servers).forEach(function(key){
+	Object.keys(servers).forEach(function(key){
 		var newA=document.createElement("a");
 		var newTick=document.createElement("span");
 		var newName=document.createElement("span");
 		newA.classList.add("menuItem");
-		newA.setAttribute("value",data.servers[key].host);
+		newA.id=key;
 		newA.onclick=function(){
-			if(this.getAttribute("value")){
-				fileBackend=this.getAttribute("value");
+			if(!currentExpTime&&servers[this.id].premium){
+				notify(multilang({
+					"en-US":"This server is for premium account users only.",
+					"zh-CN":"此服务器仅限高级账号用户使用。",
+					"zh-TW":"此伺服器僅限高級賬號用戶使用。"
+				}));
+				if(!login.username){
+					menuItemLogin.click();
+				}
+			}else{
+				fileBackend=servers[this.id].host;
 				var tick=document.getElementsByClassName("tick");
 				for(var i=0;i<tick.length;i++){
 					if(tick[i].parentElement==this){
@@ -376,24 +383,14 @@ fetch("https://server-auto.rthe.cn/backend/airportal/getserverlist?"+encodeData(
 						tick[i].style.opacity="0";
 					}
 				}
-				hideMenu();
-			}else{
-				alert(multilang({
-					"en-US":"This server is for premium account users only.",
-					"zh-CN":"此服务器仅限高级账号用户使用。",
-					"zh-TW":"此伺服器僅限高級賬號用戶使用。"
-				}));
 			}
+			hideMenu();
 		}
 		newTick.classList.add("tick");
 		if(key==data.auto){
 			newTick.style.opacity="1";
 		}
-		newName.innerText=multilang({
-			"en-US":data.servers[key].name["en-US"],
-			"zh-CN":data.servers[key].name["zh-CN"],
-			"zh-TW":data.servers[key].name["zh-TW"]
-		})
+		newName.innerText=servers[key].name;
 		newA.appendChild(newTick);
 		newA.appendChild(newName);
 		menu.appendChild(newA);
