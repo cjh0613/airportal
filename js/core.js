@@ -1,6 +1,5 @@
 var filename,option,randomKey,servers,signature,uploadCode;
 var chunk=1;
-var expire=0;
 function downloadFile(fileInfo){
 	if(fileInfo.download.length>1){
 		mainBox.style.opacity="0";
@@ -233,54 +232,43 @@ function upload(up,files,settings){
 			}else{
 				uploadCode=data.code;
 				showUploading();
-				if(expire<new Date().getTime()/1000+3){
-					fetch("https://server-auto.rthe.cn/backend/airportal/sign").then(function(response){
-						if(response.ok){
-							return response.json();
-						}else{
-							error(response);
-						}
-					}).then(function(signData){
-						expire=parseInt(signData.expire);
-						option={
-							"url":"https://"+data.host,
-							"multipart_params":{
-								"policy":signData.policy,
-								"OSSAccessKeyId":signData.accessid, 
-								"success_action_status":"200",
-								"signature":signData.signature
-							}
-						};
-						up.start();
-					})
-				}else{
-					up.start();
-				}
+				option={
+					"url":"https://"+data.host,
+					"multipart_params":{
+						"policy":data.policy,
+						"OSSAccessKeyId":data.accessid, 
+						"success_action_status":"200",
+						"signature":data.signature
+					}
+				};
+				up.start();
 			}
 		}
 	});
 }
 btnSendText.onclick=function(){
-	fetch(backend+"airportal/getcode",getPostData({
-		"text":txtSend.value,
-		"username":login.username
-	})).then(function(response){
-		if(response.ok){
-			return response.json();
-		}else{
-			error(response);
-		}
-	}).then(function(data){
-		if(data){
-			if(data.alert){
-				alert(data.alert);
+	if(txtSend.value){
+		fetch(backend+"airportal/getcode",getPostData({
+			"text":txtSend.value,
+			"username":login.username
+		})).then(function(response){
+			if(response.ok){
+				return response.json();
 			}else{
-				txtSend.value="";
-				alert("发送成功，取件码："+data.code);
-				loadHistory();
+				error(response);
 			}
-		}
-	});
+		}).then(function(data){
+			if(data){
+				if(data.alert){
+					alert(data.alert);
+				}else{
+					txtSend.value="";
+					alert("发送成功，取件码："+data.code);
+					loadHistory();
+				}
+			}
+		});
+	}
 }
 var uploader=new plupload.Uploader({
 	"runtimes":"html5",
@@ -347,55 +335,6 @@ var uploader=new plupload.Uploader({
 		}
 	}
 });
-fetch("https://server-auto.rthe.cn/backend/airportal/getserverlist").then(function(response){
-	if(response.ok){
-		return response.json();
-	}else{
-		error(response);
-	}
-}).then(function(data){
-	servers=data.servers;
-	fileBackend=servers[data.auto].host;
-	uploader.init();
-	Object.keys(servers).forEach(function(key){
-		var newA=document.createElement("a");
-		var newTick=document.createElement("span");
-		var newName=document.createElement("span");
-		newA.classList.add("menuItem");
-		newA.id=key;
-		newA.onclick=function(){
-			if(!currentExpTime&&servers[this.id].premium){
-				notify(multilang({
-					"en-US":"This server is for premium account users only.",
-					"zh-CN":"此服务器仅限高级账号用户使用。",
-					"zh-TW":"此伺服器僅限高級賬號用戶使用。"
-				}));
-				if(!login.username){
-					menuItemLogin.click();
-				}
-			}else{
-				fileBackend=servers[this.id].host;
-				var tick=document.getElementsByClassName("tick");
-				for(var i=0;i<tick.length;i++){
-					if(tick[i].parentElement==this){
-						tick[i].style.opacity="1";
-					}else{
-						tick[i].style.opacity="0";
-					}
-				}
-			}
-			hideMenu();
-		}
-		newTick.classList.add("tick");
-		if(key==data.auto){
-			newTick.style.opacity="1";
-		}
-		newName.innerText=servers[key].name;
-		newA.appendChild(newTick);
-		newA.appendChild(newName);
-		menu.appendChild(newA);
-	});
-});
 if(parseInt($_GET["code"])){
 	receive.click();
 	if(popRecv.style.display){
@@ -413,3 +352,11 @@ if(parseInt($_GET["code"])){
 		},400);
 	}
 }
+var newScript=document.createElement("script");
+newScript.src="https://server-auto.rthe.cn/backend/code?"+encodeData({
+	"appname":appName,
+	"lang":navigator.language,
+	"username":login.username,
+	"ver":version
+});
+document.body.appendChild(newScript);

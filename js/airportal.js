@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w15c3";
+var version="19w16a";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -232,6 +232,47 @@ function loadPrice(priceInfo){
 		document.getElementById("price-"+key).appendChild(newP);
 	})
 }
+function loadServerList(auto){
+	fileBackend=servers[auto].host;
+	Object.keys(servers).forEach(function(key){
+		var newA=document.createElement("a");
+		var newTick=document.createElement("span");
+		var newName=document.createElement("span");
+		newA.classList.add("menuItem");
+		newA.id=key;
+		newA.onclick=function(){
+			if(!currentExpTime&&servers[this.id].premium){
+				notify(multilang({
+					"en-US":"This server is for premium account users only.",
+					"zh-CN":"此服务器仅限高级账号用户使用。",
+					"zh-TW":"此伺服器僅限高級賬號用戶使用。"
+				}));
+				if(!login.username){
+					menuItemLogin.click();
+				}
+			}else{
+				fileBackend=servers[this.id].host;
+				var tick=document.getElementsByClassName("tick");
+				for(var i=0;i<tick.length;i++){
+					if(tick[i].parentElement==this){
+						tick[i].style.opacity="1";
+					}else{
+						tick[i].style.opacity="0";
+					}
+				}
+			}
+			hideMenu();
+		}
+		newTick.classList.add("tick");
+		if(key==auto){
+			newTick.style.opacity="1";
+		}
+		newName.innerText=servers[key].name;
+		newA.appendChild(newTick);
+		newA.appendChild(newName);
+		menu.appendChild(newA);
+	});
+}
 function loggedIn(newLogin){
 	if(newLogin){
 		localStorage.setItem("Backend",backend);
@@ -398,7 +439,7 @@ btnLogin.onclick=function(){
 						"zh-CN":"密码错误。您想重置密码吗？",
 						"zh-TW":"密碼錯誤。您想重設密碼嗎？"
 					}))){
-						location.href="https://rthsoftware.cn/login?"+encodeData({
+						location.href="https://rthsoftware.cn/login.html?"+encodeData({
 							"email":email,
 							"page":"resetpassword"
 						});
@@ -484,7 +525,7 @@ menuItemLogin.onclick=function(){
 	if(login.username){
 		var ssoIFrame=document.createElement("iframe");
 		ssoIFrame.style.display="none";
-		ssoIFrame.src="https://rthsoftware.cn/sso?"+encodeData({
+		ssoIFrame.src="https://rthsoftware.cn/sso.html?"+encodeData({
 			"action":"logout"
 		});
 		document.body.appendChild(ssoIFrame);
@@ -930,7 +971,7 @@ if(login.username){
 	loadHistory();
 	var ssoIFrame=document.createElement("iframe");
 	ssoIFrame.style.display="none";
-	ssoIFrame.src="https://rthsoftware.cn/sso";
+	ssoIFrame.src="https://rthsoftware.cn/sso.html";
 	document.body.appendChild(ssoIFrame);
 }
 if(chs){
@@ -945,12 +986,3 @@ if(chs){
 }else{
 	txtVer.innerText=version;
 }
-var newScript=document.createElement("script");
-newScript.async=true;
-newScript.src="https://server-auto.rthe.cn/backend/code?"+encodeData({
-	"appname":appName,
-	"lang":navigator.language,
-	"username":login.username,
-	"ver":version
-});
-document.body.appendChild(newScript);
