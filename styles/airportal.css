@@ -257,7 +257,7 @@ a,button {outline: none;}
 	display: block;
 	border: 1px solid transparent;
 	width: 75%;
-	height: 150px;
+	height: 180px;
 	padding: 10px 2.5%;
 	margin-top: 10px;
 	text-align: center;
@@ -301,7 +301,7 @@ a,button {outline: none;}
 #btnDone1,#btnDone2,#btnDone4 {
 	top: 10px;
 }
-#btnSendFeed {
+#btnSendFeed,#btnSendText {
 	top: 20px;
 }
 #btnDone3 {
