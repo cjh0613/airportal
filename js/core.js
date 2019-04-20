@@ -213,14 +213,14 @@ function getInfo(code,password){
 				}else if(data.text){
 					showPopup([
 						'<p id="txtReceived" class="p1"></p>',
-						'<span class="line"></span>',
+						//'<span class="line"></span>',
 						'<div id="txtView" class="contentBox"></div>',
 						'<button class="btn1" id="btnDone4"></button>'
 					],"recvBox1","popRecv","slideInFromRight");
 					id("txtReceived").innerText=multilang({
 						"en-US":"Text Received",
-						"zh-CN":"您接收到文本",
-						"zh-TW":"您接收到文字"
+						"zh-CN":"接收到文本",
+						"zh-TW":"接收到文字"
 					});
 					id("txtView").innerText=decodeURIComponent(data.text);
 					id("btnDone4").innerText=multilang({
