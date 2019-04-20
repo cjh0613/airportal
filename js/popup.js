@@ -197,7 +197,7 @@ send.oncontextmenu=function(){
 	showPopup([
 		'<span class="btnClose" id="btnClose4"></span>',
 		'<p id="titleSendText" class="p1">发送文本</p>',
-		'<span class="line"></span>',
+		//'<span class="line"></span>',
 		'<textarea id="txtSend" placeholder="在此处键入任意纯文本"></textarea>',
 		'<button class="btn1" id="btnSendText">发送</button>'
 	],"sendBox0","popSend");

@@ -68,8 +68,8 @@ a,button {outline: none;}
 .send:active {
 	color: rgb(65,145,245);
 	background-color: white;
-	background-position: 100%;
-	background-image: url("../images/themeColor.jpg");
+	/*background-position: 100%;
+	background-image: url("../images/themeColor.jpg");*/
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
 }
 #receive {
@@ -450,6 +450,13 @@ a,button {outline: none;}
 	display: block;
 	padding: 5px 10px;
 	width: calc(100% - 20px);
+	transition: all 0.25s;
+}
+.tableUploadSettings input:hover {
+	border: 1px solid rgb(65,145,245);	
+}
+.tableUploadSettings input:focus {
+	border: 1px solid rgb(65,145,245);	
 }
 .line {
 	position: absolute;
