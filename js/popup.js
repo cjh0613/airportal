@@ -328,7 +328,7 @@ menuItemLogin.onclick=function(){
 			"zh-TW":"郵箱"
 		});
 		id("inputEmail").onkeydown=function(event){
-			if(event.keyCode==13){
+			if(event.keyCode==13&&this.value){
 				id("inputPsw").focus();
 			}
 		}

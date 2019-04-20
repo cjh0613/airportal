@@ -271,10 +271,10 @@ a,button {outline: none;}
 #btnDone0 {
 	top: 20px;
 }
-#btnDone1,#btnDone2,#btnDone4 {
+#btnDone1,#btnDone2 {
 	top: 15px;
 }
-#btnSendFeed,#btnSendText {
+#btnDone4,#btnSendFeed,#btnSendText {
 	top: 20px;
 }
 #btnDone3 {
