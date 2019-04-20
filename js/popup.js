@@ -37,14 +37,13 @@ function showChangelog(text,firstRunOnly){
 	if(firstRun===true||!firstRunOnly){
 		showPopup([
 			'<p id="titleUpdate" class="p1"></p>',
-			'<span class="line"></span>',
 			'<div id="txtUpdate" class="contentBox"></div>',
 			'<button class="btn1" id="btnDone4"></button>'
-		],null,"popUpdate");
+		],null,"popUpdate","rebound");
 		id("titleUpdate").innerText=multilang({
-			"en-US":"AirPortal is Updated",
-			"zh-CN":"我们更新了 AirPortal",
-			"zh-TW":"我們更新了 AirPortal"
+			"en-US":"What's New",
+			"zh-CN":"最近更新",
+			"zh-TW":"最近更新"
 		});
 		txtUpdate.innerHTML=text;
 		id("btnDone4").innerText=multilang({
@@ -69,7 +68,15 @@ function showPopup(html,elementId,parentId,animation){
 		document.body.appendChild(newParent);
 		setTimeout(function(){
 			newParent.style.opacity="1";
+			if(animation=="rebound"){
+				newParent.style.transform="scale(1.05)";
+			}
 		},250);
+		if(animation=="rebound"){
+			setTimeout(function(){
+				newParent.style.transform="";
+			},500);
+		}
 	}
 	if(elementId&&!id(elementId)){
 		var newDiv=document.createElement("div");
@@ -200,7 +207,7 @@ send.oncontextmenu=function(){
 		//'<span class="line"></span>',
 		'<textarea id="txtSend" placeholder="在此处键入任意纯文本"></textarea>',
 		'<button class="btn1" id="btnSendText">发送</button>'
-	],"sendBox0","popSend");
+	],"sendBox0","popSend","rebound");
 	id("btnClose4").onclick=function(){
 		closePopup("popSend");
 	}
@@ -320,21 +327,26 @@ menuItemLogin.onclick=function(){
 			"zh-CN":"邮箱",
 			"zh-TW":"郵箱"
 		});
+		id("inputEmail").onkeydown=function(event){
+			if(event.keyCode==13){
+				id("inputPsw").focus();
+			}
+		}
 		id("inputPsw").placeholder=multilang({
 			"en-US":"Password",
 			"zh-CN":"密码",
 			"zh-TW":"密碼"
-		});
-		id("btnLogin").innerText=multilang({
-			"en-US":"Login",
-			"zh-CN":"登录",
-			"zh-TW":"登入"
 		});
 		id("inputPsw").onkeydown=function(event){
 			if(event.keyCode==13){
 				btnLogin.click();
 			}
 		}
+		id("btnLogin").innerText=multilang({
+			"en-US":"Login",
+			"zh-CN":"登录",
+			"zh-TW":"登入"
+		});
 		id("btnLogin").onclick=function(){
 			if(id("inputEmail").value&&id("inputPsw").value){
 				var email=id("inputEmail").value.toLowerCase();

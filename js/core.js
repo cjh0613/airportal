@@ -242,8 +242,8 @@ function getInfo(code,password){
 					],"recvBox1","popRecv","slideInFromRight");
 					id("multiFilesReceived").innerText=multilang({
 						"en-US":"Multiple files received",
-						"zh-CN":"您接收到多个文件",
-						"zh-TW":"您接收到多個檔案"
+						"zh-CN":"接收到多个文件",
+						"zh-TW":"接收到多個檔案"
 					});
 					id("multiFilesTip").innerText=multilang({
 						"en-US":"Click on the items in the list to download them separately",
@@ -371,7 +371,7 @@ var uploader=new plupload.Uploader({
 								'<label id="lblFilePsw" for="inputFilePsw"></label>',
 							'</td>',
 							'<td>',
-								'<input id="inputFilePsw" type="password">',
+								'<input id="inputFilePsw" autocomplete="off">',
 							'</td>',
 						'</tr>',
 						'<tr>',
@@ -385,7 +385,7 @@ var uploader=new plupload.Uploader({
 					'</tbody>',
 				'</table>',
 				'<button class="btn1" id="btnUpload"></button>'
-			],"uploadList","popSend");
+			],"uploadList","popSend","rebound");
 			id("btnClose1").onclick=function(){
 				uploader.splice();
 				closePopup("popSend");
