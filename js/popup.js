@@ -299,7 +299,7 @@ menuItemLogin.onclick=function(){
 		document.body.appendChild(ssoIFrame);
 	}else{
 		showPopup([
-			'<span class="btnClose" id="btnClose1"></span>',
+			'<span class="btnClose" id="btnCloseLogin"></span>',
 			'<div class="loginLogo"></div>',
 			'<p class="p4">',
 				'<span id="loginTip"></span>',
@@ -309,7 +309,7 @@ menuItemLogin.onclick=function(){
 			'<input type="password" name="password" class="input1" id="inputPsw">',
 			'<button class="btn1" id="btnLogin"></button>'
 		],null,"popLogin");
-		id("btnClose1").onclick=function(){
+		id("btnCloseLogin").onclick=function(){
 			closePopup("popLogin");
 		}
 		id("loginTip").innerText=multilang({

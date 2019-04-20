@@ -300,11 +300,11 @@ function upload(up,files,settings){
 		settings.password=MD5(settings.password);
 	}
 	fetch(backend+"airportal/getcode",getPostData({
+		"downloads":settings.downloads,
 		"host":fileBackend,
 		"info":JSON.stringify(files),
 		"key":randomKey,
 		"password":settings.password,
-		"times":settings.times,
 		"username":login.username
 	})).then(function(response){
 		if(response.ok){
@@ -316,6 +316,7 @@ function upload(up,files,settings){
 		if(data){
 			if(data.alert){
 				alert(data.alert);
+				id("inputMaxDl").value=fileCount+1;
 				if(!login.username){
 					menuItemLogin.click();
 				}
@@ -358,7 +359,7 @@ var uploader=new plupload.Uploader({
 	"init":{
 		"FilesAdded":function(up,files){
 			showPopup([
-				'<span class="btnClose" id="btnClose1"></span>',
+				'<span class="btnClose" id="btnCloseUpload"></span>',
 				'<p id="filesSelected" class="p1" style="margin-top: -10px;"></p>',
 				'<p id="filesTip" style="margin-top: -10px;"></p>',
 				'<ul id="selectedFileList" class="fileList"></ul>',
@@ -374,17 +375,17 @@ var uploader=new plupload.Uploader({
 						'</tr>',
 						'<tr>',
 							'<td>',
-								'<label id="lblMaxDlTimes" for="inputMaxDlTimes"></label>',
+								'<label id="lblMaxDl" for="inputMaxDl"></label>',
 							'</td>',
 							'<td>',
-								'<input id="inputMaxDlTimes" type="number" autocomplete="off">',
+								'<input id="inputMaxDl" type="number" autocomplete="off">',
 							'</td>',
 						'</tr>',
 					'</tbody>',
 				'</table>',
 				'<button class="btn1" id="btnUpload"></button>'
 			],"uploadList","popSend","rebound");
-			id("btnClose1").onclick=function(){
+			id("btnCloseUpload").onclick=function(){
 				uploader.splice();
 				closePopup("popSend");
 			}
@@ -409,27 +410,28 @@ var uploader=new plupload.Uploader({
 				"zh-CN":"密码",
 				"zh-TW":"密碼"
 			});
-			id("lblMaxDlTimes").innerText=multilang({
-				"en-US":"Maximum Download Times",
+			id("lblMaxDl").innerText=multilang({
+				"en-US":"Maximum Downloads",
 				"zh-CN":"可下载次数",
 				"zh-TW":"可下載次數"
 			});
+			id("inputMaxDl").value=files.length+1;
 			id("btnUpload").innerText=multilang({
 				"en-US":"Upload",
 				"zh-CN":"上传",
 				"zh-TW":"上傳"
 			});
 			id("btnUpload").onclick=function(){
-				var times=id("inputMaxDlTimes").value;
-				if(parseInt(times)<1){
-					times=null;
-				}
 				chunk=1;
 				fileCount=files.length;
 				fileDone=0;
+				var downloads=id("inputMaxDl").value;
+				if(!downloads||parseInt(downloads)<1){
+					downloads=fileCount+1;
+				}
 				upload(up,files,{
-					"password":id("inputFilePsw").value,
-					"times":times
+					"downloads":downloads,
+					"password":id("inputFilePsw").value
 				});
 			}
 		},
