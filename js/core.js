@@ -316,7 +316,6 @@ function upload(up,files,settings){
 	}).then(function(data){
 		if(data){
 			if(data.alert){
-				uploader.splice();
 				alert(data.alert);
 				if(!login.username){
 					menuItemLogin.click();

@@ -409,15 +409,6 @@ menuItemHistory.onclick=function(){
 		"zh-CN":"历史记录",
 		"zh-TW":"歷史記錄"
 	});
-	id("historyList").innerHTML="";
-	var lblPlaceholder=document.createElement("p");
-	lblPlaceholder.classList.add("placeholder");
-	id("historyList").appendChild(lblPlaceholder);
-	lblPlaceholder.innerText=multilang({
-		"en-US":"Loading",
-		"zh-CN":"正在加载",
-		"zh-TW":"正在加載"
-	});
 	id("btnDone2").innerText=multilang({
 		"en-US":"Close",
 		"zh-CN":"关闭",
@@ -426,85 +417,94 @@ menuItemHistory.onclick=function(){
 	id("btnDone2").onclick=function(){
 		closePopup("popHistory");
 	}
-	fetch(backend+"airportal/get?"+encodeData({
-		"token":login.token,
-		"username":login.username
-	})).then(function(response){
-		if(response.ok){
-			return response.json();
-		}else{
-			lblPlaceholder.innerText=multilang({
-				"en-US":"Unable to connect to the server",
-				"zh-CN":"无法连接至服务器",
-				"zh-TW":"無法連接至伺服器"
-			})+" ("+response.status+")";
-		}
-	}).then(function(data){
-		if(data){
-			lblPlaceholder.innerText=multilang({
-				"en-US":"You have not uploaded any files yet",
-				"zh-CN":"您尚未上传任何文件",
-				"zh-TW":"您尚未上傳任何檔案"
-			});
-			if(data.length>0){
-				lblPlaceholder.style.display="none";
-				for(var i=data.length-1;i>=0;i--){
-					var newHistory=document.createElement("span");
-					var newSpan=document.createElement("span");
-					var newP=document.createElement("p");
-					var newDelBtn=document.createElement("span");
-					newHistory.classList.add("historyItem");
-					newHistory.setAttribute("code",data[i].code);
-					newSpan.innerText=data[i].code;
-					newSpan.title=multilang({
-						"en-US":"Download",
-						"zh-CN":"下载",
-						"zh-TW":"下載"
-					});
-					newSpan.onclick=function(){
-						open("https://rthe.cn/"+this.parentElement.getAttribute("code"));
-					}
-					newP.innerText=decodeURIComponent(data[i].name);
-					newDelBtn.classList.add("btnDel");
-					newDelBtn.title=multilang({
-						"en-US":"Delete",
-						"zh-CN":"删除",
-						"zh-TW":"刪除"
-					});
-					newDelBtn.onclick=function(){
-						var thisItem=this.parentElement;
-						var code=thisItem.getAttribute("code");
-						var filename=thisItem.getElementsByTagName("p")[0].innerText;
-						if(confirm(multilang({
-							"en-US":"Are you sure that you want to delete "+filename+" from the server?",
-							"zh-CN":"确定要删除存储在服务器上的 "+filename+" 吗？",
-							"zh-TW":"確定要刪除存儲在伺服器上的 "+filename+" 嗎？"
-						}))){
-							var parent=thisItem.parentElement
-							parent.removeChild(thisItem);
-							if(parent.getElementsByTagName("span").length<=0){
-								lblPlaceholder.style.display="";
-							}
-							fetch(backend+"airportal/del",getPostData({
-								"code":code,
-								"username":login.username
-							})).then(function(response){
-								if(!response.ok){
-									error(response);
-								}
-							});
-						}
-					}
-					newHistory.appendChild(newSpan);
-					newHistory.appendChild(newP);
-					newHistory.appendChild(newDelBtn);
-					id("historyList").appendChild(newHistory);
-				}
+	var loadHistory=function(){
+		id("historyList").innerHTML="";
+		var lblPlaceholder=document.createElement("p");
+		lblPlaceholder.classList.add("placeholder");
+		id("historyList").appendChild(lblPlaceholder);
+		lblPlaceholder.innerText=multilang({
+			"en-US":"Loading",
+			"zh-CN":"正在加载",
+			"zh-TW":"正在加載"
+		});
+		fetch(backend+"airportal/get?"+encodeData({
+			"token":login.token,
+			"username":login.username
+		})).then(function(response){
+			if(response.ok){
+				return response.json();
 			}else{
-				lblPlaceholder.style.display=id("historyList").style.marginTop="";
+				lblPlaceholder.innerText=multilang({
+					"en-US":"Unable to connect to the server",
+					"zh-CN":"无法连接至服务器",
+					"zh-TW":"無法連接至伺服器"
+				})+" ("+response.status+")";
 			}
-		}
-	});
+		}).then(function(data){
+			if(data){
+				lblPlaceholder.innerText=multilang({
+					"en-US":"You have not uploaded any files yet",
+					"zh-CN":"您尚未上传任何文件",
+					"zh-TW":"您尚未上傳任何檔案"
+				});
+				if(data.length>0){
+					lblPlaceholder.style.display="none";
+					for(var i=data.length-1;i>=0;i--){
+						var newHistory=document.createElement("span");
+						var newSpan=document.createElement("span");
+						var newP=document.createElement("p");
+						var newDelBtn=document.createElement("span");
+						newHistory.classList.add("historyItem");
+						newHistory.setAttribute("code",data[i].code);
+						newSpan.innerText=data[i].code;
+						newSpan.title=multilang({
+							"en-US":"Download",
+							"zh-CN":"下载",
+							"zh-TW":"下載"
+						});
+						newSpan.onclick=function(){
+							open("https://rthe.cn/"+this.parentElement.getAttribute("code"));
+						}
+						newP.innerText=decodeURIComponent(data[i].name);
+						newDelBtn.classList.add("btnDel");
+						newDelBtn.title=multilang({
+							"en-US":"Delete",
+							"zh-CN":"删除",
+							"zh-TW":"刪除"
+						});
+						newDelBtn.onclick=function(){
+							var thisItem=this.parentElement;
+							var code=thisItem.getAttribute("code");
+							var filename=thisItem.getElementsByTagName("p")[0].innerText;
+							if(confirm(multilang({
+								"en-US":"Are you sure that you want to delete "+filename+" from the server?",
+								"zh-CN":"确定要删除存储在服务器上的 "+filename+" 吗？",
+								"zh-TW":"確定要刪除存儲在伺服器上的 "+filename+" 嗎？"
+							}))){
+								fetch(backend+"airportal/del",getPostData({
+									"code":code,
+									"username":login.username
+								})).then(function(response){
+									if(response.ok){
+										loadHistory();
+									}else{
+										error(response);
+									}
+								});
+							}
+						}
+						newHistory.appendChild(newSpan);
+						newHistory.appendChild(newP);
+						newHistory.appendChild(newDelBtn);
+						id("historyList").appendChild(newHistory);
+					}
+				}else{
+					lblPlaceholder.style.display=id("historyList").style.marginTop="";
+				}
+			}
+		});
+	}
+	loadHistory();
 	hideMenu();
 }
 menuItemSettings.onclick=function(){
