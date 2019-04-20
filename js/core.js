@@ -1,19 +1,52 @@
-var filename,option,randomKey,servers,signature,uploadCode;
+var filename,option,randomKey,signature,uploadCode;
 var chunk=1;
 function downloadFile(fileInfo){
 	if(fileInfo.download.length>1){
-		mainBox.style.opacity="0";
-		popDownl.style.display="block";
-		setTimeout(function(){
-			popDownl.style.opacity="1";
-		},250);
+		showPopup([
+			'<p id="prefetching" class="p1" style="padding-top: 20px;"></p>',
+			'<p class="p3" id="lblDownloadP1" style="padding-top: 30px;"></p>',
+			'<span class="progressBar" id="progressBarBg1"></span>',
+			'<span class="progressBar" id="progressBar1"></span>',
+			'<p class="p3" id="lblDownloadP2" style="padding-top: 30px;"></p>',
+			'<span class="progressBar" id="progressBarBg2"></span>',
+			'<span class="progressBar" id="progressBar2"></span>',
+			'<div class="dlTipBox">',
+				'<p id="dlTip0"></p>',
+				'<p id="dlTip1"></p>',
+			'</div>'
+		],"recvBox2","popRecv","slideInFromRight");
+		id("prefetching").innerText=multilang({
+			"en-US":"Prefetching files from the server",
+			"zh-CN":"正在从服务器预读取文件",
+			"zh-TW":"正在從伺服器預讀取檔案"
+		});
+		id("lblDownloadP1").innerText=multilang({
+			"en-US":"Downloading File Slices",
+			"zh-CN":"下载文件碎片中",
+			"zh-TW":"下載檔案碎片中"
+		});
+		id("lblDownloadP2").innerText=multilang({
+			"en-US":"Total Progress",
+			"zh-CN":"总下载进度",
+			"zh-TW":"總下載進度"
+		});
+		id("dlTip0").innerText=multilang({
+			"en-US":"If the download fails, please try again with Chrome or Firefox",
+			"zh-CN":"如无法下载，请使用Chrome或Firefox浏览器重试",
+			"zh-TW":"如無法下載，請使用Chrome或Firefox瀏覽器重試"
+		});
+		id("dlTip1").innerText=multilang({
+			"en-US":"Once the fetching is complete, the file will be saved to your device immediately",
+			"zh-CN":"读取完成后，文件会立即被保存到您的设备上",
+			"zh-TW":"讀取完成后，檔案會立即被保存到您的裝置上"
+		});
 		var intervalId=setInterval(function(){
-			if(dlTip0.style.marginTop=="0px"){
-				dlTip0.style.marginTop="-20px";
-				dlTip1.style.marginTop="-10px";
+			if(id("dlTip0").style.marginTop=="0px"){
+				id("dlTip0").style.marginTop="-20px";
+				id("dlTip1").style.marginTop="-10px";
 			}else{
-				dlTip0.style.marginTop="0px";
-				dlTip1.style.marginTop="0px";
+				id("dlTip0").style.marginTop="0px";
+				id("dlTip1").style.marginTop="0px";
 			}
 		},5000);
 		var slice=[];
@@ -24,8 +57,6 @@ function downloadFile(fileInfo){
 				if(xhr.status==200){
 					slice.push(xhr.response);
 					if(progress>=fileInfo.download.length){
-						clearInterval(intervalId);
-						document.title=title;
 						var newA=document.createElement("a");
 						var url=URL.createObjectURL(new Blob(slice,{
 							"type":fileInfo.type
@@ -35,11 +66,9 @@ function downloadFile(fileInfo){
 						newA.style.display="none";
 						document.body.appendChild(newA);
 						newA.click();
-						popDownl.style.opacity="0";
-						mainBox.style.opacity="1";
-						setTimeout(function(){
-							popDownl.style.display="none";
-						},250);
+						document.title=title;
+						clearInterval(intervalId);
+						closePopup("popRecv");
 					}else{
 						progress++;
 						downloadSlice(progress);
@@ -50,14 +79,14 @@ function downloadFile(fileInfo){
 						"zh-CN":"文件损坏。请重新上传。",
 						"zh-TW":"檔案損壞。請重新上傳。"
 					}));
-					popDownl.style.opacity="0";
-					popDownl.style.display="none";
+					document.title=title;
+					clearInterval(intervalId);
+					closePopup("popRecv");
 				}else{
-					notify(multilang({
-						"en-US":"Unable to connect to the server: ",
-						"zh-CN":"无法连接至服务器：",
-						"zh-TW":"無法連接至伺服器："
-					})+xhr.status);
+					error(xhr);
+					document.title=title;
+					clearInterval(intervalId);
+					closePopup("popRecv");
 				}
 			}
 			xhr.onprogress=function(e){
@@ -65,13 +94,13 @@ function downloadFile(fileInfo){
 					var percentage=Math.round(e.loaded/e.total*100);
 					document.title="["+progress+"/"+fileInfo.download.length+": "+percentage+"%] "+title;
 					progressBar1.style.width=percentage+"px";
-					lblDownloadP1.innerText=multilang({
+					id("lblDownloadP1").innerText=multilang({
 						"en-US":"Downloading File Slices ",
 						"zh-CN":"下载文件碎片中 ",
 						"zh-TW":"下載檔案碎片中 "
 					})+percentage+"%";
 					progressBar2.style.width=Math.round(progress/fileInfo.download.length*100)+"px";
-					lblDownloadP2.innerText=multilang({
+					id("lblDownloadP2").innerText=multilang({
 						"en-US":"Total Progress ",
 						"zh-CN":"总下载进度 ",
 						"zh-TW":"總下載進度 "
@@ -88,14 +117,14 @@ function downloadFile(fileInfo){
 }
 function getInfo(code,password){
 	if(code){
-		btnSub.disabled=true;
+		id("btnSub").disabled=true;
 		invalidAttempt++;
 		fetch(backend+"airportal/getinfo?"+encodeData({
 			"code":code,
 			"password":password,
 			"username":login.username
 		})).then(function(response){
-			btnSub.disabled=false;
+			id("btnSub").disabled=false;
 			if(response.ok){
 				return response.text();
 			}else{
@@ -136,12 +165,42 @@ function getInfo(code,password){
 							"zh-CN":"密码错误。",
 							"zh-TW":"密碼錯誤。"
 						}));
+						id("inputRecvPsw").value="";
 						break;
 						case "passwordRequired":
-						password=prompt("请输入密码");
-						if(password){
-							getInfo(code,MD5(password));
+						showPopup([
+							'<p id="enterPsw" class="p1" style="padding-top: 40px;"></p>',
+							'<input type="password" id="inputRecvPsw" class="inputCode" autocomplete="off"><br>',
+							'<button class="btn1" id="btnSubPsw"></button>',
+							'<span class="btnBack" id="btnBackRecvPsw"></span>'
+						],"recvPswBox","popRecv","slideInFromRight");
+						id("enterPsw").innerText=multilang({
+							"en-US":"Please enter the password",
+							"zh-CN":"请输入密码",
+							"zh-TW":"請輸入密碼"
+						});
+						id("inputRecvPsw").onkeydown=function(event){
+							if(event.keyCode==13){
+								id("btnSubPsw").click();
+							}
 						}
+						id("btnSubPsw").innerText=multilang({
+							"en-US":"OK",
+							"zh-CN":"确定",
+							"zh-TW":"確定"
+						});
+						id("btnSubPsw").onclick=function(){
+							password=id("inputRecvPsw").value;
+							if(password){
+								getInfo(code,MD5(password));
+							}
+						}
+						id("btnBackRecvPsw").onclick=function(){
+							closePopup("recvPswBox","slideOut");
+						}
+						setTimeout(function(){
+							id("inputRecvPsw").focus();
+						},250);
 						break;
 						default:
 						notify(multilang({
@@ -152,16 +211,45 @@ function getInfo(code,password){
 						break;
 					}
 				}else if(data.text){
-					alert(decodeURIComponent(data.text));
+					showPopup([
+						'<p id="txtReceived" class="p1"></p>',
+						'<span class="line"></span>',
+						'<div id="txtView" class="contentBox"></div>',
+						'<button class="btn1" id="btnDone4"></button>'
+					],"recvBox1","popRecv","slideInFromRight");
+					id("txtReceived").innerText=multilang({
+						"en-US":"Text Received",
+						"zh-CN":"您接收到文本",
+						"zh-TW":"您接收到文字"
+					});
+					id("txtView").innerText=decodeURIComponent(data.text);
+					id("btnDone4").innerText=multilang({
+						"en-US":"Close",
+						"zh-CN":"关闭",
+						"zh-TW":"關閉"
+					});
+					id("btnDone4").onclick=function(){
+						closePopup("popRecv");
+					}
 				}else if(data.length==1){
 					downloadFile(data[0]);
-					popRecv.style.opacity="0";
-					mainBox.style.opacity="1";
-					setTimeout(function(){
-						inputCode.value="";
-						popRecv.style.display="none";
-					},250);
 				}else{
+					showPopup([
+						'<p id="multiFilesReceived" class="p1" style="margin-top: -10px;"></p>',
+						'<p id="multiFilesTip" style="margin-top: -10px;"></p>',
+						'<ul id="fileList" class="fileList"></ul>',
+						'<button class="btn1" id="btnDone1"></button>'
+					],"recvBox1","popRecv","slideInFromRight");
+					id("multiFilesReceived").innerText=multilang({
+						"en-US":"Multiple files received",
+						"zh-CN":"您接收到多个文件",
+						"zh-TW":"您接收到多個檔案"
+					});
+					id("multiFilesTip").innerText=multilang({
+						"en-US":"Click on the items in the list to download them separately",
+						"zh-CN":"单击列表中的项目来分别下载它们",
+						"zh-TW":"單擊列表中的項目來分別下載它們"
+					});
 					for(var file=0;file<data.length;file++){
 						var newLi=document.createElement("li");
 						newLi.classList.add("menu");
@@ -174,17 +262,20 @@ function getInfo(code,password){
 							var index=this.getAttribute("index")-1;
 							downloadFile(data[index]);
 						}
-						fileList.appendChild(newLi);
+						id("fileList").appendChild(newLi);
 					}
-					mainBox.style.opacity="0";
-					popRecv.style.display="block";
-					popRecv.style.opacity="1";
-					recvBox0.style.left="-500px";
-					recvBox1.style.left="0px";
+					id("btnDone1").innerText=multilang({
+						"en-US":"Close",
+						"zh-CN":"关闭",
+						"zh-TW":"關閉"
+					});
+					id("btnDone1").onclick=function(){
+						closePopup("popRecv");
+					}
 				}
 			}
 		}).catch(function(){
-			btnSub.disabled=false;
+			id("btnSub").disabled=false;
 			invalidAttempt--;
 			notify(multilang({
 				"en-US":"Unable to connect to the server.",
@@ -232,7 +323,21 @@ function upload(up,files,settings){
 				}
 			}else{
 				uploadCode=data.code;
-				showUploading();
+				document.title="["+multilang({
+					"en-US":"Uploading",
+					"zh-CN":"正在上传",
+					"zh-TW":"正在上傳"
+				})+"] "+title;
+				showPopup([
+					'<p class="p1" id="lblUploadP" style="margin-top: 120px;"></p>',
+					'<span class="progressBar" id="progressBarBg0"></span>',
+					'<span class="progressBar" id="progressBar0"></span>'
+				],"sendBox0","popSend","slideInFromRight");
+				lblUploadP.innerText=multilang({
+					"en-US":"Uploading...",
+					"zh-CN":"正在上传...",
+					"zh-TW":"正在上傳..."
+				});
 				option={
 					"url":"https://"+data.host,
 					"multipart_params":{
@@ -247,30 +352,6 @@ function upload(up,files,settings){
 		}
 	});
 }
-btnSendText.onclick=function(){
-	if(txtSend.value){
-		fetch(backend+"airportal/getcode",getPostData({
-			"text":txtSend.value,
-			"username":login.username
-		})).then(function(response){
-			if(response.ok){
-				return response.json();
-			}else{
-				error(response);
-			}
-		}).then(function(data){
-			if(data){
-				if(data.alert){
-					alert(data.alert);
-				}else{
-					txtSend.value="";
-					alert("发送成功，取件码："+data.code);
-					loadHistory();
-				}
-			}
-		});
-	}
-}
 var uploader=new plupload.Uploader({
 	"runtimes":"html5",
 	"browse_button":"send", 
@@ -278,16 +359,78 @@ var uploader=new plupload.Uploader({
 	"chunk_size":536870912,
 	"init":{
 		"FilesAdded":function(up,files){
-			console.log("您选择了这些文件：");
+			showPopup([
+				'<span class="btnClose" id="btnClose1"></span>',
+				'<p id="filesSelected" class="p1" style="margin-top: -10px;"></p>',
+				'<p id="filesTip" style="margin-top: -10px;"></p>',
+				'<ul id="selectedFileList" class="fileList"></ul>',
+				'<table class="tableUploadSettings">',
+					'<tbody>',
+						'<tr>',
+							'<td>',
+								'<label id="lblFilePsw" for="inputFilePsw"></label>',
+							'</td>',
+							'<td>',
+								'<input id="inputFilePsw" type="password">',
+							'</td>',
+						'</tr>',
+						'<tr>',
+							'<td>',
+								'<label id="lblMaxDlTimes" for="inputMaxDlTimes"></label>',
+							'</td>',
+							'<td>',
+								'<input id="inputMaxDlTimes" type="number" autocomplete="off">',
+							'</td>',
+						'</tr>',
+					'</tbody>',
+				'</table>',
+				'<button class="btn1" id="btnUpload"></button>'
+			],"uploadList","popSend");
+			id("btnClose1").onclick=function(){
+				uploader.splice();
+				closePopup("popSend");
+			}
+			id("filesSelected").innerText=multilang({
+				"en-US":"You selected these files",
+				"zh-CN":"您选择了这些文件",
+				"zh-TW":"您選擇了這些檔案"
+			});
+			id("filesTip").innerText=login.email||multilang({
+				"en-US":"Not Logged In",
+				"zh-CN":"未登录",
+				"zh-TW":"未登入"
+			});
 			plupload.each(files,function(file){
-				console.log(file.name);
+				var newLi=document.createElement("li");
+				newLi.classList.add("menu");
+				newLi.innerText=file.name;
+				id("selectedFileList").appendChild(newLi);
 			});
-			var password=prompt("设置密码");
-			var times=prompt("设置可下载次数");
-			upload(up,files,{
-				"password":password,
-				"times":times
+			id("lblFilePsw").innerText=multilang({
+				"en-US":"Password",
+				"zh-CN":"密码",
+				"zh-TW":"密碼"
 			});
+			id("lblMaxDlTimes").innerText=multilang({
+				"en-US":"Maximum Download Times",
+				"zh-CN":"可下载次数",
+				"zh-TW":"可下載次數"
+			});
+			id("btnUpload").innerText=multilang({
+				"en-US":"Upload",
+				"zh-CN":"上传",
+				"zh-TW":"上傳"
+			});
+			id("btnUpload").onclick=function(){
+				var times=id("inputMaxDlTimes").value;
+				if(parseInt(times)<1){
+					times=null;
+				}
+				upload(up,files,{
+					"password":id("inputFilePsw").value,
+					"times":times
+				});
+			}
 		},
 		"BeforeUpload":function(up,file){
 			option["multipart_params"]["key"]=uploadCode+"/"+randomKey+"/1/"+encodeURIComponent(file.name);
@@ -298,14 +441,14 @@ var uploader=new plupload.Uploader({
 			if(percent>99){
 				percent=99;
 			}
-			progressBarBg0.style.background="rgba(0,0,0,0.1)";
+			id("progressBarBg0").style.background="rgba(0,0,0,0.1)";
 			document.title="["+percent+"%] "+title;
-			lblUploadP.innerText=multilang({
+			id("lblUploadP").innerText=multilang({
 				"en-US":"Uploading",
 				"zh-CN":"正在上传",
 				"zh-TW":"正在上傳"
 			})+" "+file.name+" "+percent+"%";
-			progressBar0.style.width=percent+"px";
+			id("progressBar0").style.width=percent+"px";
 		},
 		"ChunkUploaded":function(up,file){
 			chunk++;
@@ -314,28 +457,14 @@ var uploader=new plupload.Uploader({
 		},
 		"FileUploaded":function(){
 			chunk=1;
-			document.title="[取件码 "+uploadCode+"] "+title;
-			QRBox.innerHTML="";
-			var qrcode=new Image(200,200);
-			qrcode.src=getQRCode("http://rthe.cn/"+uploadCode);
-			QRBox.appendChild(qrcode);
-			recvCode.innerText=uploadCode;
-			popRecvCode.innerText=uploadCode;
-			loadHistory();
-			sendBox0.style.left="-500px";
-			sendBox1.style.left="0px";
-			sendBox2.style.left="500px";
-			lblUploadP.innerText=multilang({
-				"en-US":"Uploading...",
-				"zh-CN":"正在上传...",
-				"zh-TW":"正在上傳..."
-			});
+			uploadSuccess(uploadCode);
 		},
 		"Error":function(up,err){
 			console.error(err.response);
 		}
 	}
 });
+uploader.init();
 if(parseInt($_GET["code"])){
 	receive.click();
 	if(popRecv.style.display){
@@ -348,7 +477,7 @@ if(parseInt($_GET["code"])){
 				animationProgress++;
 			}else{
 				clearInterval(intervalId);
-				btnSub.click();
+				id("btnSub").click();
 			}
 		},400);
 	}
@@ -361,3 +490,15 @@ newScript.src="https://server-auto.rthe.cn/backend/code?"+encodeData({
 	"ver":version
 });
 document.body.appendChild(newScript);
+if(chs){
+	txtVer.innerText="闽ICP备18016273号";
+	txtVer.onclick=function(){
+		open("http://www.miitbeian.gov.cn/");
+	}
+	txtVer.oncontextmenu=function(){
+		txtVer.innerText=version;
+		return false;
+	}
+}else{
+	txtVer.innerText=version;
+}

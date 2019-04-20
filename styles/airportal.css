@@ -1,4 +1,3 @@
-/* CSS written by MaoRX.cn. */
 html {height: 100%;}
 body {
 	background-color: rgb(250,250,250);
@@ -72,12 +71,6 @@ a,button {outline: none;}
 	background-position: 100%;
 	background-image: url("../images/themeColor.jpg");
 	box-shadow: rgba(65,145,245,0.3) 0px 5px 30px;
-}
-#btnMainSendText {
-	display: none;
-	opacity: 0;
-	position: relative;
-	z-index: 1;
 }
 #receive {
 	border: none;
@@ -209,11 +202,11 @@ a,button {outline: none;}
 }
 .popUp {
 	position: absolute;
-	z-index: 100;
 	width: 500px;
 	height: 350px;
 	top: 50%;
 	margin-top: -200px;
+	opacity: 0;
 	left: 50%;
 	margin-left: -250px;
 	padding-top: 40px;
@@ -224,10 +217,6 @@ a,button {outline: none;}
 	overflow: hidden;
 	box-shadow: rgba(0,0,0,0.05) 0px 10px 20px;
 	transition: all 0.25s;
-}
-.popUp,#popRecvCode {
-	display: none;
-	opacity: 0;
 }
 .p1 {
 	font-size: 18px;
@@ -251,23 +240,7 @@ a,button {outline: none;}
 	color: rgb(65,145,245);
 }
 #txtSend {
-	position: relative;
-	left: 10%;
-	top: 0px;
-	display: block;
-	border: 1px solid transparent;
-	width: 75%;
 	height: 180px;
-	padding: 10px 2.5%;
-	margin-top: 10px;
-	text-align: center;
-	font-size: small;
-	font-family: "Microsoft Yahei Light","Microsoft Yahei",Helvetica,sans-serif,"等线";
-	color: rgba(0,0,0,0.8);
-	background-color: rgba(0,0,0,0.05);
-	border-radius: 3px;
-	resize: none;
-	transition: all 0.5s;
 }
 #recvCode {
 	font-size: 35px;
@@ -296,10 +269,10 @@ a,button {outline: none;}
 	color: rgb(65,145,245);
 }
 #btnDone0 {
-	top: 260px;
+	top: 20px;
 }
 #btnDone1,#btnDone2,#btnDone4 {
-	top: 10px;
+	top: 15px;
 }
 #btnSendFeed,#btnSendText {
 	top: 20px;
@@ -361,41 +334,12 @@ a,button {outline: none;}
 	margin-top: 0px;
 	transition: all 0.25s;
 }
-#sendBox0 {
-	z-index: 99;
-	position: absolute;
-	width: 100%;
-	height: 200px;
-	left: 0px;
-	top: 160px;
-	background-color: white;
-	transition: all 0.25s;
-}
-#sendBox1,#sendBox_1 {
-	position: absolute;
-	width: 100%;
-	transition: all 0.25s;
-}
-#sendBox1 {
-	left: 500px;
-}
-#sendBox_1 {
-	z-index: 100;
-	left: -500px;
-}
-#sendBox2 {
-	position: absolute;
-	width: 100%;
-	left: 1000px;
-	top: 60px;
-	transition: all 0.25s;
-}
 #QRBox {
 	position: absolute;
 	width: 200px;
 	height: 200px;
-	left: 50%;
-	margin-left: -100px;
+	left: calc(50% - 100px);
+	margin-top: 35px;
 }
 .btnBack {
 	position: absolute;
@@ -404,6 +348,7 @@ a,button {outline: none;}
 	border-top: 3px solid rgba(0,0,0,0.35);
 	height: 15px;
 	width: 15px;
+	top: 15px;
 	transform: rotate(225deg);
 	cursor: pointer;
 	transition: all 0.25s;
@@ -416,16 +361,7 @@ a,button {outline: none;}
 	border-right: 3px solid rgba(65,145,245,0.5);
 	border-top: 3px solid rgba(65,145,245,0.5);
 }
-#btnBack0,#btnBack2 {
-	top: 16px;
-}
-#btnBack1 {
-	top: 60px;
-}
-#btnBack3 {
-	top: 20px;
-}
-#inputCode {
+.inputCode {
 	position: relative;
 	width: 200px;
 	outline: none;
@@ -441,53 +377,79 @@ a,button {outline: none;}
 	text-align: center;
 	transition: all 0.25s;
 }
-#inputCode:hover {
+.inputCode:hover {
 	border-bottom: 2px solid rgb(65,145,245);
 }
-#inputCode:focus {
+.inputCode:focus {
 	border-bottom: 2px solid rgb(65,145,245);
 }
-#recvBox0 {
+.popUpBox {
 	position: absolute;
 	width: 100%;
 	left: 0px;
 	transition: all 0.25s;
 }
-#recvBox1 {
+.slideInFromLeft {
 	position: absolute;
 	width: 100%;
-	left: 500px;
-	margin-top: 30px;
+	left: -500px;
 	background-color: white;
 	transition: all 0.25s;
 }
-#fileList {
+.slideInFromRight {
+	position: absolute;
+	width: 100%;
+	left: 500px;
+	background-color: white;
+	transition: all 0.25s;
+}
+.fileList {
 	width: 85%;
-	height: 200px;
+	height: 185px;
 	margin-top: 20px;
 	left: 0%;
 	overflow-y: scroll;
 	list-style: none;
 	text-align: left;
 }
-#fileList li {
-	padding-top: 15px;
-	padding-bottom: 15px;
-	padding-left: 30px;
+.fileList li {
+	padding: 15px 30px;
 	background-color: white;
 	transition: all 0.25s;
 	cursor: pointer;
 }
-#fileList li:nth-child(2n+1){
+.fileList li:nth-child(2n+1){
 	background-color: rgba(0,0,0,0.03);
 }
-#fileList li:hover {
+.fileList li:hover {
 	/*background-color: rgba(0,0,0,0.1);*/
 	color: rgb(65,145,245);
 }
-#fileList li:active {
+.fileList li:active {
 	/*background-color: rgba(0,0,0,0.15);*/
 	color: #A5C220;
+}
+#selectedFileList {
+	height: 135px;
+}
+#selectedFileList li {
+	padding: 10px 15px;
+}
+.tableUploadSettings {
+	margin: 0px auto 15px;
+	width: 85%;
+}
+.tableUploadSettings label{
+	display: block;
+	padding: 0px 5px;
+	text-align: left;
+}
+.tableUploadSettings input{
+	border: 1px solid rgba(0,0,0,0.1);
+	border-radius: 5px;
+	display: block;
+	padding: 5px 10px;
+	width: calc(100% - 20px);
 }
 .line {
 	position: absolute;
@@ -502,7 +464,7 @@ a,button {outline: none;}
 	width: 60%;
 	height: 200px;
 	left: 20%;
-	margin-top: -40px;
+	margin-top: -10px;
 	overflow-y: scroll;
 	overflow-x: hidden;
 }
@@ -526,6 +488,9 @@ a,button {outline: none;}
 }
 .historyItem span{
 	cursor: pointer;
+}
+.placeholder{
+	color: rgba(0,0,0,0.3);
 }
 .btnDel {
 	position: absolute;
@@ -558,9 +523,8 @@ a,button {outline: none;}
 .btnDel:active::before,.btnDel:active::after {
 	background-color: rgba(65,145,245,0.5);
 }
-#popRecvCode {
+.popRecvCode {
 	position: absolute;
-	z-index: 102;
 	left: 50%;
 	top: 50%;
 	margin-top: -66px;
@@ -660,12 +624,6 @@ a,button {outline: none;}
 	text-decoration: line-through;
 	transition: all 0.5s;
 }
-#accBox_1 {
-	position: absolute;
-	width: 100%;
-	left: -500px;
-	transition: all 0.25s;
-}
 #accBox0 {
 	position: absolute;
 	width: 100%;
@@ -703,13 +661,13 @@ a,button {outline: none;}
 	border-radius: 50px;
 	transition: all 0.5s;
 }
-.input1:hover,#txtFeedback:hover {
+.input1:hover,textarea:hover {
 	background-color: rgba(0,0,0,0.1);
 }
 .input1:focus {
 	background-color: rgba(0,0,0,0.15);
 }
-#txtFeedback:focus {
+textarea:focus {
 	background-color: white;
 	border-color: rgb(65,145,245);
 }
@@ -722,7 +680,6 @@ a,button {outline: none;}
 	position: absolute;
 	width: 25px;
 	height: 25px;
-	top: 50px;
 	right: 50px;
 	cursor: pointer;
 }
@@ -777,7 +734,7 @@ a,button {outline: none;}
 	text-align: center;
 	margin-top: 50px;
 }
-#txtFeedback {
+textarea {
 	position: relative;
 	left: 10%;
 	top: 0px;
@@ -792,18 +749,22 @@ a,button {outline: none;}
 	font-family: "Microsoft Yahei Light","Microsoft Yahei",Helvetica,sans-serif,"等线";
 	color: rgba(0,0,0,0.8);
 	background-color: rgba(0,0,0,0.05);
-	border-radius: 3px;
+	border-radius: 10px;
 	resize: none;
 	transition: all 0.5s;
 }
 .contentBox {
+	border: 1px solid rgba(0,0,0,0.1);
+	border-radius: 10px;
+	cursor: text;
+	padding: 10px 2.5%;
 	position: relative;
-	width: 80%;
-	height: 190px;
-	left: 10%;
-	margin-top: 0px;
+	height: 180px;
+	margin: 0px 10%;
 	text-align: left;
 	overflow-y: scroll;
+	-webkit-user-select: text;
+	user-select: text;
 }
 .contentBox1 {
 	position: relative;
@@ -833,8 +794,7 @@ a,button {outline: none;}
 .cbox:checked {
 	background-image: url(../images/cboxChecked.png);
 }
-#notificationBar {
-	z-index: 999;
+.notificationBar {
 	position: fixed;
 	bottom: -50px;
 	width: 100%;
