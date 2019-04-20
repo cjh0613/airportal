@@ -268,13 +268,10 @@ a,button {outline: none;}
 	background-color: white;
 	color: rgb(65,145,245);
 }
-#btnDone0 {
-	top: 20px;
-}
-#btnDone1,#btnDone2 {
+#btnDoneHistory {
 	top: 15px;
 }
-#btnDone4,#btnSendFeed,#btnSendText {
+#btnDone0,#btnDone4,#btnSendFeed,#btnSendText {
 	top: 20px;
 }
 #btnDone3 {
@@ -404,16 +401,17 @@ a,button {outline: none;}
 	transition: all 0.25s;
 }
 .fileList {
-	width: 85%;
-	height: 185px;
-	margin-top: 20px;
+	width: calc(100% - 80px);
+	height: 200px;
+	margin: 20px 40px;
 	left: 0%;
 	overflow-y: scroll;
+	padding: 0px;
 	list-style: none;
 	text-align: left;
 }
 .fileList li {
-	padding: 15px 30px;
+	padding: 10px 15px;
 	background-color: white;
 	transition: all 0.25s;
 	cursor: pointer;
@@ -431,9 +429,7 @@ a,button {outline: none;}
 }
 #selectedFileList {
 	height: 135px;
-}
-#selectedFileList li {
-	padding: 10px 15px;
+	margin-bottom: 15px;
 }
 .tableUploadSettings {
 	margin: 0px auto 15px;
@@ -837,6 +833,7 @@ textarea {
 	.p3 {font-size: 12px;}
 	.input1 {left: 10%;width: 75%;}
 	.contentBox1 {width: 80%; left: 10%;}
+	.fileList {margin: 20px; width: calc(100% - 40px);}
 	.payPlans,#historyList,.line {width: 80%;left: 10%;}
 	.payItem {min-width: 70px;margin-right: 5px;}
 	.footer {font-size: 11px;}

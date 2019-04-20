@@ -1,5 +1,4 @@
-var filename,option,randomKey,signature,uploadCode;
-var chunk=1;
+var chunk,fileCount,fileDone,option,randomKey,signature,uploadCode;
 function downloadFile(fileInfo){
 	if(fileInfo.download.length>1){
 		showPopup([
@@ -425,6 +424,9 @@ var uploader=new plupload.Uploader({
 				if(parseInt(times)<1){
 					times=null;
 				}
+				chunk=1;
+				fileCount=files.length;
+				fileDone=0;
 				upload(up,files,{
 					"password":id("inputFilePsw").value,
 					"times":times
@@ -455,8 +457,10 @@ var uploader=new plupload.Uploader({
 			up.setOption(option);
 		},
 		"FileUploaded":function(){
-			chunk=1;
-			uploadSuccess(uploadCode);
+			fileDone++;
+			if(fileDone>=fileCount){
+				uploadSuccess(uploadCode);
+			}
 		},
 		"Error":function(up,err){
 			console.error(err.response);

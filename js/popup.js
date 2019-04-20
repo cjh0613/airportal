@@ -402,19 +402,19 @@ menuItemHistory.onclick=function(){
 		'<div id="historyList">',
 			'<p id="lblPlaceholder" class="placeholder"></p>',
 		'</div>',
-		'<button class="btn1" id="btnDone2"></button>'
+		'<button class="btn1" id="btnDoneHistory"></button>'
 	],null,"popHistory");
 	id("titleHistory").innerText=multilang({
 		"en-US":"History",
 		"zh-CN":"历史记录",
 		"zh-TW":"歷史記錄"
 	});
-	id("btnDone2").innerText=multilang({
+	id("btnDoneHistory").innerText=multilang({
 		"en-US":"Close",
 		"zh-CN":"关闭",
 		"zh-TW":"關閉"
 	});
-	id("btnDone2").onclick=function(){
+	id("btnDoneHistory").onclick=function(){
 		closePopup("popHistory");
 	}
 	var loadHistory=function(){
