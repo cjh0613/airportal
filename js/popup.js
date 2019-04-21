@@ -59,7 +59,7 @@ function showChangelog(text,firstRunOnly){
 function showPopup(html,elementId,parentId,animation){
 	if(!id(parentId)){
 		var newParent=document.createElement("div");
-		newParent.classList.add("popUp")
+		newParent.classList.add("popUp");
 		newParent.id=parentId;
 		if(!elementId){
 			newParent.innerHTML=html.join("");

@@ -280,9 +280,9 @@ function getInfo(code,password){
 				"zh-CN":"无法连接至服务器。",
 				"zh-TW":"無法連接至伺服器。"
 			}));
-		})
+		});
 	}
-} 
+}
 function getRandStr(len){
 	len=len||32;
 	var chars="ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678";   
