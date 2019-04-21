@@ -435,7 +435,7 @@ var uploader=new plupload.Uploader({
 			}
 		},
 		"BeforeUpload":function(up,file){
-			option["multipart_params"]["key"]=uploadCode+"/"+randomKey+"/1/"+encodeURIComponent(file.name);
+			option["multipart_params"]["key"]=uploadCode+"/"+randomKey+"/1/"+file.name;
 			up.setOption(option);
 		},
 		"UploadProgress":function(up,file){
@@ -454,7 +454,7 @@ var uploader=new plupload.Uploader({
 		},
 		"ChunkUploaded":function(up,file){
 			chunk++;
-			option["multipart_params"]["key"]=uploadCode+"/"+randomKey+"/"+chunk+"/"+encodeURIComponent(file.name);
+			option["multipart_params"]["key"]=uploadCode+"/"+randomKey+"/"+chunk+"/"+file.name;
 			up.setOption(option);
 		},
 		"FileUploaded":function(){
