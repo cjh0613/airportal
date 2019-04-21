@@ -203,10 +203,25 @@ function uploadSuccess(code){
 send.oncontextmenu=function(){
 	showPopup([
 		'<span class="btnClose" id="btnClose4"></span>',
-		'<p id="titleSendText" class="p1">发送文本</p>',
-		'<textarea id="txtSend" placeholder="在此处键入任意纯文本"></textarea>',
-		'<button class="btn1" id="btnSendText">发送</button>'
+		'<p id="titleSendText" class="p1"></p>',
+		'<textarea id="txtSend" placeholder=""></textarea>',
+		'<button class="btn1" id="btnSendText"></button>'
 	],"sendBox0","popSend","rebound");
+	id("titleSendText").innerText=multilang({
+		"en-US":"Send Text",
+		"zh-CN":"发送文本",
+		"zh-TW":"發送文字"
+	});
+	id("txtSend").placeholder=multilang({
+		"en-US":"Enter the plain text here",
+		"zh-CN":"在这里输入纯文本",
+		"zh-TW":"在這裡輸入純文字"
+	});
+	id("btnSendText").innerText=multilang({
+		"en-US":"Send",
+		"zh-CN":"发送",
+		"zh-TW":"發送"
+	});
 	id("btnClose4").onclick=function(){
 		closePopup("popSend");
 	}
@@ -289,6 +304,9 @@ receive.onclick=function(){
 		}
 		id("inputCode").focus();
 	}
+}
+receive.oncontextmenu=function(){
+	return false;
 }
 menuItemLogin.onclick=function(){
 	if(login.username){
@@ -591,9 +609,9 @@ menuItemFeedback.onclick=function(){
 		"zh-TW":"我們的QQ群："
 	})+"319496964";
 	id("txtFeedback").placeholder=multilang({
-		"en-US":"Enter the text here",
-		"zh-CN":"在这里键入文本",
-		"zh-TW":"在這裡鍵入文字"
+		"en-US":"Enter the message here",
+		"zh-CN":"在这里输入消息内容",
+		"zh-TW":"在這裡輸入訊息內容"
 	});
 	id("btnSendFeed").innerText=multilang({
 		"en-US":"Send",
