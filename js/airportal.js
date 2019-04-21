@@ -1,11 +1,12 @@
 "use strict";
 var appName="AirPortal";
-var version="19w17a4";
+var version="19w17a5";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
 console.info("%c版本：%s",consoleInfoStyle,version);
 
+var currentExpTime,fileBackend;
 var $_GET=(function(){
 	var json={};
 	if(location.search){
@@ -17,7 +18,7 @@ var $_GET=(function(){
 	}
 	return json;
 })();
-var backend,currentExpTime,fileBackend;
+var backend="https://server-cn.rthe.cn/backend/";
 var firstRun=JSON.parse(localStorage.getItem("firstRun"));
 var invalidAttempt=0;
 var login={
@@ -605,11 +606,6 @@ addEventListener("message",function(e){
 		}
 	}catch(e){}
 });
-if(location.hostname){
-	backend="https://server-cn.rthe.cn/backend/";
-}else{
-	backend="http://server-test.rthe.cn/backend/";
-}
 if(login.username){
 	loggedIn();
 }
