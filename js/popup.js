@@ -204,7 +204,6 @@ send.oncontextmenu=function(){
 	showPopup([
 		'<span class="btnClose" id="btnClose4"></span>',
 		'<p id="titleSendText" class="p1">发送文本</p>',
-		//'<span class="line"></span>',
 		'<textarea id="txtSend" placeholder="在此处键入任意纯文本"></textarea>',
 		'<button class="btn1" id="btnSendText">发送</button>'
 	],"sendBox0","popSend","rebound");
@@ -351,7 +350,7 @@ menuItemLogin.onclick=function(){
 			if(id("inputEmail").value&&id("inputPsw").value){
 				var email=id("inputEmail").value.toLowerCase();
 				var password=MD5(id("inputPsw").value);
-				fetch("https://server-auto.rthe.cn/backend/userdata/verify?"+encodeData({
+				fetch("https://server-cn.rthe.cn/backend/userdata/verify?"+encodeData({
 					"email":email,
 					"password":password,
 					"token":true
