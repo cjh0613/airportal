@@ -213,12 +213,12 @@ send.oncontextmenu=function(){
 	id("btnSendText").onclick=function(){
 		var value=id("txtSend").value;
 		if(value){
-			this.disabled=true;
+			id("btnSendText").disabled=true;
 			fetch(backend+"airportal/getcode",getPostData({
 				"text":value,
 				"username":login.username
 			})).then(function(response){
-				this.disabled=false;
+				id("btnSendText").disabled=false;
 				if(response.ok){
 					return response.json();
 				}else{
