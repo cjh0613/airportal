@@ -471,13 +471,13 @@ var uploader=new plupload.Uploader({
 uploader.init();
 if(parseInt($_GET["code"])){
 	receive.click();
-	if(popRecv.style.display){
+	if(id("popRecv")){
 		var animationProgress=0;
 		var codeSplit=$_GET["code"].split("");
-		inputCode.value="";
+		id("inputCode").value="";
 		var intervalId=setInterval(function(){
 			if(animationProgress<4){
-				inputCode.value+=codeSplit[animationProgress];
+				id("inputCode").value+=codeSplit[animationProgress];
 				animationProgress++;
 			}else{
 				clearInterval(intervalId);

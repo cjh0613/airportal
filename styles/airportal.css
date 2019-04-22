@@ -829,7 +829,7 @@ textarea {
 	#btnBack2,#btnBack3 {top: -10px;left: 30px;}
 	.btnClose {top: -5px;right: 30px;}
 	#btnClose0 {top: -10px;}
-	#btnCloseLogin {top: 30px;}
+	#btnClose3,#btnCloseLogin {top: 30px;}
 	.p1 {font-size: 16px;}
 	.p3 {font-size: 12px;}
 	.input1 {left: 10%;width: 75%;}
