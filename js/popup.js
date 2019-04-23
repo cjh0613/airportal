@@ -372,11 +372,13 @@ menuItemLogin.onclick=function(){
 			if(id("inputEmail").value&&id("inputPsw").value){
 				var email=id("inputEmail").value.toLowerCase();
 				var password=MD5(id("inputPsw").value);
+				id("btnLogin").disabled=true;
 				fetch(backend+"userdata/verify?"+encodeData({
 					"email":email,
 					"password":password,
 					"token":true
 				})).then(function(response){
+					id("btnLogin").disabled=false;
 					if(response.ok){
 						return response.json();
 					}else{

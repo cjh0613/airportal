@@ -1,4 +1,5 @@
 var chunk,fileCount,fileDone,option,randomKey,signature,uploadCode;
+var chunkSize=100*1048576;
 function downloadFile(fileInfo){
 	if(fileInfo.download.length>1){
 		showPopup([
@@ -299,6 +300,7 @@ function upload(up,files,settings){
 		settings.password=MD5(settings.password);
 	}
 	fetch(backend+"airportal/getcode",getPostData({
+		"chunksize":chunkSize,
 		"downloads":settings.downloads,
 		"host":fileBackend,
 		"info":JSON.stringify(files),
@@ -354,7 +356,7 @@ var uploader=new plupload.Uploader({
 	"runtimes":"html5",
 	"browse_button":"send", 
 	"url":backend,
-	"chunk_size":536870912,
+	"chunk_size":chunkSize,
 	"init":{
 		"FilesAdded":function(up,files){
 			showPopup([

@@ -709,9 +709,6 @@ textarea:focus {
 .btnClose:active::before,.btnClose:active::after {
 	background-color: rgba(65,145,245,0.5);
 }
-#btnClose0 {
-	top: 10px;
-}
 .footer {
 	position: absolute;
 	bottom: 18px;
@@ -828,7 +825,6 @@ textarea {
 	#btnBack1 {top: -5px;left: 35px;}
 	#btnBack2,#btnBack3 {top: -10px;left: 30px;}
 	.btnClose {top: -5px;right: 30px;}
-	#btnClose0 {top: -10px;}
 	#btnClose3,#btnCloseLogin {top: 30px;}
 	.p1 {font-size: 16px;}
 	.p3 {font-size: 12px;}
