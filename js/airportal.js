@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w17a12";
+var version="19w17a13";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -245,7 +245,7 @@ function loggedIn(newLogin){
 			"zh-TW":"啟用 / 續期高級賬號"
 		});
 		id("showPrivilege").innerText=multilang({
-			"en-US":"Why Premium Plan?",
+			"en-US":"Why?",
 			"zh-CN":"高级账号有哪些特权？",
 			"zh-TW":"高級賬號有哪些特權？"
 		});
@@ -318,6 +318,7 @@ function loggedIn(newLogin){
 			payItemClick(this,"method");
 		}
 		Object.keys(window.info.price).forEach(function(key){
+			id("price-"+key).innerHTML="";
 			var newP=document.createElement("p");
 			newP.classList.add("p2");
 			window.info.price[key]["actualPrice"]=window.info.currency+window.info.price[key]["specialPrice"];
