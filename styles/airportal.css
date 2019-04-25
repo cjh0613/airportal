@@ -550,12 +550,8 @@ a,button {outline: none;}
 	transition: all 0.5s;
 }
 .payPlans {
-	width: 70%;
-	width: fit-content;
-	height: 170px;
+	width: max-content;
 	margin: 0px auto;
-	text-align: left;
-	overflow-y: scroll;
 }
 #promotionText {
 	color: #A5C220;
@@ -564,8 +560,7 @@ a,button {outline: none;}
 .payItem {
 	position: relative;
 	display: inline-block;
-	margin-right: 10px;
-	margin-bottom: 10px;
+	margin: 0px 5px 10px;
 	min-width: 80px;
 	padding-bottom: 5px;
 	background-color: white;
