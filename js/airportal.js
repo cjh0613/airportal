@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w17a14";
+var version="19w17a15";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -303,7 +303,7 @@ function loggedIn(newLogin){
 			"zh-TW":"支付寶"
 		});
 		id("wechatPay").innerText=multilang({
-			"en-US":"WeChat Pay",
+			"en-US":"WeChat",
 			"zh-CN":"微信支付",
 			"zh-TW":"微信支付"
 		});

@@ -552,6 +552,7 @@ a,button {outline: none;}
 .payPlans {
 	width: max-content;
 	margin: 0px auto;
+	text-align: left;
 }
 #promotionText {
 	color: #A5C220;
@@ -828,7 +829,8 @@ textarea {
 	.contentBox1 {width: 80%; left: 10%;}
 	.fileList {margin: 20px; width: calc(100% - 40px);}
 	.payPlans,#historyList,.line {width: 80%;left: 10%;}
-	.payItem {min-width: 70px;margin-right: 5px;}
+	.payPlans {height: 180px;overflow-y: scroll;}
+	.payItem {min-width: 70px;margin: 0px 2.5px 10px;}
 	.footer {font-size: 11px;}
 	#footerL {bottom: auto;top: 20px;}
 }
