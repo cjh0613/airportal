@@ -76,7 +76,7 @@ function showPopup(html,elementId,parentId,animation){
 		},250);
 		if(animation=="rebound"){
 			setTimeout(function(){
-				newParent.style.transform="";
+				newParent.style.transform="scale(1)";
 			},500);
 		}
 	}
