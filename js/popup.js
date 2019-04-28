@@ -55,7 +55,7 @@ function showChangelog(text,firstRunOnly){
 		});
 		id("btnDone4").onclick=function(){
 			closePopup("popUpdate");
-		}
+		};
 	}
 }
 function showPopup(html,elementId,parentId,animation){
@@ -160,7 +160,7 @@ function uploadSuccess(code){
 				"zh-TW":"您的瀏覽器不支援剪貼簿功能。請手動複製。"
 			}),url);
 		}
-	}
+	};
 	viewQRC.onclick=function(){
 		showPopup([
 			'<div id="QRBox"></div>',
@@ -171,7 +171,7 @@ function uploadSuccess(code){
 		id("QRBox").appendChild(qrcode);
 		id("btnBack0").onclick=function(){
 			closePopup("sendBox2","slideOut");
-		}
+		};
 	};
 	btnDone0.onclick=function(){
 		document.title=title;
@@ -200,7 +200,7 @@ function uploadSuccess(code){
 				popRecvCode.parentElement.removeChild(popRecvCode);
 			},250);
 		},2250);
-	}
+	};
 }
 send.oncontextmenu=function(){
 	showPopup([
@@ -226,7 +226,7 @@ send.oncontextmenu=function(){
 	});
 	id("btnClose4").onclick=function(){
 		closePopup("popSend");
-	}
+	};
 	id("btnSendText").onclick=function(){
 		var value=id("txtSend").value;
 		if(value){
@@ -251,16 +251,19 @@ send.oncontextmenu=function(){
 				}
 			});
 		}
-	}
+	};
 	id("txtSend").focus();
 	return false;
-}
+};
 receive.onclick=function(){
 	if(/(MicroMessenger|QQ)\//i.test(navigator.userAgent)){
 		alert("请在浏览器中打开此页面。");
 	}else{
 		showPopup([
-			'<p id="enterCode" class="p1" style="padding-top: 40px;"></p>',
+			'<p class="p1" style="padding-top: 30px;">',
+			'<span id="enterCode"></span>',
+			'<p id="howToGetCode" class="tip"></p>',
+			'</p>',
 			'<input type="tel" id="inputCode" class="inputCode" maxlength="4" autocomplete="off"><br>',
 			'<button class="btn1" id="btnSub"></button>',
 			'<span class="btnBack" id="btnBack1"></span>'
@@ -269,6 +272,11 @@ receive.onclick=function(){
 			"en-US":"Please enter the code",
 			"zh-CN":"请输入取件码",
 			"zh-TW":"請輸入取件碼"
+		});
+		id("howToGetCode").innerText=multilang({
+			"en-US":"You will get the code after sending a file",
+			"zh-CN":"发送文件后就会获得取件码",
+			"zh-TW":"發送檔案后就會獲得取件碼"
 		});
 		id("inputCode").onkeydown=function(event){
 			if(event.keyCode==13){
@@ -300,16 +308,16 @@ receive.onclick=function(){
 			}else{
 				getInfo(inputCode.value);
 			}
-		}
+		};
 		id("btnBack1").onclick=function(){
 			closePopup("popRecv");
-		}
+		};
 		id("inputCode").focus();
 	}
-}
+};
 receive.oncontextmenu=function(){
 	return false;
-}
+};
 menuItemLogin.onclick=function(){
 	if(login.username){
 		var ssoIFrame=document.createElement("iframe");
@@ -332,7 +340,7 @@ menuItemLogin.onclick=function(){
 		],null,"popLogin");
 		id("btnCloseLogin").onclick=function(){
 			closePopup("popLogin");
-		}
+		};
 		id("loginTip").innerText=multilang({
 			"en-US":"Log in to AirPortal with Your RTH Account",
 			"zh-CN":"使用热铁盒账号来登录到 AirPortal",
@@ -414,10 +422,10 @@ menuItemLogin.onclick=function(){
 					}
 				});
 			}
-		}
+		};
 	}
 	hideMenu();
-}
+};
 menuItemHistory.onclick=function(){
 	showPopup([
 		'<p id="titleHistory" class="p1"></p>',
@@ -439,7 +447,7 @@ menuItemHistory.onclick=function(){
 	});
 	id("btnDoneHistory").onclick=function(){
 		closePopup("popHistory");
-	}
+	};
 	var loadHistory=function(){
 		id("historyList").innerHTML="";
 		var lblPlaceholder=document.createElement("p");
@@ -487,7 +495,7 @@ menuItemHistory.onclick=function(){
 						});
 						newSpan.onclick=function(){
 							open("https://rthe.cn/"+this.parentElement.getAttribute("code"));
-						}
+						};
 						newP.innerText=decodeURIComponent(data[i].name);
 						newDelBtn.classList.add("btnDel");
 						newDelBtn.title=multilang({
@@ -515,7 +523,7 @@ menuItemHistory.onclick=function(){
 									}
 								});
 							}
-						}
+						};
 						newHistory.appendChild(newSpan);
 						newHistory.appendChild(newP);
 						newHistory.appendChild(newDelBtn);
@@ -529,7 +537,7 @@ menuItemHistory.onclick=function(){
 	}
 	loadHistory();
 	hideMenu();
-}
+};
 menuItemSettings.onclick=function(){
 	showPopup([
 		'<p id="titleSettings" class="p1"></p>',
@@ -585,9 +593,9 @@ menuItemSettings.onclick=function(){
 	});
 	id("btnDone5").onclick=function(){
 		closePopup("popSettings");
-	}
+	};
 	hideMenu();
-}
+};
 menuItemFeedback.onclick=function(){
 	showPopup([
 		'<span class="btnClose" id="btnClose3"></span>',
@@ -608,10 +616,10 @@ menuItemFeedback.onclick=function(){
 		"zh-TW":"常見問題集"
 	});
 	id("qqGroup").innerText=multilang({
-		"en-US":"Our QQ Group: ",
-		"zh-CN":"我们的QQ群：",
-		"zh-TW":"我們的QQ群："
-	})+"319496964";
+		"en-US":"Our QQ Group #",
+		"zh-CN":"我们的QQ群",
+		"zh-TW":"我們的QQ群"
+	})+" 319496964";
 	id("txtFeedback").placeholder=multilang({
 		"en-US":"Enter the message here",
 		"zh-CN":"在这里输入消息内容",
@@ -667,9 +675,9 @@ menuItemFeedback.onclick=function(){
 				}));
 			}
 		}
-	}
+	};
 	id("btnClose3").onclick=function(){
 		closePopup("popFeedback");
-	}
+	};
 	hideMenu();
-}
+};

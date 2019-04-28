@@ -65,7 +65,8 @@ a,button {outline: none;}
 .send:hover {
 	box-shadow: rgba(65,145,245,0.5) 0px 5px 30px;
 }
-.send:active {
+.send:active,
+.send-active {
 	color: rgb(65,145,245);
 	background-color: white;
 	/*background-position: 100%;
@@ -263,6 +264,9 @@ a,button {outline: none;}
 	font-weight: bold;
 	line-height: 30px;
 	letter-spacing: 10px;
+}
+.tip {
+	color: rgba(0,0,0,0.5);
 }
 .btn1 {
 	position: relative;
@@ -826,6 +830,11 @@ textarea {
 	width: 300px;
 	right: 30px;
 	text-align: right;
+}
+input[type="file"]{
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	user-select: none;
 }
 
 @media screen and (max-width:500px){  

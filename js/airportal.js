@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w17a16";
+var version="19w17a17";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -21,6 +21,7 @@ var $_GET=(function(){
 var backend="https://server-cn.rthe.cn/backend/";
 var firstRun=JSON.parse(localStorage.getItem("firstRun"));
 var invalidAttempt=0;
+var isiOS=/iPhone|iPad/i.test(navigator.userAgent);
 var login={
 	"email":localStorage.getItem("Email"),
 	"token":localStorage.getItem("Token"),
@@ -166,7 +167,7 @@ function loadServerList(auto){
 				}
 			}
 			hideMenu();
-		}
+		};
 		newTick.classList.add("tick");
 		if(key==auto){
 			newTick.style.opacity="1";
@@ -174,7 +175,7 @@ function loadServerList(auto){
 		newName.innerText=window.servers[key].name;
 		newA.appendChild(newTick);
 		newA.appendChild(newName);
-		menu.appendChild(newA);
+		menuServers.appendChild(newA);
 	});
 }
 function loggedIn(newLogin){
@@ -236,7 +237,7 @@ function loggedIn(newLogin){
 		],"accBox0","popAccount");
 		id("btnClose0").onclick=function(){
 			closePopup("popAccount");
-		}
+		};
 		id("lblUsername").innerText=login.email;
 		id("lblExpTime").innerText=privilegeStatus.innerText;
 		id("activatePremium").innerText=multilang({
@@ -265,7 +266,7 @@ function loggedIn(newLogin){
 				"zh-TW":"高級賬號特權"
 			});
 			id("txtPrivileges").innerText=window.info.privileges;
-		}
+		};
 		id("promotionText").innerText=window.info.promotion;
 		id("plans").innerHTML=multilang({
 			"en-US":"Plans",
@@ -291,7 +292,7 @@ function loggedIn(newLogin){
 		id("payItem3M").onclick=
 		id("payItem1Y").onclick=function(){
 			payItemClick(this,"plan");
-		}
+		};
 		id("paymentMethod").innerText=multilang({
 			"en-US":"Payment Method",
 			"zh-CN":"支付方式",
@@ -316,7 +317,7 @@ function loggedIn(newLogin){
 		id("payItemWechat").onclick=
 		id("payItemPaypal").onclick=function(){
 			payItemClick(this,"method");
-		}
+		};
 		Object.keys(window.info.price).forEach(function(key){
 			id("price-"+key).innerHTML="";
 			var newP=document.createElement("p");
@@ -514,10 +515,10 @@ function loggedIn(newLogin){
 						id("btnDone3").style.opacity="1";
 					}
 				});
-			}
-		}
+			};
+		};
 		hideMenu();
-	}
+	};
 	newItem.style.fontSize="small";
 	newItem.innerText=login.email;
 	menu.insertBefore(newItem,menu.firstChild);
@@ -588,7 +589,9 @@ menuIcon.onclick=function(){
 		menu.style.opacity="1";
 	},10);
 	mask.style.display="block";
-}
+	menuItemSelectServer.style.display="";
+	menuServers.style.display="none";
+};
 function hideMenu(){
 	mask.style.display="none";
 	menu.style.opacity="0";
@@ -597,6 +600,10 @@ function hideMenu(){
 	},250);
 }
 mask.onclick=hideMenu;
+menuItemSelectServer.onclick=function(){
+	this.style.display="none";
+	menuServers.style.display="";
+};
 addEventListener("message",function(e){
 	try{
 		login=JSON.parse(atob(e.data));

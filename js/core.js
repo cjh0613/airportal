@@ -194,10 +194,10 @@ function getInfo(code,password){
 							if(password){
 								getInfo(code,MD5(password));
 							}
-						}
+						};
 						id("btnBackRecvPsw").onclick=function(){
 							closePopup("recvPswBox","slideOut");
-						}
+						};
 						setTimeout(function(){
 							id("inputRecvPsw").focus();
 						},250);
@@ -229,7 +229,7 @@ function getInfo(code,password){
 					});
 					id("btnDone4").onclick=function(){
 						closePopup("popRecv");
-					}
+					};
 				}else if(data.length==1){
 					downloadFile(data[0]);
 				}else{
@@ -260,7 +260,7 @@ function getInfo(code,password){
 						newLi.onclick=function(){
 							var index=this.getAttribute("index")-1;
 							downloadFile(data[index]);
-						}
+						};
 						id("fileList").appendChild(newLi);
 					}
 					id("btnDone1").innerText=multilang({
@@ -270,7 +270,7 @@ function getInfo(code,password){
 					});
 					id("btnDone1").onclick=function(){
 						closePopup("popRecv");
-					}
+					};
 				}
 			}
 		}).catch(function(){
@@ -389,7 +389,7 @@ var uploader=new plupload.Uploader({
 			id("btnCloseUpload").onclick=function(){
 				uploader.splice();
 				closePopup("popSend");
-			}
+			};
 			id("filesSelected").innerText=multilang({
 				"en-US":"You selected these files",
 				"zh-CN":"您选择了这些文件",
@@ -434,7 +434,7 @@ var uploader=new plupload.Uploader({
 					"downloads":downloads,
 					"password":id("inputFilePsw").value
 				});
-			}
+			};
 		},
 		"BeforeUpload":function(up,file){
 			option["multipart_params"]["key"]=uploadCode+"/"+randomKey+"/1/"+file.name;
@@ -471,6 +471,29 @@ var uploader=new plupload.Uploader({
 	}
 });
 uploader.init();
+if(isiOS){
+	setTimeout(function(){
+		var longPress,longPressTimeout;
+		document.getElementsByTagName("input")[0].addEventListener("touchstart",function(){
+			send.classList.add("send-active");
+			longPress=false;
+			longPressTimeout=setTimeout(function(){
+				longPress=true;
+			},1000);
+		},{
+			passive:true
+		});
+		document.getElementsByTagName("input")[0].addEventListener("touchend",function(){
+			send.classList.remove("send-active");
+			clearTimeout(longPressTimeout);
+			if(longPress){
+				send.oncontextmenu();
+			}
+		},{
+			passive:true
+		});
+	},100);
+}
 if(parseInt($_GET["code"])){
 	receive.click();
 	if(id("popRecv")){
@@ -500,11 +523,11 @@ if(chs){
 	txtVer.innerText="闽ICP备18016273号";
 	txtVer.onclick=function(){
 		open("http://www.miitbeian.gov.cn/");
-	}
+	};
 	txtVer.oncontextmenu=function(){
 		txtVer.innerText=version;
 		return false;
-	}
+	};
 }else{
 	txtVer.innerText=version;
 }

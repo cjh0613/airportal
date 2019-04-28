@@ -27,6 +27,7 @@ try{
 			menuItemHistory.innerText="History";
 			menuItemSettings.innerText="Settings";
 			menuItemFeedback.innerText="Contact Us";
+			nameSelectServer.innerText="Select Server";
 		}else{
 			document.getElementsByTagName("html")[0].lang="zh-TW";
 			send.innerText="發送";
@@ -44,6 +45,7 @@ try{
 			menuItemHistory.innerText="歷史記錄";
 			menuItemSettings.innerText="設定";
 			menuItemFeedback.innerText="聯繫我們";
+			nameSelectServer.innerText="選擇伺服器";
 		}
 	}
 }catch(e){
