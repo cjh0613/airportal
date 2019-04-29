@@ -371,7 +371,7 @@ var uploader=new plupload.Uploader({
 								'<label id="lblFilePsw" for="inputFilePsw"></label>',
 							'</td>',
 							'<td>',
-								'<input id="inputFilePsw" autocomplete="off" placeholder="为文件设置下载密码，可放空">',
+								'<input id="inputFilePsw" autocomplete="off">',
 							'</td>',
 						'</tr>',
 						'<tr>',
@@ -410,6 +410,11 @@ var uploader=new plupload.Uploader({
 				"en-US":"Password",
 				"zh-CN":"密码",
 				"zh-TW":"密碼"
+			});
+			id("inputFilePsw").placeholder=multilang({
+				"en-US":"Password for files (Optional)",
+				"zh-CN":"为文件设置下载密码，可留空",
+				"zh-TW":"為檔案設定下載密碼，可留空"
 			});
 			id("lblMaxDl").innerText=multilang({
 				"en-US":"Maximum Downloads",
