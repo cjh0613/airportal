@@ -371,7 +371,7 @@ var uploader=new plupload.Uploader({
 								'<label id="lblFilePsw" for="inputFilePsw"></label>',
 							'</td>',
 							'<td>',
-								'<input id="inputFilePsw" autocomplete="off">',
+								'<input id="inputFilePsw" autocomplete="off" placeholder="为文件设置下载密码，可放空">',
 							'</td>',
 						'</tr>',
 						'<tr>',

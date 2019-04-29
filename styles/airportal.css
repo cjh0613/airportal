@@ -217,6 +217,10 @@ a,button {outline: none;}
 	cursor: pointer;
 	transition: all 0.25s;
 }
+#menuServers {
+	transition: all 0.5s;
+	margin-left: 200%;
+}
 .popUp {
 	position: absolute;
 	width: 500px;
@@ -461,6 +465,7 @@ a,button {outline: none;}
 	text-align: left;
 }
 .tableUploadSettings input{
+	font-size: small;
 	border: 1px solid rgba(0,0,0,0.1);
 	border-radius: 5px;
 	display: block;
