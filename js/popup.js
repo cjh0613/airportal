@@ -639,7 +639,7 @@ menuItemFeedback.onclick=function(){
 				"zh-TW":"請輸入您的電子郵箱地址。"
 			}));
 			if(emailPattern.test(email)){
-				fetch("https://server-auto.rthe.cn/backend/feedback",getPostData({
+				fetch("https://server-cn.rthe.cn/backend/feedback",getPostData({
 					"appname":appName,
 					"email":email,
 					"lang":navigator.language,

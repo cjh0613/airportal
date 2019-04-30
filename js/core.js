@@ -517,7 +517,7 @@ if(parseInt($_GET["code"])){
 	}
 }
 var newScript=document.createElement("script");
-newScript.src="https://server-auto.rthe.cn/backend/code?"+encodeData({
+newScript.src="https://server-cn.rthe.cn/backend/code?"+encodeData({
 	"appname":appName,
 	"lang":navigator.language,
 	"username":login.username,
