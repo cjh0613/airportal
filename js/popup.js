@@ -256,64 +256,60 @@ send.oncontextmenu=function(){
 	return false;
 };
 receive.onclick=function(){
-	if(/(MicroMessenger|QQ)\//i.test(navigator.userAgent)){
-		alert("请在浏览器中打开此页面。");
-	}else{
-		showPopup([
-			'<p class="p1" style="padding-top: 30px;">',
+	showPopup([
+		'<p class="p1" style="padding-top: 30px;">',
 			'<span id="enterCode"></span>',
 			'<p id="howToGetCode" class="tip"></p>',
-			'</p>',
-			'<input type="tel" id="inputCode" class="inputCode" maxlength="4" autocomplete="off"><br>',
-			'<button class="btn1" id="btnSub"></button>',
-			'<span class="btnBack" id="btnBack1"></span>'
-		],"recvBox0","popRecv");
-		id("enterCode").innerText=multilang({
-			"en-US":"Please enter the code",
-			"zh-CN":"请输入取件码",
-			"zh-TW":"請輸入取件碼"
-		});
-		id("howToGetCode").innerText=multilang({
-			"en-US":"You will get the code after sending a file",
-			"zh-CN":"发送文件后就会获得取件码",
-			"zh-TW":"發送檔案后就會獲得取件碼"
-		});
-		id("inputCode").onkeydown=function(event){
-			if(event.keyCode==13){
-				id("btnSub").click();
-			}
+		'</p>',
+		'<input type="tel" id="inputCode" class="inputCode" maxlength="4" autocomplete="off"><br>',
+		'<button class="btn1" id="btnSub"></button>',
+		'<span class="btnBack" id="btnBack1"></span>'
+	],"recvBox0","popRecv");
+	id("enterCode").innerText=multilang({
+		"en-US":"Please enter the code",
+		"zh-CN":"请输入取件码",
+		"zh-TW":"請輸入取件碼"
+	});
+	id("howToGetCode").innerText=multilang({
+		"en-US":"You will get the code after sending a file",
+		"zh-CN":"发送文件后就会获得取件码",
+		"zh-TW":"發送檔案后就會獲得取件碼"
+	});
+	id("inputCode").onkeydown=function(event){
+		if(event.keyCode==13){
+			id("btnSub").click();
 		}
-		id("btnSub").innerText=multilang({
-			"en-US":"OK",
-			"zh-CN":"确定",
-			"zh-TW":"確定"
-		});
-		id("btnSub").onclick=function(){
-			if(invalidAttempt>2){
-				var code=getRandomCharacter(3);
-				var enteredCode=prompt(multilang({
-					"en-US":"You have entered invalid codes many times. Please enter the verification code to continue: ",
-					"zh-CN":"您已经多次输入了无效取件码。请输入验证码以继续：",
-					"zh-TW":"您已經多次輸入了無效取件碼。請輸入驗證碼以繼續："
-				})+code);
-				if(enteredCode==code){
-					getInfo(inputCode.value);
-				}else if(enteredCode!==null){
-					alert(multilang({
-						"en-US":"Incorrect verification code.",
-						"zh-CN":"验证码错误。",
-						"zh-TW":"驗證碼錯誤。"
-					}));
-				}
-			}else{
-				getInfo(inputCode.value);
-			}
-		};
-		id("btnBack1").onclick=function(){
-			closePopup("popRecv");
-		};
-		id("inputCode").focus();
 	}
+	id("btnSub").innerText=multilang({
+		"en-US":"OK",
+		"zh-CN":"确定",
+		"zh-TW":"確定"
+	});
+	id("btnSub").onclick=function(){
+		if(invalidAttempt>2){
+			var code=getRandomCharacter(3);
+			var enteredCode=prompt(multilang({
+				"en-US":"You have entered invalid codes many times. Please enter the verification code to continue: ",
+				"zh-CN":"您已经多次输入了无效取件码。请输入验证码以继续：",
+				"zh-TW":"您已經多次輸入了無效取件碼。請輸入驗證碼以繼續："
+			})+code);
+			if(enteredCode==code){
+				getInfo(inputCode.value);
+			}else if(enteredCode!==null){
+				alert(multilang({
+					"en-US":"Incorrect verification code.",
+					"zh-CN":"验证码错误。",
+					"zh-TW":"驗證碼錯誤。"
+				}));
+			}
+		}else{
+			getInfo(inputCode.value);
+		}
+	};
+	id("btnBack1").onclick=function(){
+		closePopup("popRecv");
+	};
+	id("inputCode").focus();
 };
 receive.oncontextmenu=function(){
 	return false;
@@ -332,7 +328,7 @@ menuItemLogin.onclick=function(){
 			'<div class="loginLogo"></div>',
 			'<p class="p4">',
 				'<span id="loginTip"></span>',
-				'<a id="signUp" href="https://rthsoftware.cn/login.html?continue=https%3A%2F%2Fairportal.cn%2F&amp;page=signup" class="link1"></a>',
+				'<a id="signUp" class="link1"></a>',
 			'</p>',
 			'<input type="email" name="email" class="input1" id="inputEmail">',
 			'<input type="password" name="password" class="input1" id="inputPsw">',
@@ -345,6 +341,10 @@ menuItemLogin.onclick=function(){
 			"en-US":"Log in to AirPortal with Your RTH Account",
 			"zh-CN":"使用热铁盒账号来登录到 AirPortal",
 			"zh-TW":"使用熱鐵盒賬號來登入到 AirPortal"
+		});
+		id("signUp").href="https://rthsoftware.cn/login.html?"+encodeData({
+			"continue":"https://airportal.cn/",
+			"page":"signup"
 		});
 		id("signUp").innerText=multilang({
 			"en-US":"Sign Up",
