@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w17b3";
+var version="19w17b4";
 var consoleGeneralStyle="font-family:Helvetica,sans-serif;";
 var consoleInfoStyle=consoleGeneralStyle+"color:rgb(65,145,245);";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发。",consoleInfoStyle,appName);
@@ -18,7 +18,7 @@ var $_GET=(function(){
 	}
 	return json;
 })();
-var backend="https://server-cn.rthe.cn/backend/";
+var backend="https://api.rthe.cn/backend/";
 var firstRun=JSON.parse(localStorage.getItem("firstRun"));
 var invalidAttempt=0;
 var isiOS=/iPhone|iPad/i.test(navigator.userAgent);
@@ -76,7 +76,7 @@ function getPostData(data){
 	};
 }
 function getQRCode(content){
-	return "https://server-cn.rthe.cn/backend/get?"+encodeData({
+	return "https://api.rthe.cn/backend/get?"+encodeData({
 		"url":"http://qr.topscan.com/api.php?text="+content,
 		"username":"admin"
 	});
@@ -451,7 +451,7 @@ function loggedIn(newLogin){
 				if(!currentExpTime){
 					action="激活";
 				}
-				fetch("https://server-cn.rthe.cn/backend/feedback",getPostData({
+				fetch("https://api.rthe.cn/backend/feedback",getPostData({
 					"appname":appName,
 					"email":login.email,
 					"lang":navigator.language,
