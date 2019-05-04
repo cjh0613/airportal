@@ -575,6 +575,7 @@ a,button {outline: none;}
 	transition: all 0.5s;
 }
 .payPlans {
+	width: 70%;
 	width: max-content;
 	margin: 0px auto;
 	text-align: left;
