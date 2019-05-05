@@ -452,11 +452,19 @@ var uploader=new plupload.Uploader({
 			}
 			id("progressBarBg0").style.background="rgba(0,0,0,0.1)";
 			document.title="["+percent+"%] "+title;
-			id("lblUploadP").innerText=multilang({
-				"en-US":"Uploading",
-				"zh-CN":"正在上传",
-				"zh-TW":"正在上傳"
-			})+" "+file.name+" "+percent+"%";
+			if(percent==99){
+				id("lblUploadP").innerText=multilang({
+					"en-US":"Almost there",
+					"zh-CN":"马上就好",
+					"zh-TW":"馬上就好"
+				});
+			}else{
+				id("lblUploadP").innerText=multilang({
+					"en-US":"Uploading",
+					"zh-CN":"正在上传",
+					"zh-TW":"正在上傳"
+				})+" "+file.name+" "+percent+"%";
+			}
 			id("progressBar0").style.width=percent+"px";
 		},
 		"ChunkUploaded":function(up,file){

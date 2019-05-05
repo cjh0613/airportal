@@ -7,7 +7,7 @@ try{
 		mrxLink.href="https://www.maorx.cn/";
 		var yszLink=document.createElement("a");
 		yszLink.classList.add("link1");
-		yszLink.href="https://www.yangshangzhen.com/";
+		yszLink.href="https://shangzhen.rthe.cn/";
 		mrxLink.target=yszLink.target="_blank";
 		if(!zh){
 			document.getElementsByTagName("html")[0].lang="en-US";

@@ -660,11 +660,7 @@ menuItemFeedback.onclick=function(){
 							popFeedback.style.display="none";
 						},250);
 					}else{
-						alert(multilang({
-							"en-US":"Failed to send. . . Please try again or send an email to admin@yangshangzhen.com or fx_highway@qq.com",
-							"zh-CN":"发送失败……请您再试一次，或通过微博私信反馈（@是毛布斯呀 @YSZ-RTH）",
-							"zh-TW":"發送失敗……請您再試一次，或發送電郵到 admin@yangshangzhen.com 或 fx_highway@qq.com"
-						}));
+						error(response);
 					}
 				});
 			}else{
