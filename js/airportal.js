@@ -1,6 +1,6 @@
 "use strict";
 var appName="AirPortal";
-var version="19w20a5";
+var version="19w20a6";
 var consoleInfoStyle="color:rgb(65,145,245);font-family:Helvetica,sans-serif;";
 console.info("%c%s 由 毛若昕 和 杨尚臻 联合开发",consoleInfoStyle,appName);
 console.info("%c版本: %s",consoleInfoStyle,version);
@@ -47,11 +47,26 @@ function encodeData(data){
 	return array.join("&");
 }
 function error(e){
-	notify(multilang({
-		"en-US":"Unable to connect to the server: ",
-		"zh-CN":"无法连接至服务器：",
-		"zh-TW":"無法連接至伺服器："
-	})+e.status);
+	clearNotification();
+	var text=multilang({
+		"en-US":"Unable to connect to the server",
+		"zh-CN":"无法连接至服务器",
+		"zh-TW":"無法連接至伺服器"
+	});
+	if(e){
+		text+=multilang({
+			"en-US":": ",
+			"zh-CN":"：",
+			"zh-TW":"："
+		})+e.status;
+	}else{
+		text+=multilang({
+			"en-US":".",
+			"zh-CN":"。",
+			"zh-TW":"。"
+		});
+	}
+	notify(text);
 }
 function getPostData(data){
 	var formData=new FormData();
@@ -483,19 +498,11 @@ function loggedIn(newLogin){
 							"zh-CN":"Oops... 出错了",
 							"zh-TW":"Oops... 出錯了"
 						});
-						if(response.status==504){
-							id("lblPayState1").innerText=multilang({
-								"en-US":"The server was unable to respond in time.",
-								"zh-CN":"服务器无法及时响应。",
-								"zh-TW":"伺服器無法及時響應。"
-							});
-						}else{
-							id("lblPayState1").innerText=multilang({
-								"en-US":"Unable to connect to the server.",
-								"zh-CN":"无法连接至服务器。",
-								"zh-TW":"無法連接至伺服器。"
-							});
-						}
+						id("lblPayState1").innerText=multilang({
+							"en-US":"Unable to connect to the server.",
+							"zh-CN":"无法连接至服务器。",
+							"zh-TW":"無法連接至伺服器。"
+						});
 						id("lblPayState1").innerText+=multilang({
 							"en-US":"\nPlease try again (no need to pay again)\nIf you need more help, please contact us.",
 							"zh-CN":"\n请重试（无需再次扫码付款）\n如需更多帮助，请与我们联系。",

@@ -117,11 +117,11 @@ function downloadFile(fileInfo){
 }
 function getInfo(code,password){
 	if(code){
-		var loading=notify(multilang({
+		notify(multilang({
 			"en-US":"Loading...",
 			"zh-CN":"正在加载……",
 			"zh-TW":"正在加載……"
-		}));
+		}),false);
 		id("btnSub").disabled=true;
 		invalidAttempt++;
 		fetch(backend+"airportal/getinfo?"+encodeData({
@@ -129,7 +129,7 @@ function getInfo(code,password){
 			"password":password,
 			"username":login.username
 		})).then(function(response){
-			loading.parentElement.removeChild(loading);
+			clearNotification();
 			id("btnSub").disabled=false;
 			if(password){
 				id("inputRecvPsw").value="";
@@ -286,11 +286,7 @@ function getInfo(code,password){
 		}).catch(function(){
 			id("btnSub").disabled=false;
 			invalidAttempt--;
-			notify(multilang({
-				"en-US":"Unable to connect to the server.",
-				"zh-CN":"无法连接至服务器。",
-				"zh-TW":"無法連接至伺服器。"
-			}));
+			error();
 		});
 	}
 }

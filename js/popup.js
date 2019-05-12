@@ -1,3 +1,11 @@
+function clearNotification(){
+	var notificationBar=document.getElementsByClassName("notificationBar");
+	if(notificationBar.length>0){
+		for(var i=0;i<notificationBar.length;i++){
+			notificationBar[i].parentElement.removeChild(notificationBar[i]);
+		}
+	}
+}
 function closePopup(elementId,animation){
 	if(id(elementId)){
 		switch(animation){
@@ -21,21 +29,22 @@ function closePopup(elementId,animation){
 function notify(content,duration){
 	var newDiv=document.createElement("div");
 	newDiv.classList.add("notificationBar");
-	if(duration==undefined){
+	if(!duration&&duration!==false){
 		duration=3000;
 	}
 	newDiv.innerText=content;
 	document.body.appendChild(newDiv);
 	setTimeout(function(){
 		newDiv.style.bottom="0px";
-		setTimeout(function(){
-			newDiv.style.bottom="-50px";
+		if(duration){
 			setTimeout(function(){
-				newDiv.parentElement.removeChild(newDiv);
-			},250);
-		},duration);
+				newDiv.style.bottom="-50px";
+				setTimeout(function(){
+					newDiv.parentElement.removeChild(newDiv);
+				},250);
+			},duration);
+		}
 	},25);
-	return newDiv;
 }
 function showChangelog(text,firstRunOnly){
 	if(firstRun===true||!firstRunOnly){
