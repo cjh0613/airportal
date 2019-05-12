@@ -516,7 +516,7 @@ if(tmpCode){
 			var codeSplit=tmpCode.split("");
 			id("inputCode").value="";
 			var intervalId=setInterval(function(){
-				if(animationProgress<4){
+				if(animationProgress<tmpCode.length){
 					id("inputCode").value+=codeSplit[animationProgress];
 					animationProgress++;
 				}else{
