@@ -2,7 +2,8 @@ function closePopup(elementId,animation){
 	if(id(elementId)){
 		switch(animation){
 			case "slideOut":
-			id(elementId).parentElement.childNodes[id(elementId).parentElement.childElementCount-2].style.left=id(elementId).style.left="";
+			id(elementId).parentElement.childNodes[id(elementId).parentElement.childElementCount-2].style.left="0px";
+			id(elementId).style.left="";
 			break;
 			default:
 			id(elementId).style.opacity="";

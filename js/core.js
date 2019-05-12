@@ -527,7 +527,6 @@ if(tmpCode){
 		}
 	}
 }
-var newScript=document.createElement("script");
 newScript.src=backend+"code?"+encodeData({
 	"appname":appName,
 	"lang":navigator.language,
