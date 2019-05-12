@@ -507,21 +507,24 @@ if(isiOS){
 		});
 	},100);
 }
-if(parseInt($_GET["code"])){
-	receive.click();
-	if(id("popRecv")){
-		var animationProgress=0;
-		var codeSplit=$_GET["code"].split("");
-		id("inputCode").value="";
-		var intervalId=setInterval(function(){
-			if(animationProgress<4){
-				id("inputCode").value+=codeSplit[animationProgress];
-				animationProgress++;
-			}else{
-				clearInterval(intervalId);
-				id("btnSub").click();
-			}
-		},400);
+if(tmpCode){
+	localStorage.removeItem("code");
+	if(parseInt(tmpCode)){
+		receive.click();
+		if(id("popRecv")){
+			var animationProgress=0;
+			var codeSplit=tmpCode.split("");
+			id("inputCode").value="";
+			var intervalId=setInterval(function(){
+				if(animationProgress<4){
+					id("inputCode").value+=codeSplit[animationProgress];
+					animationProgress++;
+				}else{
+					clearInterval(intervalId);
+					id("btnSub").click();
+				}
+			},400);
+		}
 	}
 }
 var newScript=document.createElement("script");

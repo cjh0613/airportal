@@ -144,7 +144,7 @@ function uploadSuccess(code){
 		"zh-TW":"完成"
 	});
 	copyLink.onclick=function(){
-		var url="https://rthe.cn/"+id("recvCode").innerText;
+		var url="https://airportal.cn/"+id("recvCode").innerText;
 		if("clipboard" in navigator){
 			navigator.clipboard.writeText(url).then(function(){
 				notify(multilang({
@@ -167,7 +167,7 @@ function uploadSuccess(code){
 			'<span class="btnBack" id="btnBack0"></span>'
 		],"sendBox2","popSend","slideInFromRight");
 		var qrcode=new Image(200,200);
-		qrcode.src=getQRCode("http://rthe.cn/"+code);
+		qrcode.src=getQRCode("http://airportal.cn/"+code);
 		id("QRBox").appendChild(qrcode);
 		id("btnBack0").onclick=function(){
 			closePopup("sendBox2","slideOut");
@@ -494,7 +494,7 @@ menuItemHistory.onclick=function(){
 							"zh-TW":"下載"
 						});
 						newSpan.onclick=function(){
-							open("https://rthe.cn/"+this.parentElement.getAttribute("code"));
+							open("https://airportal.cn/"+this.parentElement.getAttribute("code"));
 						};
 						newP.innerText=decodeURIComponent(data[i].name);
 						newDelBtn.classList.add("btnDel");
