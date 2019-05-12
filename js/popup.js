@@ -35,6 +35,7 @@ function notify(content,duration){
 			},250);
 		},duration);
 	},25);
+	return newDiv;
 }
 function showChangelog(text,firstRunOnly){
 	if(firstRun===true||!firstRunOnly){
@@ -295,7 +296,7 @@ receive.onclick=function(){
 				"zh-TW":"您已經多次輸入了無效取件碼。請輸入驗證碼以繼續："
 			})+code);
 			if(enteredCode==code){
-				getInfo(inputCode.value);
+				getInfo(id("inputCode").value);
 			}else if(enteredCode!==null){
 				alert(multilang({
 					"en-US":"Incorrect verification code.",
@@ -304,7 +305,7 @@ receive.onclick=function(){
 				}));
 			}
 		}else{
-			getInfo(inputCode.value);
+			getInfo(id("inputCode").value);
 		}
 	};
 	id("btnBack1").onclick=function(){

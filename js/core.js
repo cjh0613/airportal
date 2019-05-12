@@ -117,6 +117,11 @@ function downloadFile(fileInfo){
 }
 function getInfo(code,password){
 	if(code){
+		var loading=notify(multilang({
+			"en-US":"Loading...",
+			"zh-CN":"正在加载……",
+			"zh-TW":"正在加載……"
+		}));
 		id("btnSub").disabled=true;
 		invalidAttempt++;
 		fetch(backend+"airportal/getinfo?"+encodeData({
@@ -124,7 +129,13 @@ function getInfo(code,password){
 			"password":password,
 			"username":login.username
 		})).then(function(response){
+			loading.parentElement.removeChild(loading);
 			id("btnSub").disabled=false;
+			if(password){
+				id("inputRecvPsw").value="";
+			}else{
+				id("inputCode").value="";
+			}
 			if(response.ok){
 				return response.text();
 			}else{
@@ -165,7 +176,6 @@ function getInfo(code,password){
 							"zh-CN":"密码错误。",
 							"zh-TW":"密碼錯誤。"
 						}));
-						id("inputRecvPsw").value="";
 						break;
 						case "passwordRequired":
 						showPopup([
@@ -335,8 +345,8 @@ function upload(up,files,settings){
 				],"sendBox0","popSend","slideInFromRight");
 				lblUploadP.innerText=multilang({
 					"en-US":"Uploading...",
-					"zh-CN":"正在上传...",
-					"zh-TW":"正在上傳..."
+					"zh-CN":"正在上传……",
+					"zh-TW":"正在上傳……"
 				});
 				option={
 					"url":"https://"+data.host,
