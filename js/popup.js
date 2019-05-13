@@ -39,9 +39,7 @@ function notify(content,duration){
 		if(duration){
 			setTimeout(function(){
 				newDiv.style.bottom="-50px";
-				setTimeout(function(){
-					newDiv.parentElement.removeChild(newDiv);
-				},250);
+				setTimeout(clearNotification,250);
 			},duration);
 		}
 	},25);
