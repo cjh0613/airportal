@@ -328,7 +328,8 @@ menuItemLogin.onclick=function(){
 		var ssoIFrame=document.createElement("iframe");
 		ssoIFrame.style.display="none";
 		ssoIFrame.src="https://rthsoftware.cn/sso.html?"+encodeData({
-			"action":"logout"
+			"action":"logout",
+			"token":login.token
 		});
 		document.body.appendChild(ssoIFrame);
 	}else{
