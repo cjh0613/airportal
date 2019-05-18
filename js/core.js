@@ -180,7 +180,7 @@ function getInfo(code,password){
 						case "passwordRequired":
 						showPopup([
 							'<p id="enterPsw" class="p1" style="padding-top: 40px;"></p>',
-							'<input type="password" id="inputRecvPsw" class="inputCode" autocomplete="off"><br>',
+							'<input id="inputRecvPsw" class="inputCode" autocomplete="off"><br>',
 							'<button class="btn1" id="btnSubPsw"></button>',
 							'<span class="btnBack" id="btnBackRecvPsw"></span>'
 						],"recvPswBox","popRecv","slideInFromRight");
@@ -189,11 +189,20 @@ function getInfo(code,password){
 							"zh-CN":"请输入密码",
 							"zh-TW":"請輸入密碼"
 						});
+						id("inputRecvPsw").oninput=function(){
+							if(this.value){
+								if(this.type!="password"){
+									this.type="password";
+								}
+							}else{
+								this.type="";
+							}
+						};
 						id("inputRecvPsw").onkeydown=function(event){
 							if(event.keyCode==13){
 								id("btnSubPsw").click();
 							}
-						}
+						};
 						id("btnSubPsw").innerText=multilang({
 							"en-US":"OK",
 							"zh-CN":"确定",
