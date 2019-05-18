@@ -131,9 +131,7 @@ function getInfo(code,password){
 		})).then(function(response){
 			clearNotification();
 			id("btnSub").disabled=false;
-			if(password){
-				id("inputRecvPsw").value="";
-			}else{
+			if(!password){
 				id("inputCode").value="";
 			}
 			if(response.ok){
@@ -191,9 +189,7 @@ function getInfo(code,password){
 						});
 						id("inputRecvPsw").oninput=function(){
 							if(this.value){
-								if(this.type!="password"){
-									this.type="password";
-								}
+								this.type="password";
 							}else{
 								this.type="";
 							}
@@ -210,6 +206,7 @@ function getInfo(code,password){
 						});
 						id("btnSubPsw").onclick=function(){
 							password=id("inputRecvPsw").value;
+							id("inputRecvPsw").type=id("inputRecvPsw").value="";
 							if(password){
 								getInfo(code,MD5(password));
 							}
